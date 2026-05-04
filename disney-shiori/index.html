@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,36 +18,38 @@
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: var(--bg-dark); 
-            color: white; 
-            height: 100vh; 
-            overflow: hidden; 
-            font-family: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Outfit', sans-serif;
         }
 
         #error-display {
-            display: block; 
-            background: #e74c3c; 
-            color: white; 
-            padding: 15px; 
-            font-size: 14px; 
-            position: fixed; 
-            top: 0; 
-            z-index: 9999; 
-            width: 100%; 
+            display: none;
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 9999;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
-        .app-container { 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
+        .app-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
             padding: 10px;
-            width: 100%;
-            visibility: hidden; /* JS起動まで隠す */
+            visibility: hidden;
         }
 
         header {
@@ -58,90 +61,115 @@
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
-        h1 { font-size: 20px; font-weight: 700; background: linear-gradient(45deg, #fff, #a29bfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .planner-controls { display: flex; align-items: center; gap: 10px; }
-        input[type="date"] {
-            background: var(--bg-panel);
-            border: 1px solid var(--glass-border);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 13px;
+        h1 {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .btn-icon { background: none; border: none; font-size: 20px; cursor: pointer; color: white; opacity: 0.8; transition: 0.2s; }
+        .pattern-tabs {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
 
-        main { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
-
-        .pattern-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; }
         .pattern-btn {
             background: var(--bg-panel);
             border: 1px solid var(--glass-border);
             color: var(--text-dim);
-            padding: 6px 15px;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             white-space: nowrap;
             cursor: pointer;
         }
-        .pattern-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .pattern-btn.active {
+            background: var(--accent);
+            color: white;
+        }
 
         .timeline-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 5px;
+            margin-bottom: 5px;
         }
-        .mode-switch { display: flex; background: var(--bg-panel); border-radius: 8px; padding: 3px; }
+
+        .mode-switch {
+            display: flex;
+            background: var(--bg-panel);
+            border-radius: 8px;
+            padding: 3px;
+        }
+
         .mode-btn {
             background: none;
             border: none;
             color: var(--text-dim);
-            padding: 5px 12px;
-            font-size: 11px;
+            padding: 4px 10px;
+            font-size: 10px;
             border-radius: 6px;
             cursor: pointer;
         }
-        .mode-btn.active { background: var(--glass); color: white; }
 
-        .timeline-view {
+        .mode-btn.active {
+            background: var(--glass);
+            color: white;
+        }
+
+        .view-frame {
             flex-grow: 1;
             position: relative;
             overflow: hidden;
-            min-height: 400px;
             background: #000;
             border-radius: 12px;
             border: 1px solid var(--glass-border);
         }
 
-        .timeline-scroll { height: 100%; overflow-y: hidden; position: relative; }
-        .timeline-grid { display: flex; height: 100%; position: relative; }
+        .grid-container {
+            display: flex;
+            height: 100%;
+        }
 
-        .timeline-ruler {
-            width: 50px;
+        .ruler {
+            width: 45px;
             flex-shrink: 0;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
             border-right: 1px solid var(--glass-border);
             position: relative;
             z-index: 10;
         }
+
         .hour-mark {
             position: absolute;
-            left: 0; width: 100%;
+            left: 0;
+            width: 100%;
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-dim);
             transform: translateY(-50%);
         }
 
-        .timeline-items { flex-grow: 1; display: flex; position: relative; overflow-x: auto; }
-        .timeline-lane {
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        /* Select Mode Column */
+        .lane {
             flex: 1;
-            min-width: 110px;
+            min-width: 100px;
             border-right: 1px dotted var(--glass-border);
             position: relative;
             display: flex;
@@ -149,8 +177,7 @@
         }
 
         .lane-label {
-            height: 100px;
-            padding: 10px 5px;
+            padding: 8px 4px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -159,377 +186,535 @@
             position: sticky;
             top: 0;
             z-index: 5;
+            cursor: pointer;
         }
-        .label-row-1 img { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; border: 1px solid var(--glass-border); }
-        .item-time { font-size: 8.5px; opacity: 0.9; white-space: nowrap; }
-        .scheduled-item.item-tiny .item-time { font-size: 7px; transform: scale(0.9); }
-        .show-name { font-size: 8px; font-weight: 700; margin-top: 5px; line-height: 1.2; }
-        .show-meta { font-size: 9px; color: var(--text-dim); }
 
-        .lane-items { flex-grow: 1; position: relative; }
+        .lane-label img {
+            width: 35px;
+            height: 35px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
 
-        .scheduled-item {
+        .show-name {
+            font-size: 8px;
+            font-weight: 700;
+            margin: 3px 0;
+            line-height: 1.1;
+        }
+
+        .show-info {
+            font-size: 7px;
+            color: var(--text-dim);
+        }
+
+        /* Refine Mode Column */
+        .category-lane {
+            flex: 1;
+            min-width: 150px;
+            border-right: 1px solid var(--glass-border);
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .cat-header {
+            padding: 10px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            background: var(--glass);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .items-container {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .item-box {
             position: absolute;
-            left: 4px; right: 4px;
+            left: 4px;
+            right: 4px;
             border-radius: 6px;
-            padding: 4px;
-            font-size: 10px;
+            padding: 3px 6px;
+            font-size: 9px;
             cursor: pointer;
             overflow: hidden;
             border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             transition: 0.2s;
+        }
+
+        .item-box.unselected {
+            background: transparent;
+            border-style: dashed;
+            opacity: 0.5;
+        }
+
+        .item-box.selected {
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Refine Mode Item (non-proportional option) */
+        .refine-item {
+            position: relative !important;
+            top: 0 !important;
+            margin: 5px 4px;
+            height: auto !important;
+            min-height: 36px;
+            padding: 6px;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-panel);
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
         }
-        .scheduled-item.unselected { background: transparent; border-style: dashed; opacity: 0.6; }
-        .scheduled-item.selected { color: white; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+
+        .refine-time {
+            font-size: 8px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .refine-name {
+            font-size: 10px;
+            margin-top: 2px;
+        }
 
         .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(5px);
-            display: flex; justify-content: center; align-items: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
         }
-        .modal.hidden { display: none; }
+
+        .modal.hidden {
+            display: none;
+        }
+
         .modal-content {
             background: var(--bg-panel);
-            width: 90%; max-width: 400px;
-            padding: 20px; border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 16px;
             border: 1px solid var(--glass-border);
         }
-        .input-group { margin-bottom: 12px; }
-        .input-group label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
-        .input-group input {
-            width: 100%; background: rgba(0,0,0,0.2);
-            border: 1px solid var(--glass-border); color: white;
-            padding: 8px; border-radius: 6px;
+
+        .input-group {
+            margin-bottom: 12px;
         }
-        .modal-footer { display: flex; gap: 10px; }
-        .btn-primary { flex: 1; background: var(--accent); border: none; color: white; padding: 10px; border-radius: 8px; cursor: pointer; }
-        .btn-secondary { flex: 1; background: var(--glass); border: none; color: white; padding: 10px; border-radius: 8px; cursor: pointer; }
+
+        .input-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 3px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-fill {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn-p {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-s {
+            background: var(--glass);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .add-show-btn {
+            background: var(--glass);
+            border: 1px dashed var(--glass-border);
+            color: var(--text-dim);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
-    <div id="error-display">
-        ⚠️ <span id="error-message">JavaScript起動中...</span>
-    </div>
+    <div id="error-display">⚠️ <span id="error-message"></span></div>
 
     <div class="app-container" id="app-main">
         <header>
             <h1>夢のしおり</h1>
-            <div class="planner-controls">
-                <input type="date" id="plan-date">
-                <button id="btn-config" class="btn-icon">⚙️</button>
+            <div style="display:flex; gap:10px;">
+                <button onclick="openMasterModal(-1)" class="add-show-btn">＋ ショー追加</button>
+                <input type="date" id="plan-date"
+                    style="background:var(--bg-panel); border:1px solid var(--glass-border); color:white; padding:4px 8px; border-radius:6px; font-size:12px;">
+                <button id="btn-config"
+                    style="background:none; border:none; font-size:18px; cursor:pointer;">⚙️</button>
             </div>
         </header>
 
-        <main id="capture-area">
+        <main id="capture-area" style="flex-grow:1; display:flex; flex-direction:column; gap:5px; overflow:hidden;">
             <div id="pattern-list" class="pattern-tabs"></div>
 
             <div class="timeline-header">
-                <div id="timeline-title" style="font-size:12px; font-weight:700;">ショー・パレードを選択</div>
+                <div id="timeline-title" style="font-size:11px; font-weight:700;">スケジュール作成</div>
                 <div class="mode-switch">
-                    <button id="btn-mode-select" class="mode-btn active">選択モード</button>
-                    <button id="btn-mode-refine" class="mode-btn">予定追加モード</button>
+                    <button id="btn-mode-select" class="mode-btn active">ショー選択モード</button>
+                    <button id="btn-mode-refine" class="mode-btn">予定整理モード</button>
                 </div>
-                <button id="btn-save-image" style="background:none; border:none; color:var(--accent); font-size:11px; cursor:pointer;">📸 画像保存</button>
+                <button id="btn-save-image"
+                    style="background:none; border:none; color:var(--accent); font-size:10px; cursor:pointer;">📸
+                    画像保存</button>
             </div>
 
-            <div class="timeline-view">
-                <div class="timeline-scroll">
-                    <div class="timeline-grid">
-                        <div class="timeline-ruler" id="ruler-win"></div>
-                        <div class="timeline-items" id="items-win"></div>
-                    </div>
+            <div class="view-frame">
+                <div class="grid-container">
+                    <div class="ruler" id="ruler-win"></div>
+                    <div class="content-area" id="content-win"></div>
                 </div>
             </div>
         </main>
 
-        <div id="config-panel" class="modal hidden">
+        <!-- Modals -->
+        <div id="modal-item" class="modal hidden">
             <div class="modal-content">
-                <h3>設定</h3>
-                <div style="margin:20px 0; padding-bottom:15px; border-bottom:1px solid var(--glass-border);">
-                    <h4>データ管理</h4>
-                    <button id="btn-reset-data" style="background:#e74c3c; border:none; width:100%; padding:10px; border-radius:5px; color:white; cursor:pointer; margin-top:10px;">データを初期化する</button>
+                <h3 id="modal-item-title">予定の編集</h3>
+                <div id="modal-item-inputs" style="margin:15px 0;"></div>
+                <div class="modal-footer">
+                    <button id="btn-item-save" class="btn-fill btn-p">保存</button>
+                    <button onclick="closeModal('modal-item')" class="btn-fill btn-s">キャンセル</button>
                 </div>
-                <button id="btn-close-config" class="btn-secondary" style="width:100%;">閉じる</button>
+                <button id="btn-item-delete" class="btn-fill btn-danger">この予定を削除</button>
             </div>
         </div>
 
-        <div id="schedule-modal" class="modal hidden">
+        <div id="modal-master" class="modal hidden">
             <div class="modal-content">
-                <h3 id="modal-title">予定を編集</h3>
-                <div id="modal-inputs" style="margin:15px 0;"></div>
-                <div class="modal-footer">
-                    <button id="btn-confirm-add" class="btn-primary">保存</button>
-                    <button id="btn-cancel-add" class="btn-secondary">キャンセル</button>
+                <h3 id="modal-master-title">ショー情報の編集</h3>
+                <div id="modal-master-inputs" style="margin:15px 0;">
+                    <div class="input-group"><label>ショー名</label><input id="mst-name"></div>
+                    <div class="input-group"><label>所要時間 (分)</label><input type="number" id="mst-dur"></div>
+                    <div class="input-group"><label>抽選の有無</label><select id="mst-lottery">
+                            <option value="0">なし</option>
+                            <option value="1">あり</option>
+                        </select></div>
+                    <div class="input-group"><label>画像URL/ファイル名</label><input id="mst-img"></div>
+                    <div class="input-group"><label>公演時間 (半角カンマ区切り)</label><input id="mst-times"
+                            placeholder="13:00,15:30"></div>
                 </div>
+                <div class="modal-footer">
+                    <button id="btn-master-save" class="btn-fill btn-p">保存</button>
+                    <button onclick="closeModal('modal-master')" class="btn-fill btn-s">キャンセル</button>
+                </div>
+                <button id="btn-master-delete" class="btn-fill btn-danger">このショーを削除</button>
+            </div>
+        </div>
+
+        <div id="modal-config" class="modal hidden">
+            <div class="modal-content">
+                <h3>設定</h3>
+                <p style="font-size:12px; color:var(--text-dim); margin-top:10px;">データを完全にリセットします。</p>
+                <button onclick="resetAllData()" class="btn-fill btn-danger">全データを初期化</button>
+                <button onclick="closeModal('modal-config')" class="btn-fill btn-s"
+                    style="width:100%; margin-top:10px;">閉じる</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 最小構成からの段階的復旧 ---
-        
         var DEFAULT_EVENTS = [
-            { id: 1, name: "ディズニー・ハーモニー・イン・カラー", times: ["12:45"], isLottery: true, imageUrl: "ハーモニーインカラー.jpg", duration: 45 },
-            { id: 2, name: "東京ディズニーランド・エレクトリカルパレード", times: ["18:15"], isLottery: false, imageUrl: "エレクトリカルパレード.jpg", duration: 45 },
+            { id: 1, name: "ハーモニー・イン・カラー", times: ["12:45"], isLottery: true, imageUrl: "ハーモニーインカラー.jpg", duration: 45 },
+            { id: 2, name: "エレクトリカルパレード", times: ["18:15"], isLottery: false, imageUrl: "エレクトリカルパレード.jpg", duration: 45 },
             { id: 3, name: "リーチ・フォー・ザ・スターズ", times: ["17:50", "20:15"], isLottery: true, imageUrl: "リーチフォーザスターズ.jpg", duration: 20 },
-            { id: 4, name: "ジャンボリミッキー！レッツ・ダンス！", times: ["10:45", "12:00", "13:45", "15:00"], isLottery: true, imageUrl: "ジャンボリミッキー.jpg", duration: 15 },
-            { id: 5, name: "ミッキーのマジカルミュージックワールド", times: ["10:50", "12:15", "13:40", "15:45", "17:10"], isLottery: true, imageUrl: "マジカルミュージックワールド.jpg", duration: 25 },
+            { id: 4, name: "ジャンボリミッキー！", times: ["10:45", "12:00", "13:45", "15:00"], isLottery: true, imageUrl: "ジャンボリミッキー.jpg", duration: 15 },
+            { id: 5, name: "マジカルミュージックワールド", times: ["10:50", "12:15", "13:40", "15:45", "17:10"], isLottery: true, imageUrl: "マジカルミュージックワールド.jpg", duration: 25 },
             { id: 6, name: "クラブマウスビート", times: ["12:20", "13:45", "15:10", "17:15", "18:40"], isLottery: true, imageUrl: "クラブマウスビート.jpg", duration: 25 }
         ];
 
-        var DataManager = function() {
-            this.storageKey = 'disney_shiori_v2';
-            this.currentPatternId = 0;
+        var DataManager = function () {
+            this.key = 'disney_v3';
             this.init();
         };
-        DataManager.prototype.init = function() {
-            var s = localStorage.getItem(this.storageKey);
-            if (!s) { this.reset(); }
-            else { 
-                try { var p = JSON.parse(s); if(!p.plans) this.reset(); } 
-                catch(e) { this.reset(); } 
-            }
+        DataManager.prototype.init = function () {
+            var s = localStorage.getItem(this.key);
+            if (!s) { this.reset(); } else { try { var p = JSON.parse(s); if (!p.masterEvents) this.reset(); } catch (e) { this.reset(); } }
         };
-        DataManager.prototype.reset = function() {
+        DataManager.prototype.reset = function () {
             var d = { parkHours: { open: "09:00", close: "21:00" }, masterEvents: DEFAULT_EVENTS, plans: {} };
-            localStorage.setItem(this.storageKey, JSON.stringify(d));
+            this.save(d);
         };
-        DataManager.prototype.get = function() { return JSON.parse(localStorage.getItem(this.storageKey)); };
-        DataManager.prototype.save = function(d) { localStorage.setItem(this.storageKey, JSON.stringify(d)); };
-        DataManager.prototype.getPlans = function(date) {
-            var d = this.get();
-            if (!d.plans[date]) { d.plans[date] = [{ id: 0, name: "パターンA", items: [] }]; this.save(d); }
-            return d.plans[date];
-        };
+        DataManager.prototype.get = function () { return JSON.parse(localStorage.getItem(this.key)); };
+        DataManager.prototype.save = function (d) { localStorage.setItem(this.key, JSON.stringify(d)); };
 
         var dm = new DataManager();
-        var state = { date: new Date().toISOString().split('T')[0], mode: 'select', pId: 0, pixels: 1 };
+        var state = { date: new Date().toISOString().split('T')[0], mode: 'select', pId: 0, px: 1 };
         var COLORS = ['#6c5ce7', '#e84393', '#00cec9', '#fab1a0', '#00b894', '#0984e3', '#fdcb6e', '#fd79a8', '#55efc4', '#74b9ff'];
 
-        function timeToMin(t) { var p = t.split(':'); return parseInt(p[0])*60 + parseInt(p[1]); }
-        function minToTime(m) { var h=Math.floor(m/60), n=m%60; return (h<10?'0'+h:h)+':'+(n<10?'0'+n:n); }
+        function timeToMin(t) { var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]); }
+        function minToTime(m) { var h = Math.floor(m / 60), n = m % 60; return (h < 10 ? '0' + h : h) + ':' + (n < 10 ? '0' + n : n); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
         function init() {
-            document.getElementById('error-display').style.display = 'none';
             document.getElementById('app-main').style.visibility = 'visible';
-            
             document.getElementById('plan-date').value = state.date;
-            document.getElementById('plan-date').onchange = function(e){ state.date = e.target.value; render(); };
-            
-            document.getElementById('btn-config').onclick = function() { document.getElementById('config-panel').classList.remove('hidden'); };
-            document.getElementById('btn-close-config').onclick = function() { document.getElementById('config-panel').classList.add('hidden'); };
-            document.getElementById('btn-reset-data').onclick = function() { if(confirm("初期化しますか？")){ localStorage.clear(); location.reload(); } };
-            
-            document.getElementById('btn-mode-select').onclick = function() { setMode('select'); };
-            document.getElementById('btn-mode-refine').onclick = function() { setMode('refine'); };
-            document.getElementById('btn-save-image').onclick = saveAsImage;
-
+            document.getElementById('plan-date').onchange = function (e) { state.date = e.target.value; render(); };
+            document.getElementById('btn-mode-select').onclick = function () { state.mode = 'select'; render(); };
+            document.getElementById('btn-mode-refine').onclick = function () { state.mode = 'refine'; render(); };
+            document.getElementById('btn-config').onclick = function () { document.getElementById('modal-config').classList.remove('hidden'); };
+            document.getElementById('btn-save-image').onclick = saveImage;
             render();
-        }
-
-        function setMode(m) {
-            state.mode = m;
-            document.getElementById('btn-mode-select').className = 'mode-btn' + (m==='select'?' active':'');
-            document.getElementById('btn-mode-refine').className = 'mode-btn' + (m==='refine'?' active':'');
-            render();
-        }
-
-        function switchPattern(id) {
-            state.pId = id;
-            render();
-        }
-
-        function addNewPattern() {
-            var name = prompt("パターンの名前を入力してください");
-            if (name) {
-                var d = dm.get();
-                var p = d.plans[state.date] || [];
-                var newP = { id: Date.now(), name: name, items: [] };
-                p.push(newP);
-                d.plans[state.date] = p;
-                dm.save(d);
-                state.pId = newP.id;
-                render();
-            }
         }
 
         function render() {
             var d = dm.get();
-            var plans = dm.getPlans(state.date);
+            var plans = d.plans[state.date] || [{ id: 0, name: "パターンA", items: [] }];
             var activePlan = plans[0];
-            for(var i=0; i<plans.length; i++) { if(plans[i].id === state.pId) activePlan = plans[i]; }
+            for (var i = 0; i < plans.length; i++) { if (plans[i].id === state.pId) activePlan = plans[i]; }
 
-            var tabs = document.getElementById('pattern-list');
-            tabs.innerHTML = '';
-            for(var i=0; i<plans.length; i++) {
-                var b = document.createElement('button');
-                b.className = 'pattern-btn' + (plans[i].id===state.pId?' active':'');
-                b.innerText = plans[i].name;
-                (function(id){ b.onclick = function(){ switchPattern(id); }; })(plans[i].id);
+            // Mode UI
+            document.getElementById('btn-mode-select').className = 'mode-btn' + (state.mode === 'select' ? ' active' : '');
+            document.getElementById('btn-mode-refine').className = 'mode-btn' + (state.mode === 'refine' ? ' active' : '');
+
+            // Tabs
+            var tabs = document.getElementById('pattern-list'); tabs.innerHTML = '';
+            plans.forEach(function (p) {
+                var b = document.createElement('button'); b.className = 'pattern-btn' + (p.id === state.pId ? ' active' : '');
+                b.innerText = p.name; b.onclick = function () { state.pId = p.id; render(); };
                 tabs.appendChild(b);
-            }
-            var addBtn = document.createElement('button');
-            addBtn.className = 'pattern-btn';
-            addBtn.innerText = '＋ 追加';
-            addBtn.onclick = addNewPattern;
-            tabs.appendChild(addBtn);
+            });
+            var addP = document.createElement('button'); addP.className = 'pattern-btn'; addP.innerText = '＋追加';
+            addP.onclick = function () {
+                var n = prompt("名前"); if (n) { plans.push({ id: Date.now(), name: n, items: [] }); d.plans[state.date] = plans; dm.save(d); state.pId = plans[plans.length - 1].id; render(); }
+            };
+            tabs.appendChild(addP);
 
-            var container = document.getElementById('items-win');
+            // Ruler & Pixels (Always visible)
             var ruler = document.getElementById('ruler-win');
-            container.innerHTML = '';
-            
             var start = timeToMin(d.parkHours.open), end = timeToMin(d.parkHours.close);
-            var dur = end - start;
-            var v = document.querySelector('.timeline-view');
-            var vTop = v.getBoundingClientRect().top;
-            var h = window.innerHeight - vTop - 20; 
-            if (h < 400) h = 400;
-            
-            var headerH = 95; 
-            var availableH = h - headerH;
-            state.pixels = availableH / dur;
+            var h = window.innerHeight - ruler.getBoundingClientRect().top - 20; if (h < 400) h = 400;
+            var headerH = 85;
+            state.px = (h - headerH) / (end - start);
 
+            ruler.style.display = 'block';
             var rHtml = '<div style="height:' + headerH + 'px"></div>';
-            for(var m=start; m<=end; m+=60) {
-                var top = (m-start)*state.pixels + headerH;
-                rHtml += '<div class="hour-mark" style="top:' + top + 'px">' + Math.floor(m/60) + ':00</div>';
+            var gridHtml = '';
+            for (var m = start; m <= end; m += 60) {
+                var top = (m - start) * state.px + headerH;
+                rHtml += '<div class="hour-mark" style="top:' + top + 'px">' + Math.floor(m / 60) + ':00</div>';
+                gridHtml += '<div style="position:absolute; top:' + top + 'px; left:0; right:0; height:1px; background:rgba(255,255,255,0.05); z-index:1; pointer-events:none;"></div>';
             }
             ruler.innerHTML = rHtml;
 
-            var masters = d.masterEvents;
-            for(var i=0; i<masters.length; i++) {
-                var m = masters[i];
-                var lane = document.createElement('div');
-                lane.className = 'timeline-lane';
-                lane.innerHTML = '<div class="lane-label" style="height:'+headerH+'px">' +
-                    '<div class="label-row-1"><img src="' + m.imageUrl + '" style="width:35px;height:35px;border-radius:4px;"></div>' +
-                    '<div class="show-name" style="color:' + COLORS[i%COLORS.length] + ';font-size:8px;margin:2px 0;">' + m.name + '</div>' +
-                    '<div style="font-size:8px;color:var(--text-dim);">' +
-                        '⏱️' + m.duration + '分' + (m.isLottery ? ' | 🎟️要抽選' : '') +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="lane-items"></div>';
-                
-                var itemsArea = lane.querySelector('.lane-items');
-                if (state.mode === 'refine') itemsArea.onclick = openAddModal;
-                
-                for(var j=0; j<m.times.length; j++) {
-                    var t = m.times[j];
-                    var isSel = false, realIdx = -1;
-                    for(var k=0; k<activePlan.items.length; k++) {
-                        if(activePlan.items[k].masterId === m.id && activePlan.items[k].time === t) { isSel = true; realIdx = k; break; }
-                    }
-                    if(state.mode === 'select' || isSel) renderItem(itemsArea, m, t, isSel, start, i, realIdx);
-                }
-                container.appendChild(lane);
-            }
+            // Content
+            var win = document.getElementById('content-win'); win.innerHTML = gridHtml;
+            if (state.mode === 'select') {
+                d.masterEvents.forEach(function (m, idx) {
+                    var lane = document.createElement('div'); lane.className = 'lane';
+                    lane.innerHTML = '<div class="lane-label" style="height:' + headerH + 'px">' +
+                        '<div class="label-row-1"><img src="' + m.imageUrl + '"></div>' +
+                        '<div class="show-name" style="color:' + COLORS[idx % COLORS.length] + '">' + m.name + '</div>' +
+                        '<div class="show-info">⏱️' + m.duration + '分' + (m.isLottery ? ' | 🎟️要抽選' : '') + '</div></div>' +
+                        '<div class="items-container"></div>';
+                    lane.querySelector('.lane-label').onclick = function () { openMasterModal(idx); };
 
-            if (state.mode === 'refine') {
-                var otherItems = [];
-                for(var k=0; k<activePlan.items.length; k++) { if (activePlan.items[k].isCustom) otherItems.push({ item: activePlan.items[k], idx: k }); }
-                var otherLane = document.createElement('div');
-                otherLane.className = 'timeline-lane';
-                otherLane.innerHTML = '<div class="lane-label" style="height:'+headerH+'px">' +
-                    '<div style="width:35px;height:35px;background:var(--glass);border-radius:4px;display:flex;align-items:center;justify-content:center;">➕</div>' +
-                    '<div class="show-name" style="color:#aaa;font-size:9px;margin:5px 0;">その他・休憩</div></div>' +
-                    '<div class="lane-items"></div>';
-                otherLane.querySelector('.lane-items').onclick = openAddModal;
-                var otherArea = otherLane.querySelector('.lane-items');
-                for (var i=0; i<otherItems.length; i++) renderItem(otherArea, otherItems[i].item, otherItems[i].item.time, true, start, 99, otherItems[i].idx);
-                container.appendChild(otherLane);
+                    var area = lane.querySelector('.items-container');
+                    m.times.forEach(function (t) {
+                        var isSel = activePlan.items.some(function (it) { return it.masterId === m.id && it.time === t; });
+                        renderItemBox(area, m, t, isSel, start, idx, false, activePlan.id);
+                    });
+                    win.appendChild(lane);
+                });
+            } else {
+                // Refine Mode: Show each Pattern as a column
+                plans.forEach(function (p, pIdx) {
+                    var lane = document.createElement('div'); lane.className = 'category-lane';
+                    lane.style.minWidth = '200px';
+                    lane.innerHTML = '<div class="cat-header" style="height:' + headerH + 'px; display:flex; flex-direction:column; align-items:center; justify-content:center;">' +
+                        '<div style="font-size:12px; color:var(--accent);">' + p.name + '</div>' +
+                        '<div style="font-size:9px; color:var(--text-dim); font-weight:normal;">スケジュール</div></div>' +
+                        '<div class="items-container" style="background:rgba(255,255,255,0.015)"></div>';
+                    var area = lane.querySelector('.items-container');
+
+                    area.onclick = function (e) {
+                        if (e.target === area) {
+                            var rect = area.getBoundingClientRect();
+                            var y = e.clientY - rect.top;
+                            var clickedMin = Math.round(y / state.px) + start;
+                            clickedMin = Math.floor(clickedMin / 15) * 15;
+                            openItemModal(-1, 'other', minToTime(clickedMin), p.id);
+                        }
+                    };
+
+                    p.items.forEach(function (it) {
+                        var mIdx = -1;
+                        if (it.masterId !== 999) {
+                            mIdx = d.masterEvents.findIndex(function (m) { return m.id === it.masterId; });
+                        }
+                        renderItemBox(area, it, it.time, true, start, (mIdx >= 0 ? mIdx : 99), true, p.id);
+                    });
+                    win.appendChild(lane);
+                });
             }
         }
 
-        function renderItem(area, m, t, isSel, start, mIdx, realIdx) {
-            var mStart = timeToMin(t), dur = m.duration || 30;
+        function renderItemBox(area, it, t, isSel, start, mIdx, isRefine, pId) {
+            var mStart = timeToMin(t), dur = it.duration || 30;
             var div = document.createElement('div');
-            div.className = 'scheduled-item ' + (isSel?'selected':'unselected');
-            if (dur <= 15) div.className += ' item-tiny';
-            div.style.top = (mStart - start) * state.pixels + 'px';
-            div.style.height = Math.max(dur * state.pixels, 18) + 'px';
-            if(isSel) div.style.backgroundColor = COLORS[mIdx%COLORS.length];
-            else { div.style.borderColor = COLORS[mIdx%COLORS.length]; div.style.color = COLORS[mIdx%COLORS.length]; }
-            
-            div.innerHTML = '<div class="item-time">' + t + '~' + minToTime(mStart+dur) + '</div>' + 
-                (state.mode==='refine'?'<div class="item-name">'+m.name+'</div>':'') +
-                (state.mode==='refine' && realIdx !== -1 ? '<div style="position:absolute;top:0;right:2px;font-size:12px;opacity:0.7;" onclick="removeItem(event,'+realIdx+')">×</div>' : '');
-            
-            (function(master, time, idx){
-                div.onclick = function(e) {
-                    e.stopPropagation();
-                    if(state.mode === 'select') toggle(master, time);
-                    else if(idx !== -1) openEditModal(idx);
+            div.className = 'item-box ' + (isSel ? 'selected' : 'unselected');
+
+            div.style.top = (mStart - start) * state.px + 'px';
+            var h = dur * state.px;
+            if (isRefine) {
+                h = Math.max(h, 40); // 整理モードでは情報を多く出すため高さを確保
+                div.style.zIndex = 20;
+                div.style.padding = '5px 8px';
+            }
+            div.style.height = h + 'px';
+
+            var color = COLORS[mIdx % COLORS.length] || '#999';
+            if (isSel) div.style.backgroundColor = color;
+            else { div.style.borderColor = color; div.style.color = color; }
+
+            if (isRefine) {
+                div.innerHTML = '<div style="font-size:7px; opacity:0.8; font-weight:normal;">' + t + ' ~ ' + minToTime(mStart + dur) + '</div>' +
+                    '<div style="font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + it.name + '</div>';
+                div.onclick = function () {
+                    var d = dm.get();
+                    var p = d.plans[state.date].find(function (p) { return p.id === pId; });
+                    var realIdx = p.items.indexOf(it);
+                    openItemModal(realIdx, null, null, pId);
                 };
-            })(m, t, realIdx);
+            } else {
+                div.innerHTML = '<span style="font-size:8px;">' + t + '~' + minToTime(mStart + dur) + '</span>';
+                div.onclick = function () { toggleSelection(it, t, pId); };
+            }
             area.appendChild(div);
         }
 
-        function toggle(m, t) {
-            var d = dm.get(), plans = d.plans[state.date] || [], p = plans[0];
-            for(var i=0; i<plans.length; i++) { if(plans[i].id === state.pId) p = plans[i]; }
-            var found = -1;
-            for(var i=0; i<p.items.length; i++) { if(p.items[i].masterId === m.id && p.items[i].time === t) found = i; }
-            if(found === -1) { p.items.push({ masterId: m.id, name: m.name, time: t, duration: m.duration }); }
-            else { p.items.splice(found, 1); }
+        function toggleSelection(m, t, pId) {
+            var d = dm.get(); var plans = d.plans[state.date] || [{ id: 0, name: "パターンA", items: [] }];
+            var p = plans.find(function (it) { return it.id === pId; });
+            var idx = p.items.findIndex(function (it) { return it.masterId === m.id && it.time === t; });
+            if (idx === -1) p.items.push({ masterId: m.id, name: m.name, time: t, duration: m.duration });
+            else p.items.splice(idx, 1);
             d.plans[state.date] = plans; dm.save(d); render();
         }
 
-        window.removeItem = function(e, idx) {
-            e.stopPropagation();
-            var d = dm.get(), plans = d.plans[state.date], p = plans[0];
-            for(var i=0; i<plans.length; i++) { if(plans[i].id === state.pId) p = plans[i]; }
-            p.items.splice(idx, 1); dm.save(d); render();
-        };
+        function openItemModal(idx, cat, initialTime, pId) {
+            var d = dm.get(); var plans = d.plans[state.date]; 
+            var targetPId = pId !== undefined ? pId : state.pId;
+            var p = plans.find(function (it) { return it.id === targetPId; });
+            var it = idx === -1 ? { name: '', time: initialTime || '', duration: 30, cat: cat || 'other' } : p.items[idx];
 
-        function openAddModal() {
-            renderInputs(null);
-            document.getElementById('modal-title').innerText = "予定を追加";
-            document.getElementById('schedule-modal').classList.remove('hidden');
-            document.getElementById('btn-confirm-add').onclick = function(){ saveItem(-1); };
-        }
-        function openEditModal(idx) {
-            var p = dm.getPlans(state.date), active = p[0];
-            for(var i=0; i<p.length; i++) { if(p[i].id===state.pId) active=p[i]; }
-            renderInputs(active.items[idx]);
-            document.getElementById('modal-title').innerText = "予定を編集";
-            document.getElementById('schedule-modal').classList.remove('hidden');
-            document.getElementById('btn-confirm-add').onclick = function(){ saveItem(idx); };
-        }
-        function renderInputs(item) {
-            document.getElementById('modal-inputs').innerHTML = 
-                '<div class="input-group"><label>予定名</label><input id="m-name" value="'+(item?item.name:'')+'"></div>' +
-                '<div class="input-group"><label>開始時間</label><input type="time" id="m-time" value="'+(item?item.time:'')+'"></div>' +
-                '<div class="input-group"><label>所要時間(分)</label><input type="number" id="m-dur" value="'+(item?item.duration:30)+'"></div>';
-        }
-        function saveItem(idx) {
-            var n = document.getElementById('m-name').value, t = document.getElementById('m-time').value, dr = parseInt(document.getElementById('m-dur').value);
-            if(!n || !t) return;
-            var d = dm.get(), plans = d.plans[state.date], p = plans[0];
-            for(var i=0; i<plans.length; i++) { if(plans[i].id === state.pId) p = plans[i]; }
-            var item = { name:n, time:t, duration:dr, isCustom:true, masterId:999 };
-            if(idx === -1) p.items.push(item); else p.items[idx] = item;
-            p.items.sort(function(a,b){ return a.time.localeCompare(b.time); });
-            dm.save(d); document.getElementById('schedule-modal').classList.add('hidden'); render();
-        }
-        document.getElementById('btn-cancel-add').onclick = function(){ document.getElementById('schedule-modal').classList.add('hidden'); };
+            var html = '<div class="input-group"><label>名称</label><input id="it-name" value="' + it.name + '"></div>' +
+                '<div class="input-group"><label>開始時間</label><input type="time" id="it-time" value="' + it.time + '"></div>' +
+                '<div class="input-group"><label>所要時間(分)</label><input type="number" id="it-dur" value="' + it.duration + '"></div>' +
+                '<div class="input-group"><label>カテゴリ</label><select id="it-cat">' +
+                '<option value="show" ' + (it.cat === 'show' ? 'selected' : '') + '>ショー・パレード</option>' +
+                '<option value="attraction" ' + (it.cat === 'attraction' ? 'selected' : '') + '>アトラクション</option>' +
+                '<option value="food" ' + (it.cat === 'food' ? 'selected' : '') + '>食事・休憩</option>' +
+                '<option value="other" ' + (it.cat === 'other' ? 'selected' : '') + '>その他</option></select></div>';
+            document.getElementById('modal-item-inputs').innerHTML = html;
+            document.getElementById('modal-item-title').innerText = idx === -1 ? '予定の追加 (' + p.name + ')' : '予定の編集 (' + p.name + ')';
+            document.getElementById('btn-item-delete').style.display = idx === -1 ? 'none' : 'block';
+            document.getElementById('modal-item').classList.remove('hidden');
 
-        function saveAsImage() {
+            document.getElementById('btn-item-save').onclick = function () {
+                it.name = document.getElementById('it-name').value; it.time = document.getElementById('it-time').value;
+                it.duration = parseInt(document.getElementById('it-dur').value); it.cat = document.getElementById('it-cat').value;
+                if (!it.name || !it.time) return;
+                if (it.cat === 'show') {
+                    // ショーカテゴリの場合、マスターIDがない場合はダミーを付与（整理モードでの識別のための暫定処置）
+                    if (it.masterId === undefined) it.masterId = 888; 
+                } else {
+                    it.masterId = 999;
+                }
+                if (idx === -1) p.items.push(it);
+                p.items.sort(function (a, b) { return a.time.localeCompare(b.time); });
+                dm.save(d); closeModal('modal-item'); render();
+            };
+            document.getElementById('btn-item-delete').onclick = function () { p.items.splice(idx, 1); dm.save(d); closeModal('modal-item'); render(); };
+        }
+
+        function openMasterModal(idx) {
+            var d = dm.get();
+            var m = idx === -1 ? { id: Date.now(), name: '', duration: 30, isLottery: false, imageUrl: '', times: [] } : d.masterEvents[idx];
+
+            document.getElementById('mst-name').value = m.name;
+            document.getElementById('mst-dur').value = m.duration;
+            document.getElementById('mst-lottery').value = m.isLottery ? "1" : "0";
+            document.getElementById('mst-img').value = m.imageUrl;
+            document.getElementById('mst-times').value = m.times.join(',');
+
+            document.getElementById('modal-master-title').innerText = idx === -1 ? 'ショーの新規追加' : 'ショー情報の編集';
+            document.getElementById('btn-master-delete').style.display = idx === -1 ? 'none' : 'block';
+            document.getElementById('modal-master').classList.remove('hidden');
+
+            document.getElementById('btn-master-save').onclick = function () {
+                m.name = document.getElementById('mst-name').value;
+                m.duration = parseInt(document.getElementById('mst-dur').value);
+                m.isLottery = document.getElementById('mst-lottery').value === "1";
+                m.imageUrl = document.getElementById('mst-img').value;
+                m.times = document.getElementById('mst-times').value.split(',').map(function (s) { return s.trim(); }).filter(function (s) { return s; });
+                if (!m.name) return;
+                if (idx === -1) d.masterEvents.push(m);
+                dm.save(d); closeModal('modal-master'); render();
+            };
+            document.getElementById('btn-master-delete').onclick = function () {
+                if (confirm("このショー自体をリストから削除しますか？")) { d.masterEvents.splice(idx, 1); dm.save(d); closeModal('modal-master'); render(); }
+            };
+        }
+
+        function resetAllData() { if (confirm("全データを初期化しますか？")) { localStorage.clear(); location.reload(); } }
+        function saveImage() {
             var area = document.getElementById('capture-area');
-            html2canvas(area, { backgroundColor: "#0b0b1a", scale: 2 }).then(function(canvas) {
-                var link = document.createElement('a');
-                link.download = 'disney_plan.png';
-                link.href = canvas.toDataURL();
-                link.click();
+            html2canvas(area, { backgroundColor: "#0b0b1a", scale: 2 }).then(function (canvas) {
+                var link = document.createElement('a'); link.download = 'disney_plan.png'; link.href = canvas.toDataURL(); link.click();
             });
         }
 
-        var check = setInterval(function() {
-            if (document.getElementById('plan-date')) { clearInterval(check); init(); }
-        }, 100);
+        var check = setInterval(function () { if (document.getElementById('plan-date')) { clearInterval(check); init(); } }, 100);
     </script>
 </body>
+
 </html>

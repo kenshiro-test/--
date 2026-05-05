@@ -1,5 +1,5 @@
 /**
- * Disney Planner - Main App Logic (V6 - Multi-Plan & One Screen)
+ * Dream Planner - Main App Logic (V6 - Multi-Plan & One Screen)
  */
 
 // 互換性重視 (ES5)
@@ -457,7 +457,7 @@ function saveAsImage() {
         scale: 2
     }).then(canvas => {
         const link = document.createElement('a');
-        link.download = `disney_plan_${selectedDate}.png`;
+        link.download = `dream_plan_${selectedDate}.png`;
         link.href = canvas.toDataURL();
         link.click();
     });

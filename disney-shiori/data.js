@@ -8,7 +8,7 @@ const DEFAULT_EVENTS = [
 ];
 
 var DataManager = function() {
-    this.storageKey = 'disney_shiori_v2';
+    this.storageKey = 'dream_shiori_v2';
     this.currentPatternId = 0;
     this.init();
 };

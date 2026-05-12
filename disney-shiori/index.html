@@ -836,6 +836,10 @@
                 grid.appendChild(columnsContainer);
                 win.appendChild(grid);
                 ruler.style.display = 'none'; // We integrated it into the grid
+                
+                var totalH = headerH + 30;
+                for(var i=0; i<segmentHeights.length; i++) totalH += segmentHeights[i];
+                win.style.height = totalH + 'px';
             }
         }
 

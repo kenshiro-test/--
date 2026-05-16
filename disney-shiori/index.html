@@ -3266,8 +3266,7 @@
             loginAdmin(email, password, function (ok) {
                 if (ok) {
                     localStorage.setItem('dream_admin_email', email);
-                    enableAdminUi();
-                    openAdminDashboard();
+                    syncThenOpenAdminDashboard();
                 } else {
                     document.getElementById('admin-login-error').innerText = 'メールアドレスまたはパスワードが違います。';
                     passwordInput.focus();
@@ -3286,6 +3285,13 @@
             adminEntryBtn.onclick = openAdminDashboard;
             document.querySelector('.add-show-btn').style.display = '';
             render();
+        }
+
+        function syncThenOpenAdminDashboard() {
+            dm.syncWithServer(function () {
+                enableAdminUi();
+                openAdminDashboard();
+            });
         }
 
         function configureAdminEntry(isRequested) {
@@ -3308,8 +3314,7 @@
                 }
 
                 if (status.authenticated) {
-                    enableAdminUi();
-                    openAdminDashboard();
+                    syncThenOpenAdminDashboard();
                     return;
                 }
 

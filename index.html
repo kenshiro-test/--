@@ -1363,6 +1363,8 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            min-width: 0;
+            max-width: 100%;
         }
 
         .home-tabs {
@@ -1723,6 +1725,7 @@
             gap: 8px;
             margin-top: 10px;
             min-width: 0;
+            width: 100%;
         }
 
         .task-row7 {
@@ -1734,6 +1737,8 @@
             flex-direction: column;
             gap: 8px;
             min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .task-main7 {
@@ -1770,6 +1775,7 @@
             padding-left: 24px;
             min-width: 0;
             max-width: 100%;
+            box-sizing: border-box;
         }
 
         .task-priority-arrow-right {
@@ -1905,6 +1911,11 @@
             color: #667085;
             font-size: 13px;
             text-align: center;
+            overflow-wrap: anywhere;
+            word-break: break-all;
+            white-space: normal;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         @media (max-width: 820px) {
@@ -1924,10 +1935,10 @@
             }
 
             .home-shell {
-                width: calc(100% - 72px);
-                max-width: 430px;
+                width: 100%;
+                max-width: 100%;
                 border-radius: 0;
-                padding: 24px 8px 40px;
+                padding: 20px 10px 36px;
                 border-left: none;
                 border-right: none;
                 margin-left: auto;
@@ -1981,8 +1992,9 @@
             }
 
             .task-meta-bar {
-                align-items: flex-start;
+                align-items: stretch;
                 gap: 8px;
+                flex-direction: column;
             }
 
             .task-main7 {
@@ -1996,7 +2008,7 @@
 
             .task-actions7 {
                 display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-columns: 1fr;
                 justify-content: stretch;
             }
 
@@ -2016,10 +2028,10 @@
 
         @media (max-width: 520px) {
             .home-shell {
-                width: calc(100% - 72px);
-                max-width: 430px;
-                padding-left: 6px;
-                padding-right: 6px;
+                width: 100%;
+                max-width: 100%;
+                padding-left: 8px;
+                padding-right: 8px;
                 margin-left: auto;
                 margin-right: auto;
             }
@@ -2740,11 +2752,13 @@
 
         SupabaseRemoteStore.prototype.load = function () {
             var self = this;
+            this.ensureClient();
             return this.init().then(function (ok) {
-                if (!ok || !self.user) return null;
                 return Promise.all([
                     self.client.from('global_data').select('data').eq('id', 'main').maybeSingle(),
-                    self.client.from('user_data').select('data').eq('user_id', self.user.id).maybeSingle(),
+                    ok && self.user
+                        ? self.client.from('user_data').select('data').eq('user_id', self.user.id).maybeSingle()
+                        : Promise.resolve({ data: null, error: null }),
                     self.loadMasterSeed()
                 ]).then(function (results) {
                     var globalResult = results[0];
@@ -3857,11 +3871,20 @@
             for (var i = 0; i < parks.length; i++) {
                 var park = parks[i];
                 var pd = data.parks[park];
-                var map = pd && pd.dailySchedules && pd.dailySchedules[ds] ? pd.dailySchedules[ds] : null;
-                if (!map) continue;
-                var showIds = Object.keys(map);
-                for (var j = 0; j < showIds.length; j++) {
-                    if (Array.isArray(map[showIds[j]])) return false;
+                if (!pd) continue;
+                // dailySchedulesにこの日のデータがあれば、登録済みとみなす
+                var map = pd.dailySchedules && pd.dailySchedules[ds] ? pd.dailySchedules[ds] : null;
+                if (map) {
+                    var showIds = Object.keys(map);
+                    for (var j = 0; j < showIds.length; j++) {
+                        if (Array.isArray(map[showIds[j]])) return false;
+                    }
+                }
+                // dailySchedulesが無くても、masterEventsにデフォルト時間があればOK
+                if (pd.masterEvents && pd.masterEvents.length > 0) {
+                    for (var k = 0; k < pd.masterEvents.length; k++) {
+                        if (pd.masterEvents[k].times && pd.masterEvents[k].times.length > 0) return false;
+                    }
                 }
             }
             return true;

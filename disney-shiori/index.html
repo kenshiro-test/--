@@ -1924,12 +1924,10 @@
             }
 
             .home-shell {
-                width: calc(100% - 72px);
-                max-width: 430px;
-                border-radius: 0;
-                padding: 24px 8px 40px;
-                border-left: none;
-                border-right: none;
+                width: calc(100% - 16px);
+                max-width: 520px;
+                border-radius: 12px;
+                padding: 20px 10px 36px;
                 margin-left: auto;
                 margin-right: auto;
             }
@@ -2016,10 +2014,10 @@
 
         @media (max-width: 520px) {
             .home-shell {
-                width: calc(100% - 72px);
-                max-width: 430px;
-                padding-left: 6px;
-                padding-right: 6px;
+                width: calc(100% - 12px);
+                max-width: 100%;
+                padding-left: 8px;
+                padding-right: 8px;
                 margin-left: auto;
                 margin-right: auto;
             }
@@ -3857,11 +3855,20 @@
             for (var i = 0; i < parks.length; i++) {
                 var park = parks[i];
                 var pd = data.parks[park];
-                var map = pd && pd.dailySchedules && pd.dailySchedules[ds] ? pd.dailySchedules[ds] : null;
-                if (!map) continue;
-                var showIds = Object.keys(map);
-                for (var j = 0; j < showIds.length; j++) {
-                    if (Array.isArray(map[showIds[j]])) return false;
+                if (!pd) continue;
+                // dailySchedulesにこの日のデータがあれば、登録済みとみなす
+                var map = pd.dailySchedules && pd.dailySchedules[ds] ? pd.dailySchedules[ds] : null;
+                if (map) {
+                    var showIds = Object.keys(map);
+                    for (var j = 0; j < showIds.length; j++) {
+                        if (Array.isArray(map[showIds[j]])) return false;
+                    }
+                }
+                // dailySchedulesが無くても、masterEventsにデフォルト時間があればOK
+                if (pd.masterEvents && pd.masterEvents.length > 0) {
+                    for (var k = 0; k < pd.masterEvents.length; k++) {
+                        if (pd.masterEvents[k].times && pd.masterEvents[k].times.length > 0) return false;
+                    }
                 }
             }
             return true;

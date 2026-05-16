@@ -2054,6 +2054,7 @@
         <div class="admin-login-card">
             <div class="admin-login-title">管理者ログイン</div>
             <div class="admin-login-desc">ショー・パレードの追加、削除、日別スケジュールの一括入力を行います。</div>
+            <input id="admin-login-email" class="admin-login-input" type="email" placeholder="管理者メールアドレス">
             <input id="admin-login-password" class="admin-login-input" type="password" placeholder="管理者パスワード">
             <div id="admin-login-error" class="admin-login-error"></div>
             <button id="btn-admin-login-submit" class="btn-admin-action btn-primary"
@@ -2715,34 +2716,49 @@
 
         SupabaseRemoteStore.prototype.getAdminStatus = function () {
             var self = this;
-            if (!this.isEnabled() || !this.config.adminEmail) {
+            if (!this.isEnabled()) {
                 return Promise.resolve({ available: false, authenticated: false });
             }
             return this.init().then(function () {
-                var email = self.user && self.user.email ? self.user.email.toLowerCase() : '';
-                return {
-                    available: true,
-                    authenticated: email === String(self.config.adminEmail).toLowerCase()
-                };
+                if (!self.user) return { available: true, authenticated: false };
+                return self.client.from('admin_users')
+                    .select('user_id')
+                    .eq('user_id', self.user.id)
+                    .maybeSingle()
+                    .then(function (result) {
+                        if (result.error) throw result.error;
+                        return {
+                            available: true,
+                            authenticated: !!(result.data && result.data.user_id)
+                        };
+                    });
+            }).catch(function (error) {
+                console.warn('Supabase admin status failed:', error && error.message ? error.message : error);
+                return { available: true, authenticated: false };
             });
         };
 
-        SupabaseRemoteStore.prototype.loginAdmin = function (password) {
+        SupabaseRemoteStore.prototype.loginAdmin = function (email, password) {
             var self = this;
-            if (!this.isEnabled() || !this.config.adminEmail || !password) return Promise.resolve(false);
+            if (!this.isEnabled() || !email || !password) return Promise.resolve(false);
             if (!this.client) {
                 this.client = window.supabase.createClient(this.config.url, this.config.anonKey, {
                     auth: { persistSession: true, autoRefreshToken: true }
                 });
             }
             return this.client.auth.signInWithPassword({
-                email: this.config.adminEmail,
+                email: email,
                 password: password
             }).then(function (result) {
                 if (result.error) throw result.error;
                 self.user = result.data.user;
                 self.ready = true;
-                return true;
+                return self.getAdminStatus().then(function (status) {
+                    if (!status.authenticated) {
+                        return self.logoutAdmin().then(function () { return false; });
+                    }
+                    return true;
+                });
             }).catch(function (error) {
                 console.warn('Supabase admin login failed:', error && error.message ? error.message : error);
                 return false;
@@ -3171,9 +3187,9 @@
                 .catch(function () { callback({ available: false, authenticated: false }); });
         }
 
-        function loginAdmin(password, callback) {
+        function loginAdmin(email, password, callback) {
             if (dm.remote && dm.remote.isEnabled()) {
-                dm.remote.loginAdmin(password).then(function (ok) { callback(!!ok); });
+                dm.remote.loginAdmin(email, password).then(function (ok) { callback(!!ok); });
                 return;
             }
             fetch('/api/admin/login', {
@@ -3218,9 +3234,14 @@
             document.getElementById('admin-dashboard').style.display = 'none';
             document.getElementById('admin-login-screen').style.display = 'flex';
             document.getElementById('admin-login-error').innerText = message || '';
-            var input = document.getElementById('admin-login-password');
-            input.value = '';
-            setTimeout(function () { input.focus(); }, 0);
+            var emailInput = document.getElementById('admin-login-email');
+            var passwordInput = document.getElementById('admin-login-password');
+            emailInput.value = localStorage.getItem('dream_admin_email') || '';
+            passwordInput.value = '';
+            setTimeout(function () {
+                if (emailInput.value) passwordInput.focus();
+                else emailInput.focus();
+            }, 0);
         }
 
         function hideAdminLogin() {
@@ -3228,19 +3249,28 @@
         }
 
         function submitAdminLogin() {
-            var input = document.getElementById('admin-login-password');
-            var password = input.value;
-            if (!password) {
-                document.getElementById('admin-login-error').innerText = 'パスワードを入力してください。';
+            var emailInput = document.getElementById('admin-login-email');
+            var passwordInput = document.getElementById('admin-login-password');
+            var email = String(emailInput.value || '').trim();
+            var password = passwordInput.value;
+            if (!email) {
+                document.getElementById('admin-login-error').innerText = 'メールアドレスを入力してください。';
+                emailInput.focus();
                 return;
             }
-            loginAdmin(password, function (ok) {
+            if (!password) {
+                document.getElementById('admin-login-error').innerText = 'パスワードを入力してください。';
+                passwordInput.focus();
+                return;
+            }
+            loginAdmin(email, password, function (ok) {
                 if (ok) {
+                    localStorage.setItem('dream_admin_email', email);
                     enableAdminUi();
                     openAdminDashboard();
                 } else {
-                    document.getElementById('admin-login-error').innerText = 'パスワードが違います。';
-                    input.focus();
+                    document.getElementById('admin-login-error').innerText = 'メールアドレスまたはパスワードが違います。';
+                    passwordInput.focus();
                 }
             });
         }
@@ -3303,6 +3333,9 @@
                 document.getElementById('plan-date').onchange = function (e) { state.date = e.target.value; render(); };
                 document.getElementById('btn-config').onclick = function () { document.getElementById('modal-config').classList.remove('hidden'); };
                 document.getElementById('btn-admin-login-submit').onclick = submitAdminLogin;
+                document.getElementById('admin-login-email').onkeydown = function (e) {
+                    if (e.key === 'Enter') submitAdminLogin();
+                };
                 document.getElementById('admin-login-password').onkeydown = function (e) {
                     if (e.key === 'Enter') submitAdminLogin();
                 };

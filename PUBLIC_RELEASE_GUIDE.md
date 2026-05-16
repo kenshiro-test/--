@@ -36,7 +36,6 @@ values ('SUPABASE_ADMIN_USER_ID');
 window.DREAM_SUPABASE_CONFIG = {
     url: "https://YOUR_PROJECT_ID.supabase.co",
     anonKey: "YOUR_SUPABASE_ANON_KEY",
-    adminEmail: "admin@example.com",
     imageBucket: "show-images"
 };
 ```
@@ -51,7 +50,7 @@ window.DREAM_SUPABASE_CONFIG = {
 https://ユーザー名.github.io/リポジトリ名/index.html?admin=true
 ```
 
-管理者画面で内容を確認し、`変更を保存` を押すと Supabase の `global_data` にマスターデータが保存されます。
+管理者画面で内容を確認し、Supabaseで作成した管理者メールアドレスとパスワードでログインし、`変更を保存` を押すと Supabase の `global_data` にマスターデータが保存されます。
 
 ## 4. GitHub Pages で公開する
 

@@ -228,6 +228,7 @@ DATABASE_FILE=/path/to/dream_shiori.sqlite3 python3 server.py
 - `supabase-config.js` に Supabase の `url` と `anonKey` が設定されている場合、公開版は Supabase に保存します。
 - 一般ユーザーの予定とメモは Supabase Auth の匿名ユーザーIDごとに `user_data` へ保存します。
 - 管理者ログイン時だけ、ショー・パレードのマスターデータと日別スケジュールを `global_data` へ保存します。
+- 管理者判定は `admin_users` テーブルに登録された Supabase ユーザーIDで行うため、設定ファイルへ管理者メールを書く必要はありません。
 - Supabase 未設定の場合は、これまで通り localStorage / `server.py` にフォールバックします。
 
 ### データ分離

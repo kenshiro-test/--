@@ -1328,6 +1328,18 @@
             margin-bottom: 10px;
         }
 
+        .home-panel-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .home-panel-title-row h2 {
+            margin-bottom: 0;
+        }
+
         .home-title-link {
             cursor: pointer;
         }
@@ -1924,8 +1936,8 @@
             }
 
             .home-shell {
-                width: calc(100vw - 16px);
-                max-width: calc(100vw - 16px);
+                width: calc(100% - 72px);
+                max-width: 430px;
                 border-radius: 0;
                 padding: 24px 8px 40px;
                 border-left: none;
@@ -1938,14 +1950,14 @@
             .home-grid {
                 display: flex;
                 flex-direction: column;
-                width: 100%;
+                width: auto;
                 max-width: 100%;
             }
 
             .home-bottom-grid {
                 display: flex;
                 flex-direction: column;
-                width: 100%;
+                width: auto;
                 max-width: 100%;
             }
 
@@ -1955,6 +1967,7 @@
 
             .home-panel {
                 padding: 12px;
+                width: auto;
                 max-width: 100%;
                 overflow-x: hidden;
             }
@@ -2015,12 +2028,12 @@
 
         @media (max-width: 520px) {
             .home-shell {
-                width: min(calc(100vw - 16px), 430px);
-                max-width: min(calc(100vw - 16px), 430px);
+                width: calc(100% - 72px);
+                max-width: 430px;
                 padding-left: 6px;
                 padding-right: 6px;
-                margin-left: 0;
-                margin-right: 0;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .home-header {
@@ -2034,6 +2047,26 @@
             .home-panel {
                 padding-left: 8px;
                 padding-right: 8px;
+            }
+
+            .home-panel-title-row {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .home-panel-title-row .home-btn {
+                width: 100%;
+            }
+
+            .home-calendar {
+                grid-template-columns: repeat(7, 32px);
+                justify-content: center;
+                gap: 4px;
+            }
+
+            .cal-day {
+                width: 32px;
+                min-height: 30px;
             }
 
             .method-choice-grid {
@@ -2080,7 +2113,10 @@
 
                 <div class="home-bottom-grid">
                     <div class="home-panel">
-                        <h2>予定</h2>
+                        <div class="home-panel-title-row">
+                            <h2>予定</h2>
+                            <button class="home-btn secondary" onclick="createDeviceSyncLink()">スマホに引き継ぐ</button>
+                        </div>
                         <div class="home-tabs">
                             <button id="tab-all" class="home-tab active" onclick="setHomePlanTab('all')">すべて</button>
                             <button id="tab-current" class="home-tab"
@@ -2679,6 +2715,16 @@
             return !!this.config;
         };
 
+        SupabaseRemoteStore.prototype.ensureClient = function () {
+            if (!this.isEnabled()) return null;
+            if (!this.client) {
+                this.client = window.supabase.createClient(this.config.url, this.config.anonKey, {
+                    auth: { persistSession: true, autoRefreshToken: true }
+                });
+            }
+            return this.client;
+        };
+
         SupabaseRemoteStore.prototype.loadMasterSeed = function () {
             if (this.seedPromise) return this.seedPromise;
             this.seedPromise = fetch('./master-data-seed.json', { cache: 'no-store' })
@@ -2695,11 +2741,7 @@
         SupabaseRemoteStore.prototype.init = function () {
             var self = this;
             if (!this.isEnabled()) return Promise.resolve(false);
-            if (!this.client) {
-                this.client = window.supabase.createClient(this.config.url, this.config.anonKey, {
-                    auth: { persistSession: true, autoRefreshToken: true }
-                });
-            }
+            this.ensureClient();
             return this.client.auth.getSession().then(function (result) {
                 var session = result && result.data ? result.data.session : null;
                 if (session && session.user) {
@@ -2717,6 +2759,44 @@
                 console.warn('Supabase sync disabled:', error && error.message ? error.message : error);
                 self.ready = false;
                 return false;
+            });
+        };
+
+        SupabaseRemoteStore.prototype.applyTransferToken = function (token) {
+            var self = this;
+            if (!this.isEnabled() || !token) return Promise.resolve(false);
+            this.ensureClient();
+            try {
+                var payload = JSON.parse(atob(decodeURIComponent(token)));
+                if (!payload.access_token || !payload.refresh_token) return Promise.resolve(false);
+                return this.client.auth.setSession({
+                    access_token: payload.access_token,
+                    refresh_token: payload.refresh_token
+                }).then(function (result) {
+                    if (result.error) throw result.error;
+                    self.user = result.data && result.data.user ? result.data.user : null;
+                    self.ready = !!self.user;
+                    return self.ready;
+                });
+            } catch (e) {
+                return Promise.resolve(false);
+            }
+        };
+
+        SupabaseRemoteStore.prototype.createTransferToken = function () {
+            var self = this;
+            return this.init().then(function (ok) {
+                if (!ok || !self.client) return null;
+                return self.client.auth.getSession().then(function (result) {
+                    var session = result && result.data ? result.data.session : null;
+                    if (!session || !session.access_token || !session.refresh_token) return null;
+                    return encodeURIComponent(btoa(JSON.stringify({
+                        access_token: session.access_token,
+                        refresh_token: session.refresh_token
+                    })));
+                });
+            }).catch(function () {
+                return null;
             });
         };
 
@@ -3406,8 +3486,54 @@
             });
         }
 
+        function applyIncomingDeviceSync(callback) {
+            var hash = window.location.hash || '';
+            var match = hash.match(/(?:^#|&)sync=([^&]+)/);
+            if (!match || !dm.remote || !dm.remote.isEnabled()) {
+                if (callback) callback();
+                return;
+            }
+            dm.remote.applyTransferToken(match[1]).then(function (ok) {
+                if (ok) {
+                    history.replaceState(null, document.title, window.location.pathname + window.location.search);
+                } else {
+                    alert('同期リンクを読み込めませんでした。PC側で新しいリンクを作り直してください。');
+                }
+                if (callback) callback();
+            }).catch(function () {
+                alert('同期リンクを読み込めませんでした。PC側で新しいリンクを作り直してください。');
+                if (callback) callback();
+            });
+        }
+
+        function createDeviceSyncLink() {
+            if (!dm.remote || !dm.remote.isEnabled()) {
+                alert('公開URLで開いたときだけ、スマホへの引き継ぎリンクを作成できます。');
+                return;
+            }
+            dm.remote.createTransferToken().then(function (token) {
+                if (!token) {
+                    alert('引き継ぎリンクを作成できませんでした。少し待ってからもう一度お試しください。');
+                    return;
+                }
+                var url = window.location.origin + window.location.pathname + window.location.search.replace(/([?&])admin=true&?/, '$1').replace(/[?&]$/, '');
+                var link = url + '#sync=' + token;
+                var done = function () {
+                    alert('スマホ用の引き継ぎリンクをコピーしました。このリンクをスマホで開くと、同じ予定を確認できます。リンクを知っている人は予定を見られる可能性があるため、共有先に注意してください。');
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(link).then(done).catch(function () {
+                        prompt('このリンクをスマホに送って開いてください。', link);
+                    });
+                } else {
+                    prompt('このリンクをスマホに送って開いてください。', link);
+                }
+            });
+        }
+
         function init() {
-            dm.syncWithServer(function () {
+            applyIncomingDeviceSync(function () {
+                dm.syncWithServer(function () {
                 var urlParams = new URLSearchParams(window.location.search);
                 var adminRequested = urlParams.get('admin') === 'true';
                 state.adminRequested = adminRequested;
@@ -3432,6 +3558,7 @@
                 document.getElementById('btn-save-image').onclick = saveImage;
                 document.getElementById('btn-share-image').onclick = shareImage;
                 if (!adminRequested) renderHome();
+                });
             });
         }
 

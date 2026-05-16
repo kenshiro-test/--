@@ -1,13 +1,20 @@
 import hashlib
+import base64
+import html
 import http.server
 import json
 import os
+import re
 import secrets
 import socketserver
 import sqlite3
 from copy import deepcopy
+from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from http import cookies
 from urllib.parse import urlparse
+from urllib import request
+from urllib.error import HTTPError, URLError
 
 PORT = int(os.environ.get('PORT', '8000'))
 LEGACY_DATA_FILE = 'database.json'
@@ -22,22 +29,23 @@ ADMIN_SESSION_TOKEN = secrets.token_urlsafe(32)
 DEFAULT_DATA = {
     'parkHours': {'open': '09:00', 'close': '21:00'},
     'userNotes': [],
+    'importHistory': [],
     'parks': {
         'land': {
             'masterEvents': [
-                {'id': 1, 'name': 'ハーモニー・イン・カラー', 'times': ['12:45'], 'isLottery': True, 'imageUrl': '', 'duration': 45},
-                {'id': 2, 'name': 'エレクトリカルパレード', 'times': ['18:15'], 'isLottery': False, 'imageUrl': '', 'duration': 45},
-                {'id': 4, 'name': 'ジャンボリミッキー！', 'times': ['10:45', '12:00', '13:45', '15:00'], 'isLottery': True, 'imageUrl': '', 'duration': 15},
-                {'id': 5, 'name': 'マジカルミュージックワールド', 'times': ['10:50', '12:15', '13:40', '15:45', '17:10'], 'isLottery': True, 'imageUrl': '', 'duration': 25},
-                {'id': 6, 'name': 'クラブマウスビート', 'times': ['12:20', '13:45', '15:10', '17:15', '18:40'], 'isLottery': True, 'imageUrl': '', 'duration': 25},
+                {'id': 1, 'name': 'ハーモニー・イン・カラー', 'times': ['12:45'], 'isLottery': True, 'imageUrl': '', 'duration': 45, 'description': '', 'officialUrl': '', 'area': '', 'features': ''},
+                {'id': 2, 'name': 'エレクトリカルパレード', 'times': ['18:15'], 'isLottery': False, 'imageUrl': '', 'duration': 45, 'description': '', 'officialUrl': '', 'area': '', 'features': ''},
+                {'id': 4, 'name': 'ジャンボリミッキー！', 'times': ['10:45', '12:00', '13:45', '15:00'], 'isLottery': True, 'imageUrl': '', 'duration': 15, 'description': '', 'officialUrl': '', 'area': '', 'features': ''},
+                {'id': 5, 'name': 'マジカルミュージックワールド', 'times': ['10:50', '12:15', '13:40', '15:45', '17:10'], 'isLottery': True, 'imageUrl': '', 'duration': 25, 'description': '', 'officialUrl': '', 'area': '', 'features': ''},
+                {'id': 6, 'name': 'クラブマウスビート', 'times': ['12:20', '13:45', '15:10', '17:15', '18:40'], 'isLottery': True, 'imageUrl': '', 'duration': 25, 'description': '', 'officialUrl': '', 'area': '', 'features': ''},
             ],
             'dailySchedules': {},
             'plans': {},
         },
         'sea': {
             'masterEvents': [
-                {'id': 3, 'name': 'リーチ・フォー・ザ・スターズ', 'times': ['17:50', '20:15'], 'isLottery': True, 'imageUrl': '', 'duration': 20},
-                {'id': 7, 'name': 'ビリーヴ！〜シー・オブ・ドリームス〜', 'times': ['19:30'], 'isLottery': True, 'imageUrl': '', 'duration': 30},
+                {'id': 3, 'name': 'リーチ・フォー・ザ・スターズ', 'times': ['17:50', '20:15'], 'isLottery': True, 'imageUrl': '', 'duration': 20, 'description': '', 'officialUrl': '', 'area': '', 'features': ''},
+                {'id': 7, 'name': 'ビリーヴ！〜シー・オブ・ドリームス〜', 'times': ['19:30'], 'isLottery': True, 'imageUrl': '', 'duration': 30, 'description': '', 'officialUrl': '', 'area': '', 'features': ''},
             ],
             'dailySchedules': {},
             'plans': {},
@@ -129,6 +137,138 @@ def save_global_data(data):
             "insert or replace into app_meta (key, value) values ('global_data', ?)",
             (json.dumps(_strip_plans(data), ensure_ascii=False),),
         )
+
+
+def _now_iso():
+    return datetime.now(timezone.utc).astimezone().isoformat(timespec='seconds')
+
+
+def _ensure_history(data):
+    if not isinstance(data.get('importHistory'), list):
+        data['importHistory'] = []
+    return data['importHistory']
+
+
+def _extract_meta(content, property_name):
+    pattern = re.compile(
+        r'<meta[^>]+(?:property|name)=["\']' + re.escape(property_name) + r'["\'][^>]+content=["\']([^"\']*)["\']',
+        re.IGNORECASE,
+    )
+    match = pattern.search(content)
+    return html.unescape(match.group(1)).strip() if match else ''
+
+
+def _fetch_official_fields(url):
+    last_error = None
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
+                      '(KHTML, like Gecko) Chrome/125.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
+        'Connection': 'close',
+    }
+    for attempt in range(2):
+        try:
+            req = request.Request(url, headers=headers)
+            with request.urlopen(req, timeout=12) as res:
+                raw = res.read(700000)
+            content = raw.decode('utf-8', errors='ignore')
+            description = _extract_meta(content, 'description') or _extract_meta(content, 'og:description')
+            title = _extract_meta(content, 'og:title')
+            return {'description': description, 'title': title, 'attempts': attempt + 1}
+        except HTTPError as exc:
+            last_error = f'HTTP {exc.code}'
+            if exc.code in (403, 404):
+                break
+        except URLError as exc:
+            last_error = getattr(exc, 'reason', exc)
+        except TimeoutError:
+            last_error = '通信タイムアウト'
+        except Exception as exc:
+            last_error = exc
+    raise RuntimeError(str(last_error or '取得できませんでした'))
+
+
+def run_official_import():
+    data = get_global_data()
+    history = _ensure_history(data)
+    updated = []
+    unchanged = []
+    failed = []
+    targets = []
+    for park_key, park_data in data.get('parks', {}).items():
+        for show in park_data.get('masterEvents', []):
+            official_url = show.get('officialUrl') or ''
+            if not official_url:
+                continue
+            targets.append((park_key, show, official_url))
+
+    def fetch_target(target):
+        park_key, show, official_url = target
+        fields = _fetch_official_fields(official_url)
+        return park_key, show, official_url, fields
+
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        futures = {executor.submit(fetch_target, target): target for target in targets}
+        for future in as_completed(futures):
+            park_key, show, official_url = futures[future]
+            try:
+                _, _, _, fields = future.result()
+                changed = []
+                if fields.get('description') and fields['description'] != show.get('description'):
+                    show['description'] = fields['description']
+                    changed.append('説明文')
+                item = {
+                    'park': park_key,
+                    'show': show.get('name', ''),
+                    'url': official_url,
+                    'fields': changed or ['確認のみ'],
+                    'attempts': fields.get('attempts', 1),
+                }
+                if changed:
+                    updated.append(item)
+                else:
+                    unchanged.append(item)
+            except Exception as exc:
+                failed.append({
+                    'park': park_key,
+                    'show': show.get('name', ''),
+                    'url': official_url,
+                    'error': str(exc)[:180],
+                })
+    record = {
+        'id': secrets.token_urlsafe(8),
+        'ranAt': _now_iso(),
+        'source': '管理者画面の公式サイト取り込み',
+        'imported': updated + unchanged,
+        'updated': updated,
+        'unchanged': unchanged,
+        'failed': failed,
+        'summary': f'{len(updated)}件更新 / {len(unchanged)}件更新なし / {len(failed)}件失敗',
+    }
+    history.insert(0, record)
+    del history[30:]
+    save_global_data(data)
+    return record
+
+
+def save_uploaded_show_image(body):
+    data_url = body.get('dataUrl') or ''
+    name = body.get('name') or 'show-image'
+    match = re.match(r'^data:image/(png|jpeg|jpg|webp);base64,(.+)$', data_url)
+    if not match:
+        raise ValueError('Invalid image data.')
+    ext = 'jpg' if match.group(1) in ('jpeg', 'jpg') else match.group(1)
+    raw = base64.b64decode(match.group(2), validate=True)
+    if len(raw) > 6 * 1024 * 1024:
+        raise ValueError('Image is too large.')
+    safe = re.sub(r'[^a-zA-Z0-9_-]+', '-', name).strip('-').lower()[:40] or 'show-image'
+    os.makedirs(os.path.join('assets', 'show-images'), exist_ok=True)
+    filename = f'admin-{safe}-{secrets.token_urlsafe(6)}.{ext}'
+    path = os.path.join('assets', 'show-images', filename)
+    with open(path, 'wb') as f:
+        f.write(raw)
+    return '/' + path.replace(os.sep, '/')
 
 
 def get_user_plans(user_id):
@@ -264,6 +404,12 @@ class JSONDataHandler(http.server.SimpleHTTPRequestHandler):
                 'available': bool(ADMIN_PASSWORD or ADMIN_PASSWORD_HASH),
                 'authenticated': self._is_admin_authenticated(),
             })
+        elif parsed_path == '/api/admin/import-history':
+            if not self._is_admin_authenticated():
+                self._send_json(401, {'ok': False, 'message': 'Admin login required.'})
+                return
+            data = get_global_data()
+            self._send_json(200, {'ok': True, 'history': data.get('importHistory') or []})
         else:
             return super().do_GET()
 
@@ -303,6 +449,30 @@ class JSONDataHandler(http.server.SimpleHTTPRequestHandler):
             self._send_json(200, {'ok': True}, {
                 'Set-Cookie': make_cookie(ADMIN_SESSION_COOKIE, '', max_age=0),
             })
+        elif parsed_path == '/api/admin/upload-image':
+            if not self._is_admin_authenticated():
+                self._send_json(401, {'ok': False, 'message': 'Admin login required.'})
+                return
+            body = self._read_json_body()
+            if body is None:
+                self._send_json(400, {'ok': False, 'message': 'Invalid JSON.'})
+                return
+            try:
+                image_url = save_uploaded_show_image(body)
+            except ValueError as exc:
+                self._send_json(400, {'ok': False, 'message': str(exc)})
+                return
+            self._send_json(200, {'ok': True, 'imageUrl': image_url})
+        elif parsed_path == '/api/admin/import-official':
+            if not self._is_admin_authenticated():
+                self._send_json(401, {'ok': False, 'message': 'Admin login required.'})
+                return
+            try:
+                record = run_official_import()
+            except Exception as exc:
+                self._send_json(500, {'ok': False, 'message': str(exc)})
+                return
+            self._send_json(200, {'ok': True, 'record': record})
         else:
             self.send_response(404)
             self.end_headers()

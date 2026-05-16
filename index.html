@@ -2613,6 +2613,53 @@
             return merged;
         }
 
+        function countParkMasterEvents(data, parkKey) {
+            return data && data.parks && data.parks[parkKey] && Array.isArray(data.parks[parkKey].masterEvents)
+                ? data.parks[parkKey].masterEvents.length
+                : 0;
+        }
+
+        function countParkScheduleDays(data, parkKey) {
+            return data && data.parks && data.parks[parkKey] && data.parks[parkKey].dailySchedules
+                ? Object.keys(data.parks[parkKey].dailySchedules).length
+                : 0;
+        }
+
+        function shouldUpgradeMasterData(currentData, seedData) {
+            if (!currentData || !seedData) return false;
+            var currentLand = countParkMasterEvents(currentData, 'land');
+            var currentSea = countParkMasterEvents(currentData, 'sea');
+            var seedLand = countParkMasterEvents(seedData, 'land');
+            var seedSea = countParkMasterEvents(seedData, 'sea');
+            var currentLandDays = countParkScheduleDays(currentData, 'land');
+            var currentSeaDays = countParkScheduleDays(currentData, 'sea');
+            var seedLandDays = countParkScheduleDays(seedData, 'land');
+            var seedSeaDays = countParkScheduleDays(seedData, 'sea');
+            return currentLand < seedLand || currentSea < seedSea || currentLandDays < seedLandDays || currentSeaDays < seedSeaDays;
+        }
+
+        function mergeMasterSeed(currentData, seedData) {
+            var merged = cloneData(currentData || {});
+            if (!seedData || !seedData.parks) return merged;
+            if (!merged.parks) merged.parks = {};
+            ['land', 'sea'].forEach(function (parkKey) {
+                if (!seedData.parks[parkKey]) return;
+                if (!merged.parks[parkKey]) merged.parks[parkKey] = {};
+                if (shouldUpgradeMasterData({ parks: { land: merged.parks.land || {}, sea: merged.parks.sea || {} } }, { parks: { land: seedData.parks.land || {}, sea: seedData.parks.sea || {} } })) {
+                    merged.parks[parkKey].masterEvents = cloneData(seedData.parks[parkKey].masterEvents || []);
+                    merged.parks[parkKey].dailySchedules = cloneData(seedData.parks[parkKey].dailySchedules || {});
+                }
+            });
+            if (!Array.isArray(merged.importHistory) || !merged.importHistory.length) {
+                merged.importHistory = cloneData(seedData.importHistory || []);
+            }
+            if (!merged.parkHours && seedData.parkHours) {
+                merged.parkHours = cloneData(seedData.parkHours);
+            }
+            hydrateShowAssets(merged);
+            return merged;
+        }
+
         function getSupabaseReleaseConfig() {
             var cfg = window.DREAM_SUPABASE_CONFIG || null;
             if (!cfg || !cfg.url || !cfg.anonKey || !window.supabase) return null;
@@ -2624,10 +2671,25 @@
             this.client = null;
             this.user = null;
             this.ready = false;
+            this.seedPromise = null;
+            this.needsGlobalRepair = false;
         }
 
         SupabaseRemoteStore.prototype.isEnabled = function () {
             return !!this.config;
+        };
+
+        SupabaseRemoteStore.prototype.loadMasterSeed = function () {
+            if (this.seedPromise) return this.seedPromise;
+            this.seedPromise = fetch('./master-data-seed.json', { cache: 'no-store' })
+                .then(function (res) {
+                    if (!res.ok) throw new Error('seed fetch failed');
+                    return res.json();
+                })
+                .catch(function () {
+                    return null;
+                });
+            return this.seedPromise;
         };
 
         SupabaseRemoteStore.prototype.init = function () {
@@ -2664,13 +2726,17 @@
                 if (!ok || !self.user) return null;
                 return Promise.all([
                     self.client.from('global_data').select('data').eq('id', 'main').maybeSingle(),
-                    self.client.from('user_data').select('data').eq('user_id', self.user.id).maybeSingle()
+                    self.client.from('user_data').select('data').eq('user_id', self.user.id).maybeSingle(),
+                    self.loadMasterSeed()
                 ]).then(function (results) {
                     var globalResult = results[0];
                     var userResult = results[1];
+                    var seedData = results[2];
                     if (globalResult.error) throw globalResult.error;
                     if (userResult.error) throw userResult.error;
-                    return mergeRemoteData(globalResult.data && globalResult.data.data, userResult.data && userResult.data.data);
+                    var remoteData = mergeRemoteData(globalResult.data && globalResult.data.data, userResult.data && userResult.data.data);
+                    self.needsGlobalRepair = shouldUpgradeMasterData(remoteData, seedData);
+                    return self.needsGlobalRepair ? mergeMasterSeed(remoteData, seedData) : remoteData;
                 }).catch(function (error) {
                     console.warn('Supabase load failed:', error && error.message ? error.message : error);
                     return null;
@@ -3266,8 +3332,7 @@
             loginAdmin(email, password, function (ok) {
                 if (ok) {
                     localStorage.setItem('dream_admin_email', email);
-                    enableAdminUi();
-                    openAdminDashboard();
+                    syncThenOpenAdminDashboard();
                 } else {
                     document.getElementById('admin-login-error').innerText = 'メールアドレスまたはパスワードが違います。';
                     passwordInput.focus();
@@ -3286,6 +3351,26 @@
             adminEntryBtn.onclick = openAdminDashboard;
             document.querySelector('.add-show-btn').style.display = '';
             render();
+        }
+
+        function syncThenOpenAdminDashboard() {
+            dm.syncWithServer(function () {
+                enableAdminUi();
+                var openDashboard = function () {
+                    openAdminDashboard();
+                };
+                if (dm.remote && dm.remote.isEnabled() && dm.remote.needsGlobalRepair) {
+                    dm.remote.saveGlobal(dm.get()).then(function (ok) {
+                        if (ok) dm.remote.needsGlobalRepair = false;
+                    }).catch(function (err) {
+                        console.warn('Failed to repair remote master data', err);
+                    }).then(function () {
+                        openDashboard();
+                    });
+                    return;
+                }
+                openDashboard();
+            });
         }
 
         function configureAdminEntry(isRequested) {
@@ -3308,8 +3393,7 @@
                 }
 
                 if (status.authenticated) {
-                    enableAdminUi();
-                    openAdminDashboard();
+                    syncThenOpenAdminDashboard();
                     return;
                 }
 

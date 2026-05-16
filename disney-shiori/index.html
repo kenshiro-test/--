@@ -3356,12 +3356,20 @@
         function syncThenOpenAdminDashboard() {
             dm.syncWithServer(function () {
                 enableAdminUi();
+                var openDashboard = function () {
+                    openAdminDashboard();
+                };
                 if (dm.remote && dm.remote.isEnabled() && dm.remote.needsGlobalRepair) {
                     dm.remote.saveGlobal(dm.get()).then(function (ok) {
                         if (ok) dm.remote.needsGlobalRepair = false;
+                    }).catch(function (err) {
+                        console.warn('Failed to repair remote master data', err);
+                    }).then(function () {
+                        openDashboard();
                     });
+                    return;
                 }
-                openAdminDashboard();
+                openDashboard();
             });
         }
 

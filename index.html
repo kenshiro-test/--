@@ -68,6 +68,7 @@
             padding: 10px;
             visibility: visible;
             gap: 8px;
+            overflow-y: auto;
         }
 
         header {
@@ -148,18 +149,22 @@
         }
 
         .view-frame {
-            flex-grow: 1;
+            flex-grow: 0;
             position: relative;
             overflow: hidden;
             background: #ffffff;
             border-radius: 12px;
             border: 1px solid var(--glass-border);
             min-height: 0;
+            height: min(62vh, 620px);
+            display: flex;
+            flex-direction: column;
         }
 
         .grid-container {
             display: flex;
-            height: 100%;
+            flex: 1;
+            min-height: 0;
             overflow-y: auto;
             overflow-x: hidden;
         }
@@ -255,7 +260,7 @@
             padding: 8px 6px;
             border-top: 1px solid rgba(108, 92, 231, 0.16);
             box-sizing: border-box;
-            min-height: 50px;
+            min-height: 54px;
             align-items: center;
         }
 
@@ -274,7 +279,7 @@
         .lane-label .show-title-btn {
             padding: 10px 6px;
             border-bottom: 1px solid rgba(108, 92, 231, 0.16);
-            min-height: 88px;
+            min-height: 76px;
             display: flex !important;
             align-items: center;
             justify-content: center;
@@ -1108,6 +1113,15 @@
             margin: 4px auto 18px;
         }
 
+        .flow-subnav-row {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 8px;
+            width: min(1120px, calc(100% - 36px));
+            margin: -6px auto 8px;
+        }
+
         .planner-step-title {
             display: none;
             text-align: center;
@@ -1115,8 +1129,13 @@
             font-size: 26px;
             font-weight: 950;
             line-height: 1.25;
-            margin: 2px 0 4px;
+            margin: 16px 0 14px;
             flex-shrink: 0;
+        }
+
+        #capture-area {
+            flex: 0 0 auto !important;
+            overflow: visible !important;
         }
 
         .step-container:not(.home-screen) {
@@ -2476,6 +2495,10 @@
                 width: calc(100% - 20px);
             }
 
+            .flow-subnav-row {
+                width: calc(100% - 20px);
+            }
+
             .planner-step-title {
                 font-size: 24px;
             }
@@ -2829,12 +2852,13 @@
                     style="background:none; border:none; font-size:13px; font-weight:bold; color:var(--text-dim); cursor:pointer;">管理者モード</button>
                 <button id="btn-config"
                     style="background:none; border:none; font-size:13px; font-weight:bold; color:var(--text-dim); cursor:pointer;">リセット</button>
-                <button id="planner-top-back" class="flow-nav-btn flow-back" style="display:none;">戻る</button>
-                <button id="planner-top-reset" class="flow-reset-btn" style="display:none;">リセット</button>
             </div>
         </header>
         <div id="planner-progress" class="flow-progress" style="display:none;"><div id="planner-progress-bar" class="flow-progress-bar"></div></div>
-        <div id="planner-step-title" class="planner-step-title"></div>
+        <div id="planner-subnav-row" class="flow-subnav-row" style="display:none;">
+            <button id="planner-top-back" class="flow-nav-btn flow-back">戻る</button>
+            <button id="planner-top-reset" class="flow-reset-btn" style="display:none;">リセット</button>
+        </div>
 
         <main id="capture-area" style="flex-grow:1; display:flex; flex-direction:column; gap:5px; overflow:hidden;">
             <div id="park-selector" style="display:flex; gap:8px; margin-bottom:2px;">
@@ -2887,6 +2911,7 @@
             </div>
 
             <div class="view-frame">
+                <div id="planner-step-title" class="planner-step-title"></div>
                 <div class="grid-container">
                     <div class="ruler" id="ruler-win"></div>
                     <div class="content-area" id="content-win"></div>
@@ -4870,8 +4895,10 @@
                 var plannerNext = document.getElementById('planner-flow-next');
                 var plannerReset = document.getElementById('planner-top-reset');
                 var plannerTitle = document.getElementById('planner-step-title');
+                var plannerSubnav = document.getElementById('planner-subnav-row');
                 if (plannerRow && plannerBack && plannerNext) {
                     plannerRow.style.display = (state.mode === 'select' || state.mode === 'refine') ? 'flex' : 'none';
+                    if (plannerSubnav) plannerSubnav.style.display = plannerRow.style.display;
                     if (plannerProgress) plannerProgress.style.display = plannerRow.style.display;
                     if (plannerProgressBar) plannerProgressBar.style.setProperty('--progress', state.mode === 'select' ? '66%' : '83%');
                     if (plannerTitle) {
@@ -4910,7 +4937,7 @@
                 // Ruler & Pixels (Used in Select Mode)
                 var ruler = document.getElementById('ruler-win');
                 var start = timeToMin(d.parkHours.open), end = timeToMin(d.parkHours.close);
-                var headerH = state.mode === 'refine' ? 78 : 150;
+                var headerH = state.mode === 'refine' ? 78 : 132;
 
                 // スクロールなしで1画面にすべて収めるための高さ計算
                 var frame = document.querySelector('.view-frame');

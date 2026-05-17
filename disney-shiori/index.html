@@ -2517,13 +2517,19 @@
 
         var SHOW_IMAGE_CACHE_VERSION = '20260514-3';
 
+        function resolveAppAssetPath(src) {
+            if (!src || src.charAt(0) !== '/' || /^(data:|https?:)/.test(src)) return src;
+            if (window.location.protocol === 'file:') return '.' + src;
+            var dir = window.location.pathname.replace(/[^/]*$/, '');
+            if (!dir || dir === '/') return src;
+            return dir.replace(/\/$/, '') + src;
+        }
+
         function getShowImageSrc(url) {
             var src = String(url || '').trim();
             if (!src) return '';
             if (/^(data:|https?:)/.test(src)) return src;
-            if (window.location.protocol === 'file:' && src.charAt(0) === '/') {
-                src = '.' + src;
-            }
+            src = resolveAppAssetPath(src);
             return src + (src.indexOf('?') === -1 ? '?' : '&') + 'v=' + SHOW_IMAGE_CACHE_VERSION;
         }
 

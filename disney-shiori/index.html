@@ -2182,8 +2182,7 @@
                                 <div style="display:flex; gap:8px;">
                                     <button class="home-btn secondary" onclick="toggleSteps7MemoActions()"
                                         id="btn-steps7-memo">メモ</button>
-                                    <button class="home-btn secondary" onclick="saveSteps7Image()">保存</button>
-                                    <button class="home-btn secondary" onclick="shareSteps7Image()">共有</button>
+                                    <button class="home-btn secondary" onclick="saveSteps7Image()">画像保存</button>
                                     <button class="home-btn secondary" onclick="resetSteps7()">リセット</button>
                                     <button class="home-btn secondary" onclick="toggleSteps7Edit()"
                                         id="btn-steps7-edit">編集</button>
@@ -2429,8 +2428,6 @@
                     </button>
                 </div>
                 <div style="display:flex; gap:8px; align-items:center;">
-                    <button id="btn-share-image" onclick="shareImage()"
-                        style="background:#00a8ff; border:none; color:white; font-size:13px; padding:6px 14px; border-radius:20px; cursor:pointer; font-weight:bold;">共有</button>
                     <button id="btn-save-image" onclick="saveImage()"
                         style="background:var(--accent); border:none; color:white; font-size:13px; padding:6px 14px; border-radius:20px; cursor:pointer; font-weight:bold; box-shadow:0 2px 8px rgba(108,92,231,0.3);">画像保存</button>
                     <button id="btn-complete-plan" onclick="renderHome()"
@@ -3530,7 +3527,6 @@
                 configureAdminEntry(adminRequested);
 
                 document.getElementById('btn-save-image').onclick = saveImage;
-                document.getElementById('btn-share-image').onclick = shareImage;
                 if (!adminRequested) renderHome();
             });
         }
@@ -5670,6 +5666,8 @@
             var frame = document.querySelector('.view-frame');
             if (!frame) return Promise.reject(new Error('スケジュール表示が見つかりません'));
             var container = frame.querySelector('.grid-container');
+            var content = frame.querySelector('.content-area');
+            var renderedGrid = content ? content.firstElementChild : null;
             var target = container || frame;
             var originals = [
                 [frame, 'overflow', frame.style.overflow],
@@ -5680,14 +5678,38 @@
                 originals.push([container, 'overflow', container.style.overflow]);
                 originals.push([container, 'height', container.style.height]);
                 originals.push([container, 'width', container.style.width]);
+                originals.push([container, 'alignItems', container.style.alignItems]);
+            }
+            if (content) {
+                originals.push([content, 'overflow', content.style.overflow]);
+                originals.push([content, 'width', content.style.width]);
+                originals.push([content, 'flex', content.style.flex]);
+            }
+            if (renderedGrid) {
+                originals.push([renderedGrid, 'width', renderedGrid.style.width]);
+                originals.push([renderedGrid, 'minWidth', renderedGrid.style.minWidth]);
             }
             frame.style.overflow = 'visible';
             frame.style.height = 'auto';
             frame.style.maxHeight = 'none';
+            var contentWidth = content ? Math.max(content.scrollWidth, content.offsetWidth, content.clientWidth) : 0;
+            if (renderedGrid) contentWidth = Math.max(contentWidth, renderedGrid.scrollWidth, renderedGrid.offsetWidth, renderedGrid.clientWidth);
+            var rulerWidth = frame.querySelector('.ruler') ? frame.querySelector('.ruler').offsetWidth : 0;
+            var exportWidth = Math.max(frame.clientWidth, rulerWidth + contentWidth);
             if (container) {
                 container.style.overflow = 'visible';
                 container.style.height = 'auto';
-                container.style.width = Math.max(container.scrollWidth, container.offsetWidth, container.clientWidth) + 'px';
+                container.style.alignItems = 'stretch';
+                container.style.width = exportWidth + 'px';
+            }
+            if (content) {
+                content.style.overflow = 'visible';
+                content.style.flex = '0 0 ' + contentWidth + 'px';
+                content.style.width = contentWidth + 'px';
+            }
+            if (renderedGrid) {
+                renderedGrid.style.width = contentWidth + 'px';
+                renderedGrid.style.minWidth = contentWidth + 'px';
             }
             return captureElementCanvas(target, "#f4f6f9").finally(function () {
                 originals.forEach(function (item) { item[0].style[item[1]] = item[2]; });
@@ -5696,17 +5718,9 @@
 
         function saveImage() {
             captureScheduleCanvas().then(function (canvas) {
-                return shareCanvasOrDownload(canvas, 'dream_plan_' + state.date + '.png', 'Dream Schedule Plan', isMobileShareDevice());
-            }).catch(function (e) {
-                alert('画像保存に失敗しました: ' + (e && e.message ? e.message : e));
-            });
-        }
-
-        function shareImage() {
-            captureScheduleCanvas().then(function (canvas) {
                 return shareCanvasOrDownload(canvas, 'dream_plan_' + state.date + '.png', 'Dream Schedule Plan', true);
             }).catch(function (e) {
-                alert('画像共有に失敗しました: ' + (e && e.message ? e.message : e));
+                alert('画像保存に失敗しました: ' + (e && e.message ? e.message : e));
             });
         }
 
@@ -5718,6 +5732,11 @@
                 hidden.push([el, el.style.display]);
                 el.style.display = 'none';
             });
+            var controls = panel.querySelector('.task-meta-bar > div:last-child');
+            if (controls) {
+                hidden.push([controls, controls.style.display]);
+                controls.style.display = 'none';
+            }
             return captureElementCanvas(panel, "#ffffff").finally(function () {
                 hidden.forEach(function (item) { item[0].style.display = item[1]; });
             });
@@ -5725,17 +5744,9 @@
 
         function saveSteps7Image() {
             captureSteps7Canvas().then(function (canvas) {
-                return shareCanvasOrDownload(canvas, 'dream_memo_' + state.date + '.png', '入園後やることメモ', isMobileShareDevice());
-            }).catch(function (e) {
-                alert('メモ画像の保存に失敗しました: ' + (e && e.message ? e.message : e));
-            });
-        }
-
-        function shareSteps7Image() {
-            captureSteps7Canvas().then(function (canvas) {
                 return shareCanvasOrDownload(canvas, 'dream_memo_' + state.date + '.png', '入園後やることメモ', true);
             }).catch(function (e) {
-                alert('メモ画像の共有に失敗しました: ' + (e && e.message ? e.message : e));
+                alert('メモ画像の保存に失敗しました: ' + (e && e.message ? e.message : e));
             });
         }
 

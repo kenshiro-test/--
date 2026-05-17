@@ -392,11 +392,11 @@
 
         .show-detail-close-top {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 14px;
+            right: 14px;
             z-index: 8;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border: none;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.92);
@@ -427,6 +427,8 @@
 
         .show-detail-body {
             padding: 24px 24px 20px;
+            position: relative;
+            padding-right: 72px;
         }
 
         .show-detail-kicker {
@@ -531,6 +533,10 @@
             .show-detail-sections {
                 padding-left: 16px;
                 padding-right: 16px;
+            }
+
+            .show-detail-body {
+                padding-right: 64px;
             }
         }
 
@@ -2491,7 +2497,6 @@
 
         <div id="modal-show-detail" class="modal hidden">
             <div class="modal-content show-detail-content">
-                <button class="show-detail-close-top" onclick="closeModal('modal-show-detail')" aria-label="閉じる">×</button>
                 <div id="show-detail-content"></div>
                 <div class="modal-footer" style="padding:0 24px 24px;">
                     <button onclick="closeModal('modal-show-detail')" class="btn-fill btn-s">閉じる</button>
@@ -3308,6 +3313,7 @@
                 + '<img src="' + escapeHtml(imageSrc) + '" alt="' + escapeHtml(show.name) + 'のイメージビジュアル" onerror="this.onerror=null;this.src=\'' + escapeHtml(fallbackSrc) + '\';">'
                 + '</div>'
                 + '<div class="show-detail-body">'
+                + '<button class="show-detail-close-top" onclick="closeModal(\'modal-show-detail\')" aria-label="閉じる">×</button>'
                 + '<div class="show-detail-kicker">' + (state.park === 'land' ? '東京ディズニーランド' : '東京ディズニーシー') + '</div>'
                 + '<h3 class="show-detail-title">' + escapeHtml(show.name) + '</h3>'
                 + '<div class="show-detail-meta">'

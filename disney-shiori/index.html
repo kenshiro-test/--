@@ -112,6 +112,7 @@
             align-items: center;
             padding: 0 5px;
             margin-bottom: 5px;
+            gap: 8px;
         }
 
         .mode-switch {
@@ -386,6 +387,24 @@
             max-height: 92vh;
             overflow: auto;
             padding: 0;
+            position: relative;
+        }
+
+        .show-detail-close-top {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 8;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #344054;
+            font-size: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
         }
 
         .show-detail-hero {
@@ -1119,6 +1138,18 @@
             -webkit-tap-highlight-color: transparent;
             position: relative;
             z-index: 2;
+        }
+
+        .show-picker-detail-btn {
+            flex-shrink: 0;
+            border: 1px solid rgba(108, 92, 231, 0.24);
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--accent);
+            border-radius: 999px;
+            padding: 7px 11px;
+            font-size: 12px;
+            font-weight: 900;
+            cursor: pointer;
         }
 
         .show-picker-item input {
@@ -1949,14 +1980,14 @@
             .home-grid {
                 display: flex;
                 flex-direction: column;
-                width: auto;
+                width: 100%;
                 max-width: 100%;
             }
 
             .home-bottom-grid {
                 display: flex;
                 flex-direction: column;
-                width: auto;
+                width: 100%;
                 max-width: 100%;
             }
 
@@ -1966,14 +1997,14 @@
 
             .home-panel {
                 padding: 12px;
-                width: auto;
+                width: 100%;
                 max-width: 100%;
                 overflow-x: hidden;
             }
 
             .home-calendar {
                 gap: 3px;
-                grid-template-columns: repeat(7, minmax(0, 1fr));
+                grid-template-columns: repeat(7, calc((100% - 18px) / 7));
             }
 
             .cal-day {
@@ -2049,15 +2080,44 @@
                 padding-right: 8px;
             }
 
+            .calendar-panel {
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+
             .home-calendar {
-                grid-template-columns: repeat(7, 32px);
-                justify-content: center;
-                gap: 4px;
+                grid-template-columns: repeat(7, calc((100% - 12px) / 7));
+                justify-content: stretch;
+                gap: 2px;
             }
 
             .cal-day {
-                width: 32px;
+                width: auto;
                 min-height: 30px;
+            }
+
+            #header-select,
+            #header-refine {
+                align-items: stretch !important;
+                padding: 0;
+            }
+
+            #header-select>div,
+            #header-refine>div {
+                flex-wrap: wrap;
+                gap: 6px !important;
+            }
+
+            #header-select>div:last-child,
+            #header-refine>div:last-child {
+                justify-content: flex-end;
+                flex: 1;
+            }
+
+            #header-select button,
+            #header-refine button {
+                padding: 7px 10px !important;
+                font-size: 11px !important;
             }
 
             .method-choice-grid {
@@ -2115,11 +2175,15 @@
                     </div>
 
                     <div style="display:flex; flex-direction:column; gap:16px;">
-                        <div class="home-panel">
+                        <div id="home-memo-panel7" class="home-panel">
                             <h2>入園後やることメモ</h2>
                             <div class="task-meta-bar">
                                 <div class="task-priority-head"><span class="mini-arrow"></span><span>優先度</span></div>
                                 <div style="display:flex; gap:8px;">
+                                    <button class="home-btn secondary" onclick="toggleSteps7MemoActions()"
+                                        id="btn-steps7-memo">メモ</button>
+                                    <button class="home-btn secondary" onclick="saveSteps7Image()">保存</button>
+                                    <button class="home-btn secondary" onclick="shareSteps7Image()">共有</button>
                                     <button class="home-btn secondary" onclick="resetSteps7()">リセット</button>
                                     <button class="home-btn secondary" onclick="toggleSteps7Edit()"
                                         id="btn-steps7-edit">編集</button>
@@ -2331,19 +2395,12 @@
             <div id="header-select" class="timeline-header"
                 style="display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <button onclick="renderHome()"
-                        style="background:rgba(108, 92, 231, 0.1); border:1px solid var(--accent); color:var(--accent); font-size:11px; padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:bold;">
-                        ⬅ ホーム
-                    </button>
-                    <div id="header-select-title" style="font-size:14px; font-weight:800; color:var(--text-main);">
-                        ショー選択
-                    </div>
-                </div>
-                <div style="display:flex; align-items:center; gap:8px;">
                     <button onclick="nextStep('show-pick')"
                         style="background:rgba(108, 92, 231, 0.1); border:1px solid var(--accent); color:var(--accent); font-size:11px; padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:bold;">
-                        ↺ ショー再選択
+                        戻る
                     </button>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
                     <button onclick="autoCreateSchedule()"
                         style="background:rgba(243, 156, 18, 0.12); border:1px solid #f39c12; color:#b76b00; font-size:11px; padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:bold;">
                         ⚡自動
@@ -2351,6 +2408,10 @@
                     <button onclick="createNewPattern()"
                         style="background:rgba(39, 174, 96, 0.1); border:1px solid #27ae60; color:#27ae60; font-size:11px; padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:bold;">
                         ＋別パターン
+                    </button>
+                    <button id="btn-delete-pattern" onclick="deleteCurrentPattern()"
+                        style="background:rgba(231, 76, 60, 0.1); border:1px solid #e74c3c; color:#c0392b; font-size:11px; padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:bold;">
+                        削除
                     </button>
                     <button onclick="changeMode('refine')"
                         style="background:var(--accent); border:none; color:white; font-size:13px; padding:6px 16px; border-radius:20px; cursor:pointer; font-weight:bold; box-shadow:0 2px 8px rgba(108,92,231,0.3);">
@@ -2364,9 +2425,8 @@
                 <div style="display:flex; align-items:center; gap:10px;">
                     <button onclick="changeMode('select')"
                         style="background:rgba(108, 92, 231, 0.1); border:1px solid var(--accent); color:var(--accent); font-size:11px; padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:bold;">
-                        ⬅ ショー選択画面に戻る
+                        戻る
                     </button>
-                    <div style="font-size:14px; font-weight:800; color:var(--text-main);">スケジュール作成</div>
                 </div>
                 <div style="display:flex; gap:8px; align-items:center;">
                     <button id="btn-share-image" onclick="shareImage()"
@@ -2434,6 +2494,7 @@
 
         <div id="modal-show-detail" class="modal hidden">
             <div class="modal-content show-detail-content">
+                <button class="show-detail-close-top" onclick="closeModal('modal-show-detail')" aria-label="閉じる">×</button>
                 <div id="show-detail-content"></div>
                 <div class="modal-footer" style="padding:0 24px 24px;">
                     <button onclick="closeModal('modal-show-detail')" class="btn-fill btn-s">閉じる</button>
@@ -3057,7 +3118,8 @@
             homePreviewPlanIndex: {},
             calYear: new Date().getFullYear(),
             calMonth: new Date().getMonth(),
-            steps7Editing: false
+            steps7Editing: false,
+            steps7MemoActions: false
         };
         var COLORS = [
             '#4834d4', // 濃い紫
@@ -3705,11 +3767,14 @@
             }
             var list = document.getElementById('home-memo-list7');
             var editing = !!state.steps7Editing;
+            var memoActions = !!state.steps7MemoActions;
             var rows = d.userNotes.steps7.filter(function (s) {
                 return !!s.enabled;
             }).sort(function (a, b) { return a.no - b.no; });
             var editBtn = document.getElementById('btn-steps7-edit');
             if (editBtn) editBtn.innerText = editing ? '編集完了' : '編集';
+            var memoBtn = document.getElementById('btn-steps7-memo');
+            if (memoBtn) memoBtn.innerText = memoActions ? 'メモ完了' : 'メモ';
             list.innerHTML = rows.map(function (s) {
                 var actionHtml = editing
                     ? '<button class="mini-btn delete" onclick="deleteStep7Item(' + s.no + ')">削除</button>' +
@@ -3717,8 +3782,10 @@
                     '<button class="mini-btn open" onclick="moveStep7(' + s.no + ', 1)">↓</button>' +
                     '<button class="mini-btn open memo-add-btn7" onclick="addMemoToStep7(' + s.no + ')">メモ追加</button>' +
                     '<button class="mini-btn delete" onclick="clearMemoStep7(' + s.no + ')">メモ削除</button>'
-                    : '<button class="mini-btn open memo-add-btn7" onclick="addMemoToStep7(' + s.no + ')">メモ追加</button>' +
-                    '<button class="mini-btn delete" onclick="clearMemoStep7(' + s.no + ')">メモ削除</button>';
+                    : (memoActions
+                        ? '<button class="mini-btn open memo-add-btn7" onclick="addMemoToStep7(' + s.no + ')">メモ追加</button>' +
+                        '<button class="mini-btn delete" onclick="clearMemoStep7(' + s.no + ')">メモ削除</button>'
+                        : '');
                 return '<div class="task-row7">' +
                     '<div class="task-main7">' +
                     '<div class="task-no7">' + s.no + '</div>' +
@@ -3733,7 +3800,7 @@
                         : '') +
                     '</div>' +
                     '</div>' +
-                    '<div class="task-actions7">' + actionHtml + '</div>' +
+                    (actionHtml ? '<div class="task-actions7">' + actionHtml + '</div>' : '') +
                     '</div>';
             }).join('');
             if (rows.length === 0) list.innerHTML = '';
@@ -3797,6 +3864,11 @@
 
         function toggleSteps7Edit() {
             state.steps7Editing = !state.steps7Editing;
+            renderHomeMemos7();
+        }
+
+        function toggleSteps7MemoActions() {
+            state.steps7MemoActions = !state.steps7MemoActions;
             renderHomeMemos7();
         }
 
@@ -3994,16 +4066,17 @@
                 var lotteryStr = m.isLottery ? '<span style="color:#f38ba8; margin-left:8px; font-size:11px; background:rgba(243,139,168,0.1); padding:2px 6px; border-radius:4px;">抽選要</span>' : '';
 
                 item.innerHTML = '<input type="checkbox" ' + (isPicked ? 'checked' : '') + (canSelect ? '' : ' disabled') + '>' +
-                    '<button type="button" class="show-picker-main-btn">' +
+                    '<div class="show-picker-main-btn">' +
                     '<div style="flex:1;">' +
                     '<div class="show-title-btn">' + escapeHtml(m.name) + '</div>' +
                     '<div style="font-size:12px; color:var(--text-dim); margin-top:4px; display:flex; align-items:center; flex-wrap:wrap;">' +
                     '🕒 ' + timeStr + lotteryStr +
                     '</div>' +
                     '</div>' +
-                    '</button>';
+                    '</div>' +
+                    '<button type="button" class="show-picker-detail-btn">詳細</button>';
 
-                var detailTrigger = item.querySelector('.show-picker-main-btn');
+                var detailTrigger = item.querySelector('.show-picker-detail-btn');
                 detailTrigger.onclick = function (e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -4013,6 +4086,14 @@
                     e.preventDefault();
                     e.stopPropagation();
                     openShowDetailById(m.id);
+                };
+
+                var mainTrigger = item.querySelector('.show-picker-main-btn');
+                mainTrigger.onclick = function (e) {
+                    if (!canSelect) return;
+                    var cb = item.querySelector('input');
+                    cb.checked = !cb.checked;
+                    cb.dispatchEvent(new Event('change'));
                 };
 
                 item.querySelector('input').onchange = function (e) {
@@ -4257,12 +4338,11 @@
                 var activePlan = plans[0];
                 for (var i = 0; i < plans.length; i++) { if (plans[i].id === state.pId) activePlan = plans[i]; }
 
-                var selTitle = document.getElementById('header-select-title');
-                if (selTitle) selTitle.innerText = "ショー選択 (" + activePlan.name + ")";
-
                 // Header Toggle
                 document.getElementById('header-select').style.display = (state.mode === 'select' ? 'flex' : 'none');
                 document.getElementById('header-refine').style.display = (state.mode === 'refine' ? 'flex' : 'none');
+                var deletePatternBtn = document.getElementById('btn-delete-pattern');
+                if (deletePatternBtn) deletePatternBtn.style.display = plans.length > 1 ? '' : 'none';
 
                 // Tabs (Show only in select mode to switch plans)
                 var tabs = document.getElementById('pattern-list');
@@ -5511,6 +5591,25 @@
             render();
         }
 
+        function deleteCurrentPattern() {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var plans = pd.plans[state.date] || [];
+            if (plans.length <= 1) {
+                alert('最後の予定パターンは削除できません。');
+                return;
+            }
+            var current = plans.find(function (p) { return p.id === state.pId; }) || plans[0];
+            if (!confirm(current.name + 'を削除しますか？')) return;
+            plans = plans.filter(function (p) { return p.id !== current.id; });
+            refreshPlanNames(plans);
+            pd.plans[state.date] = plans;
+            dm.save(d);
+            state.pId = plans[Math.max(0, Math.min(plans.length - 1, 0))].id;
+            state.mode = 'select';
+            render();
+        }
+
         function resetAllData() {
             if (confirm("予定パターンをすべて初期化しますか？（ショーの時間などは保持されます）")) {
                 var d = dm.get();
@@ -5523,69 +5622,120 @@
                 renderHome();
             }
         }
-        function saveImage() {
+        function isMobileShareDevice() {
+            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
+        }
+
+        function captureElementCanvas(target, bgColor) {
+            var width = Math.max(target.scrollWidth, target.offsetWidth, target.clientWidth);
+            var height = Math.max(target.scrollHeight, target.offsetHeight, target.clientHeight);
+            return html2canvas(target, {
+                backgroundColor: bgColor || "#f4f6f9",
+                scale: Math.min(2, window.devicePixelRatio || 2),
+                scrollX: 0,
+                scrollY: 0,
+                width: width,
+                height: height,
+                windowWidth: width,
+                windowHeight: height,
+                useCORS: true
+            });
+        }
+
+        function downloadCanvas(canvas, filename) {
+            var link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        async function shareCanvasOrDownload(canvas, filename, title, preferShare) {
+            if (preferShare) {
+                try {
+                    var blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
+                    var file = new File([blob], filename, { type: 'image/png' });
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({ title: title || 'Dream Schedule Planner', files: [file] });
+                        return;
+                    }
+                } catch (e) {
+                    console.warn('Share failed, falling back to download:', e);
+                }
+            }
+            downloadCanvas(canvas, filename);
+            if (preferShare) alert('この端末では共有保存が使えないため、ダウンロードに切り替えました。');
+        }
+
+        function captureScheduleCanvas() {
             var frame = document.querySelector('.view-frame');
+            if (!frame) return Promise.reject(new Error('スケジュール表示が見つかりません'));
             var container = frame.querySelector('.grid-container');
-            // スクロール全体を撮るため一時的にoverflow/heightを解除
-            var origFrameOverflow = frame.style.overflow;
-            var origFrameHeight = frame.style.height;
-            var origContainerOverflow = container ? container.style.overflow : '';
+            var target = container || frame;
+            var originals = [
+                [frame, 'overflow', frame.style.overflow],
+                [frame, 'height', frame.style.height],
+                [frame, 'maxHeight', frame.style.maxHeight]
+            ];
+            if (container) {
+                originals.push([container, 'overflow', container.style.overflow]);
+                originals.push([container, 'height', container.style.height]);
+                originals.push([container, 'width', container.style.width]);
+            }
             frame.style.overflow = 'visible';
             frame.style.height = 'auto';
-            if (container) container.style.overflow = 'visible';
+            frame.style.maxHeight = 'none';
+            if (container) {
+                container.style.overflow = 'visible';
+                container.style.height = 'auto';
+                container.style.width = Math.max(container.scrollWidth, container.offsetWidth, container.clientWidth) + 'px';
+            }
+            return captureElementCanvas(target, "#f4f6f9").finally(function () {
+                originals.forEach(function (item) { item[0].style[item[1]] = item[2]; });
+            });
+        }
 
-            var target = container || frame;
-            html2canvas(target, { backgroundColor: "#f4f6f9", scale: 2, scrollY: 0, windowHeight: target.scrollHeight }).then(function (canvas) {
-                // 元に戻す
-                frame.style.overflow = origFrameOverflow;
-                frame.style.height = origFrameHeight;
-                if (container) container.style.overflow = origContainerOverflow;
-                var link = document.createElement('a'); link.download = 'dream_plan_' + state.date + '.png'; link.href = canvas.toDataURL(); link.click();
-            }).catch(function () {
-                frame.style.overflow = origFrameOverflow;
-                frame.style.height = origFrameHeight;
-                if (container) container.style.overflow = origContainerOverflow;
+        function saveImage() {
+            captureScheduleCanvas().then(function (canvas) {
+                return shareCanvasOrDownload(canvas, 'dream_plan_' + state.date + '.png', 'Dream Schedule Plan', isMobileShareDevice());
+            }).catch(function (e) {
+                alert('画像保存に失敗しました: ' + (e && e.message ? e.message : e));
             });
         }
 
         function shareImage() {
-            var frame = document.querySelector('.view-frame');
-            var container = frame.querySelector('.grid-container');
-            var origFrameOverflow = frame.style.overflow;
-            var origFrameHeight = frame.style.height;
-            var origContainerOverflow = container ? container.style.overflow : '';
-            frame.style.overflow = 'visible';
-            frame.style.height = 'auto';
-            if (container) container.style.overflow = 'visible';
+            captureScheduleCanvas().then(function (canvas) {
+                return shareCanvasOrDownload(canvas, 'dream_plan_' + state.date + '.png', 'Dream Schedule Plan', true);
+            }).catch(function (e) {
+                alert('画像共有に失敗しました: ' + (e && e.message ? e.message : e));
+            });
+        }
 
-            var target = container || frame;
-            html2canvas(target, { backgroundColor: "#f4f6f9", scale: 2, scrollY: 0, windowHeight: target.scrollHeight }).then(async function (canvas) {
-                frame.style.overflow = origFrameOverflow;
-                frame.style.height = origFrameHeight;
-                if (container) container.style.overflow = origContainerOverflow;
+        function captureSteps7Canvas() {
+            var panel = document.getElementById('home-memo-panel7');
+            if (!panel) return Promise.reject(new Error('入園後やることメモが見つかりません'));
+            var hidden = [];
+            panel.querySelectorAll('.task-actions7').forEach(function (el) {
+                hidden.push([el, el.style.display]);
+                el.style.display = 'none';
+            });
+            return captureElementCanvas(panel, "#ffffff").finally(function () {
+                hidden.forEach(function (item) { item[0].style.display = item[1]; });
+            });
+        }
 
-                try {
-                    var blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
-                    var file = new File([blob], 'dream_plan_' + state.date + '.png', { type: 'image/png' });
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        await navigator.share({ title: 'Dream Schedule Plan', files: [file] });
-                    } else {
-                        var link = document.createElement('a');
-                        link.download = file.name;
-                        link.href = canvas.toDataURL();
-                        link.click();
-                        alert('この端末では共有が使えないため、画像保存に切り替えました。');
-                    }
-                } catch (e) {
-                    var link = document.createElement('a');
-                    link.download = 'dream_plan_' + state.date + '.png';
-                    link.href = canvas.toDataURL();
-                    link.click();
-                }
-            }).catch(function () {
-                frame.style.overflow = origFrameOverflow;
-                frame.style.height = origFrameHeight;
-                if (container) container.style.overflow = origContainerOverflow;
+        function saveSteps7Image() {
+            captureSteps7Canvas().then(function (canvas) {
+                return shareCanvasOrDownload(canvas, 'dream_memo_' + state.date + '.png', '入園後やることメモ', isMobileShareDevice());
+            }).catch(function (e) {
+                alert('メモ画像の保存に失敗しました: ' + (e && e.message ? e.message : e));
+            });
+        }
+
+        function shareSteps7Image() {
+            captureSteps7Canvas().then(function (canvas) {
+                return shareCanvasOrDownload(canvas, 'dream_memo_' + state.date + '.png', '入園後やることメモ', true);
+            }).catch(function (e) {
+                alert('メモ画像の共有に失敗しました: ' + (e && e.message ? e.message : e));
             });
         }
 

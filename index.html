@@ -1079,14 +1079,17 @@
         }
 
         .flow-reset-btn {
-            border: none;
+            border: 1px solid rgba(108, 92, 231, 0.18);
             background: #eef1f7;
             color: #344054;
             border-radius: 999px;
-            padding: 9px 13px;
-            font-size: 12px;
+            min-width: 88px;
+            min-height: 44px;
+            padding: 11px 18px;
+            font-size: 14px;
             font-weight: 900;
             cursor: pointer;
+            box-shadow: 0 10px 24px rgba(83, 76, 132, 0.14);
         }
 
         .flow-progress {
@@ -1131,6 +1134,46 @@
             line-height: 1.25;
             margin: 16px 0 14px;
             flex-shrink: 0;
+        }
+
+        .planner-select-tools {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: -2px 10px 14px;
+            flex-shrink: 0;
+        }
+
+        .planner-tool-btn {
+            border-radius: 999px;
+            border: 1px solid rgba(108, 92, 231, 0.18);
+            background: #ffffff;
+            color: var(--accent);
+            padding: 9px 14px;
+            font-size: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(83, 76, 132, 0.1);
+        }
+
+        .planner-tool-btn.auto {
+            border-color: rgba(243, 156, 18, 0.34);
+            color: #b76b00;
+            background: rgba(243, 156, 18, 0.1);
+        }
+
+        .planner-tool-btn.add {
+            border-color: rgba(39, 174, 96, 0.3);
+            color: #1f8b4c;
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .planner-tool-btn.delete {
+            border-color: rgba(231, 76, 60, 0.3);
+            color: #c0392b;
+            background: rgba(231, 76, 60, 0.1);
         }
 
         #capture-area {
@@ -2912,6 +2955,11 @@
 
             <div class="view-frame">
                 <div id="planner-step-title" class="planner-step-title"></div>
+                <div id="planner-select-tools" class="planner-select-tools">
+                    <button onclick="autoCreateSchedule()" class="planner-tool-btn auto">自動</button>
+                    <button onclick="createNewPattern()" class="planner-tool-btn add">パターン追加</button>
+                    <button id="planner-tool-delete-pattern" onclick="deleteCurrentPattern()" class="planner-tool-btn delete">パターン削除</button>
+                </div>
                 <div class="grid-container">
                     <div class="ruler" id="ruler-win"></div>
                     <div class="content-area" id="content-win"></div>
@@ -4896,6 +4944,7 @@
                 var plannerReset = document.getElementById('planner-top-reset');
                 var plannerTitle = document.getElementById('planner-step-title');
                 var plannerSubnav = document.getElementById('planner-subnav-row');
+                var plannerSelectTools = document.getElementById('planner-select-tools');
                 if (plannerRow && plannerBack && plannerNext) {
                     plannerRow.style.display = (state.mode === 'select' || state.mode === 'refine') ? 'flex' : 'none';
                     if (plannerSubnav) plannerSubnav.style.display = plannerRow.style.display;
@@ -4903,8 +4952,9 @@
                     if (plannerProgressBar) plannerProgressBar.style.setProperty('--progress', state.mode === 'select' ? '66%' : '83%');
                     if (plannerTitle) {
                         plannerTitle.style.display = plannerRow.style.display === 'flex' ? 'block' : 'none';
-                        plannerTitle.innerHTML = state.mode === 'select' ? 'ショーの時間を<br>選択してください' : '予定を<br>追加してください';
+                        plannerTitle.innerHTML = state.mode === 'select' ? 'ショーの時間を<br>選択してください' : '予定を追加してください';
                     }
+                    if (plannerSelectTools) plannerSelectTools.style.display = state.mode === 'select' ? 'flex' : 'none';
                     plannerBack.style.display = plannerRow.style.display === 'flex' ? '' : 'none';
                     plannerBack.onclick = state.mode === 'select' ? function () { nextStep('show-pick'); } : function () { changeMode('select'); };
                     plannerNext.onclick = state.mode === 'select' ? function () { changeMode('refine'); } : function () { showCompleteScreen(); };
@@ -4915,11 +4965,13 @@
                 }
                 var deletePatternBtn = document.getElementById('btn-delete-pattern');
                 if (deletePatternBtn) deletePatternBtn.style.display = plans.length > 1 ? '' : 'none';
+                var plannerToolDelete = document.getElementById('planner-tool-delete-pattern');
+                if (plannerToolDelete) plannerToolDelete.style.display = plans.length > 1 ? '' : 'none';
 
                 // Tabs (Show only in select mode to switch plans)
                 var tabs = document.getElementById('pattern-list');
                 if (tabs) {
-                    if (state.mode === 'select' && plans.length > 1) {
+                    if ((state.mode === 'select' || state.mode === 'refine') && plans.length > 1) {
                         tabs.style.display = 'flex';
                         tabs.innerHTML = '';
                         plans.forEach(function (p) {
@@ -5028,10 +5080,12 @@
                     ruler.style.display = 'block';
                     win.innerHTML = '';
                     win.style.background = 'none';
+                    var visiblePlans = plans.filter(function (p) { return p.id === activePlan.id; });
+                    if (!visiblePlans.length) visiblePlans = [activePlan];
 
                     // 1. Collect all time boundaries from all patterns
                     var timePoints = [start, end];
-                    plans.forEach(function (p) {
+                    visiblePlans.forEach(function (p) {
                         p.items.forEach(function (it) {
                             var s = timeToMin(it.time);
                             var e = s + (it.duration || 30);
@@ -5057,7 +5111,8 @@
                     var hRow = document.createElement('div');
                     hRow.style.cssText = 'display:flex; position:sticky; top:0; z-index:100; background:var(--bg-dark);';
                     hRow.innerHTML = '<div style="width:50px; flex-shrink:0; background:var(--glass); border-bottom:1px solid var(--glass-border);"></div>'; // Corner
-                    plans.forEach(function (p, pIdx) {
+                    visiblePlans.forEach(function (p) {
+                        var pIdx = plans.findIndex(function (target) { return target.id === p.id; });
                         var h = document.createElement('div');
                         h.className = 'category-lane';
                         h.style.cssText = 'flex:1; min-width:240px; border-right:1px solid var(--glass-border); position:relative;';
@@ -5099,7 +5154,7 @@
                         var sTime = timePoints[i];
                         var eTime = timePoints[i + 1];
                         var dur = eTime - sTime;
-                        var anyEventStarts = plans.some(function (p) { return p.items.some(function (it) { return timeToMin(it.time) === sTime; }); });
+                        var anyEventStarts = visiblePlans.some(function (p) { return p.items.some(function (it) { return timeToMin(it.time) === sTime; }); });
                         segmentHeights[i] = anyEventStarts ? 108 : Math.max(dur * 0.6, 60);
                     }
 
@@ -5124,7 +5179,7 @@
                     columnsContainer.appendChild(rulerCol);
 
                     // Pattern Columns
-                    plans.forEach(function (p) {
+                    visiblePlans.forEach(function (p) {
                         var col = document.createElement('div');
                         col.style.cssText = 'flex:1; min-width:' + (isMobilePlanner ? '100%' : '240px') + '; border:1px solid rgba(108,92,231,0.14); border-radius:' + (isMobilePlanner ? '16px' : '0') + '; overflow:hidden; display:flex; flex-direction:column; background:#fff;';
                         if (isMobilePlanner) {

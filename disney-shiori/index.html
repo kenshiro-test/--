@@ -232,6 +232,26 @@
             margin-top: 2px;
         }
 
+        .show-meta-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .show-meta-cell {
+            border: 1px solid rgba(108, 92, 231, 0.18);
+            border-radius: 10px;
+            background: rgba(108, 92, 231, 0.07);
+            color: #5a46d3;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 6px 4px;
+            white-space: nowrap;
+            text-align: center;
+        }
+
         /* Refine Mode Column */
         .category-lane {
             flex: 1;
@@ -962,6 +982,171 @@
         .btn-success {
             background: #27ae60;
             color: white;
+        }
+
+        .flow-nav-btn {
+            position: fixed;
+            z-index: 5600;
+            border: none;
+            border-radius: 999px;
+            min-width: 88px;
+            min-height: 44px;
+            padding: 11px 18px;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(83, 76, 132, 0.18);
+        }
+
+        .flow-back {
+            top: max(18px, env(safe-area-inset-top));
+            left: max(16px, env(safe-area-inset-left));
+            background: #ffffff;
+            color: var(--accent);
+            border: 1px solid rgba(108, 92, 231, 0.24);
+        }
+
+        .flow-next {
+            right: max(16px, env(safe-area-inset-right));
+            bottom: max(18px, env(safe-area-inset-bottom));
+            background: linear-gradient(135deg, #6c5ce7 0%, #8f7aff 100%);
+            color: #ffffff;
+        }
+
+        .method-choice-card.active {
+            border-color: var(--accent);
+            background: linear-gradient(160deg, #f3efff 0%, #ffffff 100%);
+            box-shadow: 0 14px 30px rgba(108, 92, 231, 0.2);
+        }
+
+        .planner-next-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            font-size: 13px;
+            padding: 7px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 900;
+            box-shadow: 0 2px 8px rgba(108, 92, 231, 0.28);
+        }
+
+        .plan-icon-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .plan-icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            background: #ffffff;
+            color: #2f3b52;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+        }
+
+        .plan-icon-btn.delete {
+            color: #c0392b;
+            border-color: rgba(192, 57, 43, 0.22);
+        }
+
+        .add-plan-single-btn {
+            background: rgba(108, 92, 231, 0.1);
+            border: 1px solid rgba(108, 92, 231, 0.22);
+            color: var(--accent);
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .complete-card {
+            width: min(760px, 94vw);
+            background: #ffffff;
+            border-radius: 22px;
+            border: 1px solid rgba(108, 92, 231, 0.16);
+            box-shadow: 0 18px 42px rgba(83, 76, 132, 0.14);
+            padding: 28px;
+            margin: 72px auto 96px;
+            text-align: left;
+        }
+
+        .complete-title {
+            text-align: center;
+            color: var(--accent);
+            font-size: 30px;
+            font-weight: 950;
+            margin-bottom: 18px;
+        }
+
+        .confirm-plan-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .confirm-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border: 1px solid #eef0f7;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .confirm-row {
+            display: grid;
+            grid-template-columns: 24px 1fr auto;
+            gap: 14px;
+            padding: 17px 16px;
+            border-bottom: 1px solid #eef0f7;
+            align-items: center;
+        }
+
+        .confirm-row:last-child {
+            border-bottom: none;
+        }
+
+        .confirm-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            background: var(--accent);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.12);
+        }
+
+        .confirm-time {
+            font-size: 15px;
+            font-weight: 950;
+            color: #243042;
+            margin-bottom: 8px;
+        }
+
+        .confirm-name {
+            font-size: 17px;
+            font-weight: 850;
+            color: #243042;
+            line-height: 1.4;
+        }
+
+        .confirm-badge {
+            background: #8f7aff;
+            color: white;
+            border-radius: 999px;
+            padding: 8px 13px;
+            font-size: 13px;
+            font-weight: 900;
+            white-space: nowrap;
         }
 
         /* Onboarding Steps */
@@ -2133,6 +2318,26 @@
                 font-size: 11px !important;
             }
 
+            .show-meta-row {
+                grid-template-columns: 1fr;
+            }
+
+            .complete-card {
+                width: calc(100% - 20px);
+                padding: 18px 12px;
+                margin-top: 70px;
+            }
+
+            .confirm-row {
+                grid-template-columns: 18px 1fr;
+                gap: 10px;
+            }
+
+            .confirm-badge {
+                grid-column: 2;
+                justify-self: start;
+            }
+
             .method-choice-grid {
                 grid-template-columns: 1fr;
             }
@@ -2231,8 +2436,10 @@
     </div>
 
     <div id="step-park" class="step-container" style="display:none;">
+        <button class="flow-nav-btn flow-back" onclick="nextStep('home')">戻る</button>
+        <button class="flow-nav-btn flow-next" onclick="goNextFromPark()">次へ</button>
         <div class="step-card">
-            <h2 class="step-title">パークを選択してください</h2>
+            <h2 class="step-title">パークを<br>選択してください</h2>
             <p class="step-desc">パークによってショーが異なります</p>
             <div class="park-choice-grid">
                 <div onclick="selectStepPark('land')" id="choice-land" class="park-choice-card">
@@ -2240,15 +2447,16 @@
                     <div style="font-weight:bold;">ランド</div>
                 </div>
                 <div onclick="selectStepPark('sea')" id="choice-sea" class="park-choice-card">
-                    <div class="park-emoji">🌊</div>
+                    <div class="park-emoji">🌏</div>
                     <div style="font-weight:bold;">シー</div>
                 </div>
             </div>
-            <button onclick="nextStep('home')" class="btn-back">ホーム</button>
         </div>
     </div>
 
     <div id="step-show-pick" class="step-container" style="display:none;">
+        <button class="flow-nav-btn flow-back" onclick="prevStep('park')">戻る</button>
+        <button class="flow-nav-btn flow-next" onclick="goNextFromShowPick()">次へ</button>
         <div class="step-card">
             <h2 class="step-title">見たいショーを<br>選択してください</h2>
             <p class="step-desc">あとから変更できます</p>
@@ -2259,28 +2467,42 @@
             <div id="show-picker-list" class="show-picker-list">
                 <!-- Checkboxes will be rendered here -->
             </div>
-            <button onclick="nextStep('method')" class="btn-next">スケジュールを作成する</button>
-            <button onclick="prevStep('park')" class="btn-back">戻る</button>
         </div>
     </div>
 
     <div id="step-method" class="step-container" style="display:none;">
+        <button class="flow-nav-btn flow-back" onclick="prevStep('show-pick')">戻る</button>
+        <button class="flow-nav-btn flow-next" onclick="goNextFromMethod()">次へ</button>
         <div class="step-card">
             <h2 class="step-title">作成方法を<br>選択してください</h2>
             <div id="method-summary" class="method-summary"></div>
             <div class="method-choice-grid">
-                <button type="button" class="method-choice-card" onclick="autoCreateSchedule()">
+                <button type="button" id="method-auto" class="method-choice-card" onclick="selectScheduleMethod('auto')">
                     <div class="method-choice-icon">⚡</div>
                     <div class="method-choice-title">自動で作成</div>
                     <div class="method-choice-desc">選択したショーを各1回ずつ見られるように、<br>重ならない時間を自動で選択します。</div>
                 </button>
-                <button type="button" class="method-choice-card" onclick="manualCreateSchedule()">
+                <button type="button" id="method-manual" class="method-choice-card" onclick="selectScheduleMethod('manual')">
                     <div class="method-choice-icon">✍</div>
                     <div class="method-choice-title">手動で作成</div>
                     <div class="method-choice-desc">ショーの時間を自分で選びながら<br>スケジュールを作成します。</div>
                 </button>
             </div>
-            <button onclick="prevStep('show-pick')" class="btn-back">戻る</button>
+        </div>
+    </div>
+
+    <div id="step-complete" class="step-container" style="display:none;">
+        <button class="flow-nav-btn flow-back" onclick="backToRefineFromComplete()">戻る</button>
+        <button class="flow-nav-btn flow-next" onclick="renderHome()">ホーム</button>
+        <div class="complete-card">
+            <div class="complete-title">予定の作成が完了しました</div>
+            <div id="complete-plan-tabs" class="confirm-plan-tabs"></div>
+            <div id="complete-capture-area">
+                <div id="complete-plan-list" class="confirm-list"></div>
+            </div>
+            <div style="text-align:center; margin-top:18px;">
+                <button class="home-btn primary" onclick="saveCompleteImage()">画像を保存する</button>
+            </div>
         </div>
     </div>
 
@@ -2382,6 +2604,8 @@
     </div>
 
     <div class="app-container" id="app-main" style="display:none;">
+        <button id="planner-flow-back" class="flow-nav-btn flow-back" style="display:none;">戻る</button>
+        <button id="planner-flow-next" class="flow-nav-btn flow-next" style="display:none;">次へ</button>
         <header>
             <h1 class="home-title-link" onclick="renderHome()">Dream Schedule Planner</h1>
             <div style="display:flex; gap:10px; align-items:center;">
@@ -2400,7 +2624,7 @@
                 <button id="btn-park-land" class="pattern-btn active"
                     style="flex:1; padding:8px; font-size:13px; font-weight:bold;">🏰 ランド</button>
                 <button id="btn-park-sea" class="pattern-btn"
-                    style="flex:1; padding:8px; font-size:13px; font-weight:bold;">🌊 シー</button>
+                    style="flex:1; padding:8px; font-size:13px; font-weight:bold;">🌏 シー</button>
             </div>
             <div id="pattern-list" class="pattern-tabs"></div>
 
@@ -2441,10 +2665,7 @@
                     </button>
                 </div>
                 <div style="display:flex; gap:8px; align-items:center;">
-                    <button id="btn-save-image" onclick="saveImage()"
-                        style="background:var(--accent); border:none; color:white; font-size:13px; padding:6px 14px; border-radius:20px; cursor:pointer; font-weight:bold; box-shadow:0 2px 8px rgba(108,92,231,0.3);">画像保存</button>
-                    <button id="btn-complete-plan" onclick="renderHome()"
-                        style="background:#27ae60; border:none; color:white; font-size:13px; padding:6px 14px; border-radius:20px; cursor:pointer; font-weight:bold; box-shadow:0 2px 8px rgba(39,174,96,0.25);">完了</button>
+                    <button id="btn-complete-plan" onclick="showCompleteScreen()" class="planner-next-btn">次へ</button>
                 </div>
             </div>
 
@@ -3128,20 +3349,42 @@
             calYear: new Date().getFullYear(),
             calMonth: new Date().getMonth(),
             steps7Editing: false,
-            steps7MemoActions: false
+            steps7MemoActions: false,
+            scheduleMethod: '',
+            completePlanId: null
         };
         var COLORS = [
-            '#4834d4', // 濃い紫
-            '#be2edd', // 濃いピンク
-            '#0097e6', // 鮮やかな青
-            '#e67e22', // 濃いオレンジ
-            '#27ae60', // 濃い緑
-            '#2980b9', // 落ち着いた青
-            '#c0392b', // 濃い赤
-            '#8e44ad', // 濃い紫
-            '#16a085', // 濃いティール
-            '#2c3e50'  // ダークグレー
+            '#6c5ce7',
+            '#7b68ee',
+            '#8f7aff',
+            '#5a46d3',
+            '#9b8cff',
+            '#7357d8',
+            '#a29bfe',
+            '#4f3cc9',
+            '#8667f2',
+            '#6b5bd6'
         ];
+
+        function getCatColor(cat) {
+            return {
+                show: '#6c5ce7',
+                attraction: '#7b68ee',
+                food: '#8f7aff',
+                rest: '#a29bfe',
+                other: '#5a46d3'
+            }[cat] || '#6c5ce7';
+        }
+
+        function getCatLabel(cat) {
+            return {
+                show: 'ショー',
+                attraction: 'アトラクション',
+                food: '食事',
+                rest: '休憩',
+                other: 'その他'
+            }[cat] || 'その他';
+        }
 
         function normalizeTimeInput(value) {
             var raw = String(value || '').trim();
@@ -3539,7 +3782,6 @@
 
                 configureAdminEntry(adminRequested);
 
-                document.getElementById('btn-save-image').onclick = saveImage;
                 if (!adminRequested) renderHome();
             });
         }
@@ -3741,9 +3983,8 @@
         }
 
         function renderHomeMiniItem(item) {
-            var catColors = { show: '#6c5ce7', attraction: '#0097e6', food: '#e67e22', rest: '#95a5a6', other: '#27ae60' };
             var catIcons = { show: '🎶', attraction: '🎢', food: '🍽️', rest: '😴', other: '📌' };
-            var color = catColors[item.cat] || catColors.other;
+            var color = getCatColor(item.cat);
             var icon = catIcons[item.cat] || catIcons.other;
             var dur = item.duration || 30;
             return '<div class="home-mini-item" style="background:' + color + ';">' +
@@ -4047,7 +4288,36 @@
             document.getElementById('choice-land').className = 'park-choice-card' + (p === 'land' ? ' active' : '');
             document.getElementById('choice-sea').className = 'park-choice-card' + (p === 'sea' ? ' active' : '');
             updateParkButtons();
-            setTimeout(function () { nextStep('show-pick'); }, 400);
+        }
+
+        function goNextFromPark() {
+            if (!state.park) state.park = 'land';
+            nextStep('show-pick');
+        }
+
+        function goNextFromShowPick() {
+            if (!state.pickedShowIds || state.pickedShowIds.length === 0) {
+                alert('見たいショーを1つ以上選択してください。');
+                return;
+            }
+            nextStep('method');
+        }
+
+        function selectScheduleMethod(method) {
+            state.scheduleMethod = method;
+            var auto = document.getElementById('method-auto');
+            var manual = document.getElementById('method-manual');
+            if (auto) auto.classList.toggle('active', method === 'auto');
+            if (manual) manual.classList.toggle('active', method === 'manual');
+        }
+
+        function goNextFromMethod() {
+            if (!state.scheduleMethod) {
+                alert('作成方法を選択してください。');
+                return;
+            }
+            if (state.scheduleMethod === 'auto') autoCreateSchedule();
+            else manualCreateSchedule();
         }
 
         function renderShowPicker() {
@@ -4157,6 +4427,7 @@
         function renderScheduleMethod() {
             var summary = document.getElementById('method-summary');
             if (!summary) return;
+            selectScheduleMethod(state.scheduleMethod || '');
             var d = dm.get();
             var pd = getParkData(d);
             var picked = pd.masterEvents.filter(function (m) { return state.pickedShowIds.includes(m.id); });
@@ -4350,6 +4621,14 @@
                 // Header Toggle
                 document.getElementById('header-select').style.display = (state.mode === 'select' ? 'flex' : 'none');
                 document.getElementById('header-refine').style.display = (state.mode === 'refine' ? 'flex' : 'none');
+                var plannerBack = document.getElementById('planner-flow-back');
+                var plannerNext = document.getElementById('planner-flow-next');
+                if (plannerBack && plannerNext) {
+                    plannerBack.style.display = (state.mode === 'select' || state.mode === 'refine') ? '' : 'none';
+                    plannerNext.style.display = (state.mode === 'select' || state.mode === 'refine') ? '' : 'none';
+                    plannerBack.onclick = state.mode === 'select' ? function () { nextStep('show-pick'); } : function () { changeMode('select'); };
+                    plannerNext.onclick = state.mode === 'select' ? function () { changeMode('refine'); } : function () { showCompleteScreen(); };
+                }
                 var deletePatternBtn = document.getElementById('btn-delete-pattern');
                 if (deletePatternBtn) deletePatternBtn.style.display = plans.length > 1 ? '' : 'none';
 
@@ -4413,7 +4692,10 @@
                         var lane = document.createElement('div'); lane.className = 'lane';
                         lane.innerHTML = '<div class="lane-label" style="height:' + headerH + 'px; justify-content:center;">' +
                             '<button type="button" class="show-title-btn" style="color:' + COLORS[idx % COLORS.length] + '; display:block; width:100%; text-align:center;">' + escapeHtml(m.name) + '</button>' +
-                            '<div class="show-info">⏱️' + m.duration + '分' + (m.isLottery ? ' | 🎟️要抽選' : '') + '</div></div>' +
+                            '<div class="show-meta-row">' +
+                            '<div class="show-meta-cell">約' + escapeHtml(m.duration) + '分</div>' +
+                            '<div class="show-meta-cell">' + (m.isLottery ? '抽選あり' : '抽選なし') + '</div>' +
+                            '</div></div>' +
                             '<div class="items-container"></div>';
                         if (state.isAdmin) {
                             lane.querySelector('.lane-label').onclick = function () { openMasterModal(idx); };
@@ -4497,24 +4779,21 @@
                         h.className = 'category-lane';
                         h.style.cssText = 'flex:1; min-width:240px; border-right:1px solid var(--glass-border); position:relative;';
                         h.innerHTML = '<div class="cat-header" style="height:' + headerH + 'px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; border-bottom:1px solid var(--glass-border); padding:6px;">' +
-                            '<div style="display:flex; align-items:center; gap:8px;">' +
+                            '<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;">' +
                             '<div style="font-size:14px; color:var(--accent); font-weight:bold;">' + p.name + '</div>' +
-                            (plans.length > 1 ? '<button class="del-plan-btn" style="background:none; border:none; cursor:pointer; font-size:12px; opacity:0.5;">🗑️</button>' : '') +
+                            '<div class="plan-icon-actions">' +
+                            '<button class="plan-icon-btn rename-plan-btn" title="名前を変更">✎</button>' +
+                            '<button class="plan-icon-btn copy-plan-btn" title="複製">⧉</button>' +
+                            (plans.length > 1 ? '<button class="plan-icon-btn delete del-plan-btn" title="削除">🗑</button>' : '') +
+                            '</div>' +
                             '</div>' +
                             '<div style="background:rgba(0,0,0,0.03); border-radius:15px; padding:8px; display:flex; flex-direction:column; align-items:center; gap:5px; width:90%;">' +
-                            '<div style="font-size:11px; color:var(--text-dim); font-weight:bold;">▼ 予定を追加 ▼</div>' +
-                            '<div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">' +
-                            '<button class="cat-add-btn" data-cat="show" style="background:#6c5ce7; color:white; border:none; padding:6px 10px; border-radius:12px; font-size:11px; font-weight:bold; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.1);">🎶ショー</button>' +
-                            '<button class="cat-add-btn" data-cat="attraction" style="background:#0097e6; color:white; border:none; padding:6px 10px; border-radius:12px; font-size:11px; font-weight:bold; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.1);">🎢アトラクション</button>' +
-                            '<button class="cat-add-btn" data-cat="food" style="background:#e67e22; color:white; border:none; padding:6px 10px; border-radius:12px; font-size:11px; font-weight:bold; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.1);">🍽️食事</button>' +
-                            '<button class="cat-add-btn" data-cat="rest" style="background:#95a5a6; color:white; border:none; padding:6px 10px; border-radius:12px; font-size:11px; font-weight:bold; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.1);">😴休憩</button>' +
-                            '<button class="cat-add-btn" data-cat="other" style="background:#27ae60; color:white; border:none; padding:6px 10px; border-radius:12px; font-size:11px; font-weight:bold; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.1);">📌その他</button>' +
-                            '</div>' +
+                            '<button class="add-plan-single-btn">予定追加</button>' +
                             '</div></div>';
 
-                        h.querySelectorAll('.cat-add-btn').forEach(function (btn) {
-                            btn.onclick = function () { openItemModal(-1, btn.getAttribute('data-cat'), '', p.id); };
-                        });
+                        h.querySelector('.add-plan-single-btn').onclick = function () { openCategoryChoiceModal(p.id); };
+                        h.querySelector('.rename-plan-btn').onclick = function () { renamePattern(p.id); };
+                        h.querySelector('.copy-plan-btn').onclick = function () { duplicatePattern(p.id); };
                         var delBtn = h.querySelector('.del-plan-btn');
                         if (delBtn) {
                             delBtn.onclick = function () {
@@ -4544,11 +4823,12 @@
 
                     // Create the Flex-Row container for Columns
                     var columnsContainer = document.createElement('div');
-                    columnsContainer.style.cssText = 'display:flex; flex-direction:row; width:100%;';
+                    var isMobilePlanner = window.matchMedia && window.matchMedia('(max-width: 720px)').matches;
+                    columnsContainer.style.cssText = 'display:flex; flex-direction:' + (isMobilePlanner ? 'column' : 'row') + '; width:100%; gap:' + (isMobilePlanner ? '14px' : '0') + ';';
 
                     // Ruler Column
                     var rulerCol = document.createElement('div');
-                    rulerCol.style.cssText = 'width:50px; flex-shrink:0; border-right:1px solid var(--glass-border); background:rgba(0,0,0,0.02); display:flex; flex-direction:column;';
+                    rulerCol.style.cssText = 'width:50px; flex-shrink:0; border-right:1px solid var(--glass-border); background:rgba(0,0,0,0.02); display:' + (isMobilePlanner ? 'none' : 'flex') + '; flex-direction:column;';
                     for (var i = 0; i < timePoints.length - 1; i++) {
                         var rCell = document.createElement('div');
                         rCell.style.cssText = 'height:' + segmentHeights[i] + 'px; border-bottom:1px dashed rgba(0,0,0,0.1); font-size:10px; color:var(--text-dim); padding-top:4px; font-weight:bold; text-align:center; box-sizing:border-box;';
@@ -4564,7 +4844,33 @@
                     // Pattern Columns
                     plans.forEach(function (p) {
                         var col = document.createElement('div');
-                        col.style.cssText = 'flex:1; min-width:240px; border-right:1px solid var(--glass-border); display:flex; flex-direction:column;';
+                        col.style.cssText = 'flex:1; min-width:' + (isMobilePlanner ? '100%' : '240px') + '; border:1px solid rgba(108,92,231,0.14); border-radius:' + (isMobilePlanner ? '16px' : '0') + '; overflow:hidden; display:flex; flex-direction:column; background:#fff;';
+                        if (isMobilePlanner) {
+                            var mobileHead = document.createElement('div');
+                            mobileHead.style.cssText = 'padding:12px 10px; background:#f5f1ff; color:var(--accent); font-weight:900; text-align:center; display:flex; flex-direction:column; gap:10px; align-items:center;';
+                            mobileHead.innerHTML = '<div>' + escapeHtml(p.name) + '</div>' +
+                                '<div class="plan-icon-actions">' +
+                                '<button class="plan-icon-btn mobile-rename-plan-btn" title="名前を変更">✎</button>' +
+                                '<button class="plan-icon-btn mobile-copy-plan-btn" title="複製">⧉</button>' +
+                                (plans.length > 1 ? '<button class="plan-icon-btn delete mobile-del-plan-btn" title="削除">🗑</button>' : '') +
+                                '</div>' +
+                                '<button class="add-plan-single-btn mobile-add-plan-btn">予定追加</button>';
+                            mobileHead.querySelector('.mobile-rename-plan-btn').onclick = function () { renamePattern(p.id); };
+                            mobileHead.querySelector('.mobile-copy-plan-btn').onclick = function () { duplicatePattern(p.id); };
+                            var mobileDel = mobileHead.querySelector('.mobile-del-plan-btn');
+                            if (mobileDel) mobileDel.onclick = function () {
+                                if (confirm(p.name + "を削除しますか？")) {
+                                    plans.splice(plans.findIndex(function (target) { return target.id === p.id; }), 1);
+                                    refreshPlanNames(plans);
+                                    pd.plans[state.date] = plans;
+                                    dm.save(d);
+                                    state.pId = plans[0].id;
+                                    render();
+                                }
+                            };
+                            mobileHead.querySelector('.mobile-add-plan-btn').onclick = function () { openCategoryChoiceModal(p.id); };
+                            col.appendChild(mobileHead);
+                        }
 
                         var i = 0;
                         while (i < timePoints.length - 1) {
@@ -4635,6 +4941,7 @@
                         columnsContainer.appendChild(col);
                     });
 
+                    if (isMobilePlanner) hRow.style.display = 'none';
                     grid.appendChild(columnsContainer);
                     win.appendChild(grid);
                     ruler.style.display = 'none'; // We integrated it into the grid
@@ -4661,11 +4968,10 @@
             }
 
             // ジャンル別カラー & アイコン
-            var catColors = { show: '#6c5ce7', attraction: '#0097e6', food: '#e67e22', rest: '#95a5a6', other: '#27ae60' };
             var catIcons = { show: '🎶', attraction: '🎢', food: '🍽️', rest: '😴', other: '📌' };
-            var color = catColors[it.cat] || catColors.other;
+            var color = getCatColor(it.cat);
             var icon = catIcons[it.cat] || catIcons.other;
-            div.style.cssText = 'height:100%; min-height:0; padding:9px; border-radius:10px; background:' + color + '; color:white; cursor:pointer; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.22); z-index:10; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; overflow:hidden;';
+            div.style.cssText = 'height:100%; min-height:0; padding:9px; border-radius:10px; background:' + color + '; color:white; cursor:pointer; position:relative; box-shadow:0 4px 10px rgba(108,92,231,0.18); z-index:10; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; overflow:hidden;';
 
             div.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">' +
                 '<div style="font-size:12px; font-weight:800; background:rgba(255,255,255,0.3); color:#263238; padding:3px 7px; border-radius:6px; white-space:nowrap;">' + t + ' - ' + minToTime(timeToMin(t) + dur) + '</div>' +
@@ -4738,7 +5044,7 @@
                 var startText = minToTime(gapStartMin);
                 var endText = minToTime(gapStartMin + gapMin);
                 if (confirm(startText + '〜' + endText + '（' + gapMin + '分）に予定を作成しますか？')) {
-                    openItemModal(-1, 'attraction', startText, pId, gapMin);
+                    openCategoryChoiceModal(pId, startText, gapMin);
                 }
             };
 
@@ -4803,6 +5109,32 @@
             gapDiv.appendChild(label);
 
             area.appendChild(gapDiv);
+        }
+
+        function openCategoryChoiceModal(pId, initialTime, initialDuration) {
+            var cats = [
+                ['show', '🎶', 'ショー'],
+                ['attraction', '🎢', 'アトラクション'],
+                ['food', '🍽️', '食事'],
+                ['rest', '😴', '休憩'],
+                ['other', '📌', 'その他']
+            ];
+            var html = '<div style="display:grid; grid-template-columns:1fr; gap:10px;">' + cats.map(function (cat) {
+                return '<button class="home-btn secondary category-choice-btn" data-cat="' + cat[0] + '" style="padding:14px; font-size:15px; text-align:left;">' + cat[1] + ' ' + cat[2] + '</button>';
+            }).join('') + '</div>';
+            document.getElementById('modal-item-title').innerText = 'ジャンルを選択';
+            document.getElementById('modal-item-inputs').innerHTML = html;
+            document.getElementById('btn-item-save').style.display = 'none';
+            document.getElementById('btn-item-delete').style.display = 'none';
+            document.getElementById('modal-item').classList.remove('hidden');
+            document.querySelectorAll('.category-choice-btn').forEach(function (btn) {
+                btn.onclick = function () {
+                    var cat = btn.getAttribute('data-cat');
+                    document.getElementById('btn-item-save').style.display = '';
+                    closeModal('modal-item');
+                    openItemModal(-1, cat, initialTime || '', pId, initialDuration);
+                };
+            });
         }
 
         function renderItemBox(area, it, t, isSel, start, mIdx, isRefine, pId) {
@@ -4905,6 +5237,7 @@
 
             document.getElementById('modal-item-inputs').innerHTML = html;
             document.getElementById('modal-item-title').innerText = idx === -1 ? '予定の追加' : '予定の編集';
+            document.getElementById('btn-item-save').style.display = '';
             document.getElementById('btn-item-delete').style.display = idx === -1 ? 'none' : 'block';
             document.getElementById('modal-item').classList.remove('hidden');
 
@@ -5580,7 +5913,7 @@
         function refreshPlanNames(plans) {
             var circleNums = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
             plans.forEach(function (p, i) {
-                p.name = "予定" + (circleNums[i] || (i + 1));
+                if (!p.customName) p.name = "予定" + (circleNums[i] || (i + 1));
             });
         }
 
@@ -5616,6 +5949,43 @@
             dm.save(d);
             state.pId = plans[Math.max(0, Math.min(plans.length - 1, 0))].id;
             state.mode = 'select';
+            render();
+        }
+
+        function renamePattern(planId) {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var plans = pd.plans[state.date] || [];
+            var plan = plans.find(function (p) { return p.id === planId; });
+            if (!plan) return;
+            var next = prompt('パターン名を入力してください', plan.name || '');
+            if (next === null) return;
+            next = next.trim();
+            if (!next) {
+                plan.customName = false;
+            } else {
+                plan.name = next;
+                plan.customName = true;
+            }
+            dm.save(d);
+            render();
+        }
+
+        function duplicatePattern(planId) {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var plans = pd.plans[state.date] || [];
+            var plan = plans.find(function (p) { return p.id === planId; });
+            if (!plan) return;
+            var copy = JSON.parse(JSON.stringify(plan));
+            copy.id = Date.now();
+            copy.customName = false;
+            copy.name = '';
+            plans.push(copy);
+            refreshPlanNames(plans);
+            pd.plans[state.date] = plans;
+            dm.save(d);
+            state.pId = copy.id;
             render();
         }
 
@@ -5656,6 +6026,71 @@
             link.download = filename;
             link.href = canvas.toDataURL('image/png');
             link.click();
+        }
+
+        function getCurrentPlans() {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var plans = pd.plans[state.date] || [{ id: 0, name: '予定①', items: [] }];
+            if (!Array.isArray(plans) || !plans.length) plans = [{ id: 0, name: '予定①', items: [] }];
+            refreshPlanNames(plans);
+            return plans;
+        }
+
+        function showCompleteScreen() {
+            state.completePlanId = state.pId;
+            document.getElementById('app-main').style.display = 'none';
+            document.querySelectorAll('.step-container').forEach(function (el) { el.style.display = 'none'; });
+            document.getElementById('step-complete').style.display = 'flex';
+            renderCompleteScreen();
+        }
+
+        function backToRefineFromComplete() {
+            document.getElementById('step-complete').style.display = 'none';
+            document.getElementById('app-main').style.display = 'flex';
+            state.mode = 'refine';
+            render();
+        }
+
+        function renderCompleteScreen() {
+            var plans = getCurrentPlans();
+            var active = plans.find(function (p) { return p.id === state.completePlanId; }) || plans[0];
+            state.completePlanId = active.id;
+            var tabs = document.getElementById('complete-plan-tabs');
+            tabs.innerHTML = plans.map(function (p) {
+                return '<button class="pattern-btn' + (p.id === active.id ? ' active' : '') + '" onclick="state.completePlanId=' + p.id + ';renderCompleteScreen();">' + escapeHtml(p.name) + '</button>';
+            }).join('');
+            var list = document.getElementById('complete-plan-list');
+            var items = (active.items || []).slice().filter(function (it) { return it.time; }).sort(function (a, b) { return timeToMin(a.time) - timeToMin(b.time); });
+            var rows = [];
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (i > 0) {
+                    var prev = items[i - 1];
+                    var prevEnd = timeToMin(prev.time) + (prev.duration || 30);
+                    var gap = timeToMin(item.time) - prevEnd;
+                    if (gap > 0) rows.push({ gap: true, time: minToTime(prevEnd), duration: gap, name: '予定なし' });
+                }
+                rows.push(item);
+            }
+            if (!rows.length) {
+                list.innerHTML = '<div class="confirm-row"><div class="confirm-dot"></div><div><div class="confirm-time">未作成</div><div class="confirm-name">予定がまだありません</div></div></div>';
+                return;
+            }
+            list.innerHTML = rows.map(function (row) {
+                var dur = row.duration || 30;
+                var end = row.time ? minToTime(timeToMin(row.time) + dur) : '';
+                var color = row.gap ? '#c8bfff' : getCatColor(row.cat);
+                var badge = row.gap ? '' : '<div class="confirm-badge" style="background:' + color + ';">' + escapeHtml(getCatLabel(row.cat)) + '</div>';
+                return '<div class="confirm-row">' +
+                    '<div class="confirm-dot" style="background:' + color + '; box-shadow:0 0 0 4px ' + (row.gap ? 'rgba(168,155,254,0.16)' : 'rgba(108,92,231,0.12)') + ';"></div>' +
+                    '<div>' +
+                    '<div class="confirm-time">' + escapeHtml(row.time || '') + ' 〜 ' + escapeHtml(end) + '（' + dur + '分）</div>' +
+                    '<div class="confirm-name">' + escapeHtml(row.name || '予定なし') + '</div>' +
+                    '</div>' +
+                    badge +
+                    '</div>';
+            }).join('');
         }
 
         async function shareCanvasOrDownload(canvas, filename, title, preferShare) {
@@ -5732,6 +6167,16 @@
         function saveImage() {
             captureScheduleCanvas().then(function (canvas) {
                 return shareCanvasOrDownload(canvas, 'dream_plan_' + state.date + '.png', 'Dream Schedule Plan', true);
+            }).catch(function (e) {
+                alert('画像保存に失敗しました: ' + (e && e.message ? e.message : e));
+            });
+        }
+
+        function saveCompleteImage() {
+            var target = document.getElementById('complete-capture-area');
+            if (!target) return;
+            captureElementCanvas(target, '#ffffff').then(function (canvas) {
+                return shareCanvasOrDownload(canvas, 'dream_plan_summary_' + state.date + '.png', 'Dream Schedule Plan', true);
             }).catch(function (e) {
                 alert('画像保存に失敗しました: ' + (e && e.message ? e.message : e));
             });

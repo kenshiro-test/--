@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>夢のしおり - Dream Schedule Planner</title>
+    <meta name="description" content="東京ディズニーリゾートのショー・パレード予定をかんたんに組み立てられる、非公式の予定作成ツールです。">
+    <meta property="og:title" content="夢のしおり - Dream Schedule Planner">
+    <meta property="og:description" content="ショー・パレードの予定を選んで、自分だけの1日プランを作成できます。">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="夢のしおり - Dream Schedule Planner">
+    <meta name="twitter:description" content="ショー・パレードの予定を選んで、自分だけの1日プランを作成できます。">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2135,12 +2142,12 @@
 
 <body>
     <div id="error-display">⚠️ <span id="error-message"></span></div>
-    <button id="btn-admin-entry"
+    <button id="btn-admin-entry" data-nosnippet
         style="display:none; position:fixed; top:14px; right:14px; z-index:6000; background:#ffffff; border:1px solid rgba(0,0,0,0.12); color:var(--accent); padding:9px 14px; border-radius:18px; font-size:13px; font-weight:800; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.18);">
         管理者モード
     </button>
 
-    <div id="admin-login-screen" class="admin-login-screen">
+    <div id="admin-login-screen" class="admin-login-screen" data-nosnippet>
         <div class="admin-login-card">
             <div class="admin-login-title">管理者ログイン</div>
             <div class="admin-login-desc">ショー・パレードの追加、削除、日別スケジュールの一括入力を行います。</div>
@@ -2278,7 +2285,7 @@
     </div>
 
     <!-- Admin Dashboard -->
-    <div id="admin-dashboard">
+    <div id="admin-dashboard" data-nosnippet>
         <div class="admin-header">
             <div class="admin-title-block">
                 <h2>ショー・パレード管理</h2>

@@ -36,8 +36,8 @@
         body {
             background: linear-gradient(180deg, #efe9ff 0%, #f6f4ff 36%, #e9f5ff 100%);
             color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-y: auto;
             overflow-x: hidden;
             font-family: 'Outfit', sans-serif;
         }
@@ -62,13 +62,13 @@
         }
 
         .app-container {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             padding: 10px;
             visibility: visible;
             gap: 8px;
-            overflow-y: auto;
+            overflow: visible;
         }
 
         header {
@@ -151,12 +151,12 @@
         .view-frame {
             flex-grow: 0;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             background: #ffffff;
             border-radius: 12px;
             border: 1px solid var(--glass-border);
             min-height: 0;
-            height: min(62vh, 620px);
+            height: auto;
             display: flex;
             flex-direction: column;
         }
@@ -165,8 +165,7 @@
             display: flex;
             flex: 1;
             min-height: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow: visible;
         }
 
         .ruler {
@@ -174,8 +173,9 @@
             flex-shrink: 0;
             background: #fdfdfd;
             border-right: 1px solid var(--glass-border);
-            position: relative;
-            z-index: 60;
+            position: sticky;
+            left: 0;
+            z-index: 80;
         }
 
         .hour-mark {
@@ -192,7 +192,7 @@
             flex-grow: 1;
             display: flex;
             overflow-x: auto;
-            overflow-y: hidden;
+            overflow-y: visible;
             position: relative;
             min-width: 0;
         }
@@ -224,7 +224,7 @@
             border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
-            z-index: 50;
+            z-index: 90;
             cursor: pointer;
             justify-content: space-between;
             overflow: hidden;
@@ -2705,9 +2705,10 @@
 
     <div id="step-park" class="step-container" style="display:none;">
         <div class="flow-shell">
-            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div><div class="flow-header-actions"><button class="flow-nav-btn flow-back" onclick="nextStep('home')">戻る</button></div></div>
+            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div></div>
             <div class="flow-progress"><div class="flow-progress-bar" style="--progress:16%;"></div></div>
         </div>
+        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="nextStep('home')">戻る</button></div>
         <div class="step-card">
             <h2 class="step-title">パークを<br>選択してください</h2>
             <p class="step-desc">パークによってショーが異なります</p>
@@ -2727,9 +2728,10 @@
 
     <div id="step-show-pick" class="step-container" style="display:none;">
         <div class="flow-shell">
-            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div><div class="flow-header-actions"><button class="flow-nav-btn flow-back" onclick="prevStep('park')">戻る</button></div></div>
+            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div></div>
             <div class="flow-progress"><div class="flow-progress-bar" style="--progress:33%;"></div></div>
         </div>
+        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="prevStep('park')">戻る</button></div>
         <div class="step-card">
             <h2 class="step-title">見たいショーを<br>選択してください</h2>
             <p class="step-desc">あとから変更できます</p>
@@ -4991,11 +4993,9 @@
                 var start = timeToMin(d.parkHours.open), end = timeToMin(d.parkHours.close);
                 var headerH = state.mode === 'refine' ? 78 : 132;
 
-                // スクロールなしで1画面にすべて収めるための高さ計算
+                // ページ全体で自然に縦スクロールさせるため、表の縦サイズは固定比率で作る。
                 var frame = document.querySelector('.view-frame');
-                var h = frame.clientHeight;
-                if (h < 300) h = 300; // 異常に小さい場合のみ最小値を保証
-                state.px = (h - headerH) / (end - start);
+                state.px = state.mode === 'select' ? 0.62 : 0.6;
 
                 var win = document.getElementById('content-win');
                 if (state.mode === 'select') {

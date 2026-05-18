@@ -1572,6 +1572,41 @@
             margin-bottom: 15px;
         }
 
+        .app-icon {
+            width: 1.25em;
+            height: 1.25em;
+            object-fit: contain;
+            vertical-align: -0.24em;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .park-icon {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .method-choice-icon .app-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .plan-row-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .home-mini-name,
+        .icon-text {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         .show-picker-list {
             text-align: left;
             margin-bottom: 25px;
@@ -2778,11 +2813,11 @@
             <p class="step-desc">パークによってショーが異なります</p>
             <div class="park-choice-grid">
                 <div onclick="selectStepPark('land')" id="choice-land" class="park-choice-card">
-                    <div class="park-emoji">🏰</div>
+                    <div class="park-emoji"><img class="park-icon" src="./アイコン/land.png" alt="ランド"></div>
                     <div style="font-weight:bold;">ランド</div>
                 </div>
                 <div onclick="selectStepPark('sea')" id="choice-sea" class="park-choice-card">
-                    <div class="park-emoji">🌏</div>
+                    <div class="park-emoji"><img class="park-icon" src="./アイコン/sea.png" alt="シー"></div>
                     <div style="font-weight:bold;">シー</div>
                 </div>
             </div>
@@ -2821,12 +2856,12 @@
             <div id="method-summary" class="method-summary"></div>
             <div class="method-choice-grid">
                 <button type="button" id="method-auto" class="method-choice-card" onclick="selectScheduleMethod('auto')">
-                    <div class="method-choice-icon">⚡</div>
+                    <div class="method-choice-icon"><img class="app-icon" src="./アイコン/auto.png" alt="自動"></div>
                     <div class="method-choice-title">自動で作成</div>
                     <div class="method-choice-desc">選択したショーを各1回ずつ見られるように、<br>重ならない時間を自動で選択します。</div>
                 </button>
                 <button type="button" id="method-manual" class="method-choice-card" onclick="selectScheduleMethod('manual')">
-                    <div class="method-choice-icon">✍</div>
+                    <div class="method-choice-icon"><img class="app-icon" src="./アイコン/manual.png" alt="手動"></div>
                     <div class="method-choice-title">手動で作成</div>
                     <div class="method-choice-desc">ショーの時間を自分で選びながら<br>スケジュールを作成します。</div>
                 </button>
@@ -2976,9 +3011,9 @@
         <main id="capture-area" style="flex-grow:1; display:flex; flex-direction:column; gap:5px; overflow:hidden;">
             <div id="park-selector" style="display:flex; gap:8px; margin-bottom:2px;">
                 <button id="btn-park-land" class="pattern-btn active"
-                    style="flex:1; padding:8px; font-size:13px; font-weight:bold;">🏰 ランド</button>
+                    style="flex:1; padding:8px; font-size:13px; font-weight:bold;"><img class="app-icon" src="./アイコン/land.png" alt="ランド"> ランド</button>
                 <button id="btn-park-sea" class="pattern-btn"
-                    style="flex:1; padding:8px; font-size:13px; font-weight:bold;">🌏 シー</button>
+                    style="flex:1; padding:8px; font-size:13px; font-weight:bold;"><img class="app-icon" src="./アイコン/sea.png" alt="シー"> シー</button>
             </div>
             <div id="pattern-list" class="pattern-tabs"></div>
 
@@ -2993,7 +3028,7 @@
                 <div style="display:flex; align-items:center; gap:8px;">
                     <button onclick="autoCreateSchedule()"
                         style="background:rgba(243, 156, 18, 0.12); border:1px solid #f39c12; color:#b76b00; font-size:11px; padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:bold;">
-                        ⚡自動
+                        <img class="app-icon" src="./アイコン/auto.png" alt="自動">自動
                     </button>
                     <button onclick="createNewPattern()"
                         style="background:rgba(39, 174, 96, 0.1); border:1px solid #27ae60; color:#27ae60; font-size:11px; padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:bold;">
@@ -3750,6 +3785,29 @@
             }[cat] || 'その他';
         }
 
+        var ICON_BASE = './アイコン/';
+        var APP_ICONS = {
+            land: 'land.png',
+            sea: 'sea.png',
+            clock: 'clock.png',
+            auto: 'auto.png',
+            manual: 'manual.png',
+            show: 'show.png',
+            attraction: 'attraction.png',
+            food: 'food.png',
+            rest: 'rest.png',
+            other: 'other.png'
+        };
+
+        function iconHtml(key, className, alt) {
+            var file = APP_ICONS[key] || APP_ICONS.other;
+            return '<img class="' + (className || 'app-icon') + '" src="' + ICON_BASE + file + '" alt="' + (alt || '') + '">';
+        }
+
+        function catIconHtml(cat, className) {
+            return iconHtml(cat || 'other', className || 'app-icon', getCatLabel(cat));
+        }
+
         function normalizeTimeInput(value) {
             var raw = String(value || '').trim();
             if (/^\d{4}$/.test(raw)) {
@@ -4239,12 +4297,12 @@
             }
             list.innerHTML = rows.map(function (row) {
                 var parkName = row.park === 'land' ? 'ランド' : 'シー';
-                var parkIcon = row.park === 'land' ? '🏰' : '🌏';
+                var parkIcon = row.park === 'land' ? iconHtml('land', 'app-icon', 'ランド') : iconHtml('sea', 'app-icon', 'シー');
                 var key = row.park + '|' + row.date;
                 var isPreviewOpen = state.homePreviewKey === key;
                 return '<div class="plan-card ' + row.park + '">' +
                     '<div class="plan-row ' + row.park + '">' +
-                    '<div><div class="plan-row-title">' + parkIcon + ' ' + formatPlanDate(row.date) + 'の予定</div>' +
+                    '<div><div class="plan-row-title">' + parkIcon + '<span>' + formatPlanDate(row.date) + 'の予定</span></div>' +
                     '<div class="plan-row-meta">' + parkName + ' / ' + row.plans.length + 'パターン / ' + row.itemCount + '件の予定</div></div>' +
                     '<div class="plan-row-actions">' +
                     '<button class="mini-btn open" onclick="openExistingPlan(\'' + row.date + '\', \'' + row.park + '\')">開く</button>' +
@@ -4351,13 +4409,12 @@
         }
 
         function renderHomeMiniItem(item) {
-            var catIcons = { show: '🎶', attraction: '🎢', food: '🍽️', rest: '😴', other: '📌' };
             var color = getCatColor(item.cat);
-            var icon = catIcons[item.cat] || catIcons.other;
+            var icon = catIconHtml(item.cat);
             var dur = item.duration || 30;
             return '<div class="home-mini-item" style="background:' + color + ';">' +
                 '<div class="home-mini-item-top"><span class="home-mini-time">' + escapeHtml(item.time) + ' - ' + escapeHtml(minToTime(timeToMin(item.time) + dur)) + '</span><span>' + dur + '分</span></div>' +
-                '<div class="home-mini-name">' + icon + ' ' + escapeHtml(item.name || '') + '</div>' +
+                '<div class="home-mini-name">' + icon + '<span>' + escapeHtml(item.name || '') + '</span></div>' +
                 '</div>';
         }
 
@@ -4715,7 +4772,7 @@
                     '<div style="flex:1;">' +
                     '<div class="show-title-btn">' + escapeHtml(m.name) + '</div>' +
                     '<div style="font-size:12px; color:var(--text-dim); margin-top:4px; display:flex; align-items:center; flex-wrap:wrap;">' +
-                    '🕒 ' + timeStr + lotteryStr +
+                    iconHtml('clock', 'app-icon', '時間') + '<span>' + timeStr + '</span>' + lotteryStr +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -5374,10 +5431,8 @@
                 it.cat = 'show';
             }
 
-            // ジャンル別カラー & アイコン
-            var catIcons = { show: '🎶', attraction: '🎢', food: '🍽️', rest: '😴', other: '📌' };
             var color = getCatColor(it.cat);
-            var icon = catIcons[it.cat] || catIcons.other;
+            var icon = catIconHtml(it.cat);
             div.style.cssText = 'height:100%; min-height:0; padding:9px; border-radius:10px; background:#fff; border:2px solid ' + color + '; color:#243042; cursor:pointer; position:relative; box-shadow:0 4px 10px rgba(108,92,231,0.12); z-index:10; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; overflow:hidden;';
 
             div.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">' +
@@ -5387,7 +5442,7 @@
                 '<button class="item-del-btn" style="background:' + color + '; border:none; color:white; width:26px; height:26px; border-radius:13px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:0.2s; flex-shrink:0;">✕</button>' +
                 '</div>' +
                 '</div>' +
-                '<div style="font-size:14px; font-weight:700; line-height:1.25; letter-spacing:0; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">' + icon + ' ' + escapeHtml(it.name || '') + '</div>';
+                '<div class="icon-text" style="font-size:14px; font-weight:700; line-height:1.25; letter-spacing:0; overflow:hidden;">' + icon + '<span>' + escapeHtml(it.name || '') + '</span></div>';
 
             div.querySelector('.item-del-btn').onclick = function (e) {
                 e.stopPropagation();
@@ -5520,14 +5575,14 @@
 
         function openCategoryChoiceModal(pId, initialTime, initialDuration) {
             var cats = [
-                ['show', '🎶', 'ショー'],
-                ['attraction', '🎢', 'アトラクション'],
-                ['food', '🍽️', '食事'],
-                ['rest', '😴', '休憩'],
-                ['other', '📌', 'その他']
+                ['show', 'ショー'],
+                ['attraction', 'アトラクション'],
+                ['food', '食事'],
+                ['rest', '休憩'],
+                ['other', 'その他']
             ];
             var html = '<div style="display:grid; grid-template-columns:1fr; gap:10px;">' + cats.map(function (cat) {
-                return '<button class="home-btn secondary category-choice-btn" data-cat="' + cat[0] + '" style="padding:14px; font-size:15px; text-align:left;">' + cat[1] + ' ' + cat[2] + '</button>';
+                return '<button class="home-btn secondary category-choice-btn" data-cat="' + cat[0] + '" style="padding:14px; font-size:15px; text-align:left; display:flex; align-items:center; gap:8px;">' + catIconHtml(cat[0]) + '<span>' + cat[1] + '</span></button>';
             }).join('') + '</div>';
             document.getElementById('modal-item-title').innerText = 'ジャンルを選択';
             document.getElementById('modal-item-inputs').innerHTML = html;
@@ -5611,24 +5666,23 @@
             var p = plans.find(function (it) { return it.id === targetPId; });
 
             var catNames = { show: 'ショー・パレード', attraction: 'アトラクション', food: '食事', rest: '休憩', other: 'その他' };
-            var catIcons = { show: '🎶', attraction: '🎢', food: '🍽️', rest: '😴', other: '📌' };
             var defaultName = idx === -1 ? (catNames[cat] || 'その他') : '';
             var it = idx === -1 ? { name: defaultName, time: initialTime || '', duration: initialDuration || 30, cat: cat || 'other' } : p.items[idx];
             var selectedCat = it.cat || cat || 'other';
 
             var endTime = it.time ? minToTime(timeToMin(it.time) + (it.duration || 30)) : '';
-            var catIcon = catIcons[selectedCat] || '📌';
+            var catIcon = catIconHtml(selectedCat);
             var catLabel = catNames[selectedCat] || 'その他';
 
             var html = '<div class="item-modal-layout">' +
                 '<div class="item-form-panel">' +
-                '<div id="it-cat-label" style="background:rgba(108,92,231,0.08); padding:8px 12px; border-radius:10px; margin-bottom:12px; font-size:13px; font-weight:bold;">' + catIcon + ' ' + catLabel + '</div>' +
+                '<div id="it-cat-label" style="background:rgba(108,92,231,0.08); padding:8px 12px; border-radius:10px; margin-bottom:12px; font-size:13px; font-weight:bold; display:flex; align-items:center; gap:6px;">' + catIcon + '<span>' + catLabel + '</span></div>' +
                 '<div class="input-group"><label>ジャンル</label><select id="it-cat">' +
-                '<option value="show"' + (selectedCat === 'show' ? ' selected' : '') + '>🎶 ショー・パレード</option>' +
-                '<option value="attraction"' + (selectedCat === 'attraction' ? ' selected' : '') + '>🎢 アトラクション</option>' +
-                '<option value="food"' + (selectedCat === 'food' ? ' selected' : '') + '>🍽️ 食事</option>' +
-                '<option value="rest"' + (selectedCat === 'rest' ? ' selected' : '') + '>😴 休憩</option>' +
-                '<option value="other"' + (selectedCat === 'other' ? ' selected' : '') + '>📌 その他</option>' +
+                '<option value="show"' + (selectedCat === 'show' ? ' selected' : '') + '>ショー・パレード</option>' +
+                '<option value="attraction"' + (selectedCat === 'attraction' ? ' selected' : '') + '>アトラクション</option>' +
+                '<option value="food"' + (selectedCat === 'food' ? ' selected' : '') + '>食事</option>' +
+                '<option value="rest"' + (selectedCat === 'rest' ? ' selected' : '') + '>休憩</option>' +
+                '<option value="other"' + (selectedCat === 'other' ? ' selected' : '') + '>その他</option>' +
                 '</select></div>' +
                 '<div class="input-group"><label>名称</label><input id="it-name" value="' + escapeHtml(it.name) + '"></div>' +
                 '<div style="display:flex; gap:10px;">' +
@@ -5654,7 +5708,7 @@
                 var startVal = normalizeTimeInput(document.getElementById('it-time').value);
                 var endVal = normalizeTimeInput(document.getElementById('it-end').value);
                 var catLabelEl = document.getElementById('it-cat-label');
-                if (catLabelEl) catLabelEl.innerText = (catIcons[catVal] || '📌') + ' ' + (catNames[catVal] || 'その他');
+                if (catLabelEl) catLabelEl.innerHTML = catIconHtml(catVal) + '<span>' + (catNames[catVal] || 'その他') + '</span>';
                 var draftItems = p.items.map(function (item, itemIdx) {
                     var copy = Object.assign({}, item);
                     copy._sourceIndex = itemIdx;
@@ -5791,16 +5845,15 @@
 
         function renderPreviewItemBox(area, it) {
             var dur = it.duration || 30;
-            var catIcons = { show: '🎶', attraction: '🎢', food: '🍽️', rest: '😴', other: '📌' };
             var color = getCatColor(it.cat);
-            var icon = catIcons[it.cat] || catIcons.other;
+            var icon = catIconHtml(it.cat);
             var div = document.createElement('div');
             div.style.cssText = 'height:100%; min-height:0; padding:9px; border-radius:10px; background:#fff; border:2px solid ' + color + '; color:#243042; position:relative; box-shadow:0 4px 10px rgba(108,92,231,0.12); z-index:10; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; overflow:hidden;' + (it._draft ? ' outline:3px solid rgba(108,92,231,0.22);' : '');
             div.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">' +
                 '<div style="font-size:12px; font-weight:800; background:rgba(108,92,231,0.09); color:#243042; padding:3px 7px; border-radius:6px; white-space:nowrap;">' + it.time + ' - ' + minToTime(timeToMin(it.time) + dur) + '</div>' +
                 '<div style="font-size:10px; color:' + color + '; font-weight:bold; white-space:nowrap;">' + dur + '分</div>' +
                 '</div>' +
-                '<div style="font-size:14px; font-weight:700; line-height:1.25; letter-spacing:0; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">' + (it._draft ? '追加予定 ' : '') + icon + ' ' + escapeHtml(it.name || '名称未入力') + '</div>';
+                '<div class="icon-text" style="font-size:14px; font-weight:700; line-height:1.25; letter-spacing:0; overflow:hidden;">' + (it._draft ? '<span>追加予定</span>' : '') + icon + '<span>' + escapeHtml(it.name || '名称未入力') + '</span></div>';
             area.appendChild(div);
         }
 

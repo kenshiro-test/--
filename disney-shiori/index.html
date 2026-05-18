@@ -71,6 +71,11 @@
             overflow: visible;
         }
 
+        #app-main {
+            padding: 18px 0;
+            gap: 0;
+        }
+
         header {
             display: flex;
             justify-content: space-between;
@@ -1141,6 +1146,11 @@
             width: min(1120px, calc(100% - 36px));
             margin: 0 auto;
             flex-shrink: 0;
+        }
+
+        .flow-shell #planner-progress {
+            width: 100%;
+            margin: 0;
         }
 
         .flow-nav-row {
@@ -2943,19 +2953,21 @@
     </div>
 
     <div class="app-container" id="app-main" style="display:none;">
-        <header>
-            <h1 class="home-title-link" onclick="renderHome()">Dream Schedule Planner</h1>
-            <div style="display:flex; gap:10px; align-items:center;">
-                <button onclick="openMasterModal(-1)" class="add-show-btn">＋ ショー追加</button>
-                <input type="date" id="plan-date"
-                    style="background:var(--bg-panel); border:1px solid var(--glass-border); color:var(--text-main); padding:4px 8px; border-radius:6px; font-size:12px;">
-                <button id="btn-admin" title="管理者モード"
-                    style="background:none; border:none; font-size:13px; font-weight:bold; color:var(--text-dim); cursor:pointer;">管理者モード</button>
-                <button id="btn-config"
-                    style="background:none; border:none; font-size:13px; font-weight:bold; color:var(--text-dim); cursor:pointer;">リセット</button>
+        <div class="flow-shell">
+            <div class="flow-header">
+                <div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div>
+                <div class="flow-header-actions">
+                    <button onclick="openMasterModal(-1)" class="add-show-btn">＋ ショー追加</button>
+                    <input type="date" id="plan-date"
+                        style="background:var(--bg-panel); border:1px solid var(--glass-border); color:var(--text-main); padding:4px 8px; border-radius:6px; font-size:12px;">
+                    <button id="btn-admin" title="管理者モード"
+                        style="background:none; border:none; font-size:13px; font-weight:bold; color:var(--text-dim); cursor:pointer;">管理者モード</button>
+                    <button id="btn-config"
+                        style="background:none; border:none; font-size:13px; font-weight:bold; color:var(--text-dim); cursor:pointer;">リセット</button>
+                </div>
             </div>
-        </header>
-        <div id="planner-progress" class="flow-progress" style="display:none;"><div id="planner-progress-bar" class="flow-progress-bar"></div></div>
+            <div id="planner-progress" class="flow-progress" style="display:none;"><div id="planner-progress-bar" class="flow-progress-bar"></div></div>
+        </div>
         <div id="planner-subnav-row" class="flow-subnav-row" style="display:none;">
             <button id="planner-top-back" class="flow-nav-btn flow-back">戻る</button>
             <button id="planner-top-reset" class="flow-reset-btn" style="display:none;">リセット</button>

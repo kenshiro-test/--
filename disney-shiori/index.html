@@ -53,7 +53,7 @@
             display: none;
             background: #e74c3c;
             color: white;
-            padding: 10px;
+            padding: 18px 0 10px;
             position: fixed;
             top: 0;
             width: 100%;
@@ -81,7 +81,7 @@
             border-radius: 12px;
             margin-bottom: 0;
             min-height: 74px;
-            width: min(1120px, calc(100% - 18px));
+            width: min(1120px, calc(100% - 36px));
             margin-left: auto;
             margin-right: auto;
             flex-shrink: 0;
@@ -1107,6 +1107,12 @@
             border-radius: 999px;
         }
 
+        #planner-progress {
+            width: min(1120px, calc(100% - 36px));
+            margin: 0 auto;
+            flex-shrink: 0;
+        }
+
         .flow-nav-row {
             display: flex;
             justify-content: flex-end;
@@ -1359,6 +1365,24 @@
 
         .confirm-row.gap {
             background: rgba(108, 92, 231, 0.045);
+            padding-top: 8px;
+            padding-bottom: 8px;
+            opacity: 0.72;
+        }
+
+        .confirm-row.gap .confirm-dot {
+            width: 12px;
+            height: 12px;
+            justify-self: center;
+        }
+
+        .confirm-row.gap .confirm-time {
+            font-size: 10px;
+            margin-bottom: 3px;
+        }
+
+        .confirm-row.gap .confirm-name {
+            font-size: 11px;
         }
 
         .confirm-row:last-child {
@@ -2748,9 +2772,10 @@
 
     <div id="step-method" class="step-container" style="display:none;">
         <div class="flow-shell">
-            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div><div class="flow-header-actions"><button class="flow-nav-btn flow-back" onclick="prevStep('show-pick')">戻る</button></div></div>
+            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div></div>
             <div class="flow-progress"><div class="flow-progress-bar" style="--progress:50%;"></div></div>
         </div>
+        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="prevStep('show-pick')">戻る</button></div>
         <div class="step-card">
             <h2 class="step-title">作成方法を<br>選択してください</h2>
             <div id="method-summary" class="method-summary"></div>
@@ -2772,9 +2797,10 @@
 
     <div id="step-complete" class="step-container" style="display:none;">
         <div class="flow-shell">
-            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div><div class="flow-header-actions"><button class="flow-nav-btn flow-back" onclick="backToRefineFromComplete()">戻る</button></div></div>
+            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div></div>
             <div class="flow-progress"><div class="flow-progress-bar" style="--progress:100%;"></div></div>
         </div>
+        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="backToRefineFromComplete()">戻る</button></div>
         <div class="complete-card">
             <div class="complete-title">予定の作成が<br>完了しました</div>
             <div class="complete-save-row">
@@ -2959,6 +2985,7 @@
                 <div id="planner-step-title" class="planner-step-title"></div>
                 <div id="planner-select-tools" class="planner-select-tools">
                     <button onclick="autoCreateSchedule()" class="planner-tool-btn auto">自動</button>
+                    <button onclick="duplicateCurrentPattern()" class="planner-tool-btn">コピー</button>
                     <button onclick="createNewPattern()" class="planner-tool-btn add">パターン追加</button>
                     <button id="planner-tool-delete-pattern" onclick="deleteCurrentPattern()" class="planner-tool-btn delete">パターン削除</button>
                 </div>
@@ -6323,6 +6350,15 @@
             dm.save(d);
             state.pId = copy.id;
             render();
+        }
+
+        function duplicateCurrentPattern() {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var plans = pd.plans[state.date] || [];
+            var current = plans.find(function (p) { return p.id === state.pId; }) || plans[0];
+            if (!current) return;
+            duplicatePattern(current.id);
         }
 
         function resetAllData() {

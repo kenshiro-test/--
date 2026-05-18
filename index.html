@@ -197,6 +197,30 @@
             min-width: 0;
         }
 
+        .content-area.refine-content {
+            display: block;
+            overflow: visible;
+            width: 100%;
+        }
+
+        .content-area.refine-content > div {
+            width: 100%;
+        }
+
+        .view-frame.refine-frame {
+            gap: 0;
+            padding-bottom: 8px;
+        }
+
+        .view-frame.refine-frame .planner-step-title {
+            padding-bottom: 10px;
+        }
+
+        .view-frame.refine-frame .grid-container {
+            border-top: none;
+            background: #ffffff;
+        }
+
         /* Select Mode Column */
         .lane {
             flex: 1;
@@ -306,6 +330,12 @@
             position: sticky;
             top: 0;
             z-index: 50;
+        }
+
+        .refine-header-lane .cat-header {
+            position: relative;
+            top: auto;
+            background: #ffffff;
         }
 
         .items-container {
@@ -5025,6 +5055,8 @@
                 state.px = state.mode === 'select' ? 0.62 : 0.6;
 
                 var win = document.getElementById('content-win');
+                if (frame) frame.classList.toggle('refine-frame', state.mode === 'refine');
+                if (win) win.classList.toggle('refine-content', state.mode === 'refine');
                 if (state.mode === 'select') {
                     ruler.style.display = 'block';
                     win.style.setProperty('--hour-h', (60 * state.px) + 'px');
@@ -5136,12 +5168,12 @@
 
                     // Header Row
                     var hRow = document.createElement('div');
-                    hRow.style.cssText = 'display:flex; position:sticky; top:0; z-index:100; background:var(--bg-dark);';
-                    hRow.innerHTML = '<div style="width:50px; flex-shrink:0; background:var(--glass); border-bottom:1px solid var(--glass-border);"></div>'; // Corner
+                    hRow.style.cssText = 'display:flex; position:relative; z-index:1; background:#ffffff;';
+                    hRow.innerHTML = '<div style="width:50px; flex-shrink:0; background:#ffffff; border-bottom:1px solid var(--glass-border);"></div>'; // Corner
                     visiblePlans.forEach(function (p) {
                         var pIdx = plans.findIndex(function (target) { return target.id === p.id; });
                         var h = document.createElement('div');
-                        h.className = 'category-lane';
+                        h.className = 'category-lane refine-header-lane';
                         h.style.cssText = 'flex:1; min-width:240px; border-right:1px solid var(--glass-border); position:relative;';
                         h.innerHTML = '<div class="cat-header" style="height:' + headerH + 'px; padding:0;">' +
                             '<div class="plan-editor-head">' +
@@ -5311,7 +5343,7 @@
 
                     var totalH = headerH + 30;
                     for (var i = 0; i < segmentHeights.length; i++) totalH += segmentHeights[i];
-                    win.style.height = totalH + 'px';
+                    win.style.height = 'auto';
                 }
             } catch (e) {
                 console.error('render failed', e);

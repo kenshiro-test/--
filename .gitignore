@@ -2,6 +2,7 @@
 *.sqlite3
 *.sqlite3-*
 __pycache__/
+outputs/
 
 # Local scratch files
 disney-shiori/tmp_script.js

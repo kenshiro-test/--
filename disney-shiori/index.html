@@ -1114,9 +1114,9 @@
         }
 
         .flow-reset-btn {
-            border: 1px solid rgba(108, 92, 231, 0.18);
-            background: #eef1f7;
-            color: #344054;
+            border: 1px solid rgba(231, 76, 60, 0.26);
+            background: rgba(231, 76, 60, 0.08);
+            color: #c0392b;
             border-radius: 999px;
             min-width: 88px;
             min-height: 44px;
@@ -1125,6 +1125,12 @@
             font-weight: 900;
             cursor: pointer;
             box-shadow: 0 10px 24px rgba(83, 76, 132, 0.14);
+        }
+
+        .reset-danger {
+            color: #c0392b !important;
+            border-color: rgba(231, 76, 60, 0.26) !important;
+            background: rgba(231, 76, 60, 0.08) !important;
         }
 
         .flow-progress {
@@ -2767,10 +2773,10 @@
                                 <div style="display:flex; gap:8px;">
                                     <button class="home-btn secondary" onclick="toggleSteps7MemoActions()"
                                         id="btn-steps7-memo">メモ</button>
-                                    <button class="home-btn secondary" onclick="saveSteps7Image()">画像保存</button>
-                                    <button class="home-btn secondary" onclick="resetSteps7()">リセット</button>
                                     <button class="home-btn secondary" onclick="toggleSteps7Edit()"
                                         id="btn-steps7-edit">編集</button>
+                                    <button class="home-btn secondary" onclick="saveSteps7Image()">画像保存</button>
+                                    <button class="home-btn secondary reset-danger" onclick="resetSteps7()">リセット</button>
                                 </div>
                             </div>
                             <div class="memo7-wrap">

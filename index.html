@@ -6507,6 +6507,63 @@
             });
         }
 
+        function waitForImagesInElement(target) {
+            var images = Array.prototype.slice.call(target.querySelectorAll('img'));
+            return Promise.all(images.map(function (img) {
+                if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+                return new Promise(function (resolve) {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
+            }));
+        }
+
+        function captureCleanElementCanvas(target, bgColor) {
+            var rect = target.getBoundingClientRect();
+            var width = Math.ceil(Math.max(target.scrollWidth, target.offsetWidth, target.clientWidth, rect.width || 0));
+            var height = Math.ceil(Math.max(target.scrollHeight, target.offsetHeight, target.clientHeight, rect.height || 0));
+            var clone = target.cloneNode(true);
+            var wrapper = document.createElement('div');
+            var previousScrollX = window.scrollX || window.pageXOffset || 0;
+            var previousScrollY = window.scrollY || window.pageYOffset || 0;
+            wrapper.style.cssText = [
+                'position:fixed',
+                'left:0',
+                'top:0',
+                'z-index:2147483647',
+                'width:' + width + 'px',
+                'min-height:' + height + 'px',
+                'background:' + (bgColor || '#ffffff'),
+                'padding:0',
+                'margin:0',
+                'box-sizing:border-box',
+                'pointer-events:none'
+            ].join(';');
+            clone.style.width = width + 'px';
+            clone.style.maxWidth = 'none';
+            clone.style.boxSizing = 'border-box';
+            wrapper.appendChild(clone);
+            document.body.appendChild(wrapper);
+            return waitForImagesInElement(wrapper).then(function () {
+                return html2canvas(wrapper, {
+                    backgroundColor: bgColor || '#ffffff',
+                    scale: Math.min(2, window.devicePixelRatio || 2),
+                    scrollX: 0,
+                    scrollY: 0,
+                    x: 0,
+                    y: 0,
+                    width: width,
+                    height: Math.ceil(Math.max(wrapper.scrollHeight, height)),
+                    windowWidth: width,
+                    windowHeight: Math.ceil(Math.max(wrapper.scrollHeight, height)),
+                    useCORS: true
+                });
+            }).finally(function () {
+                if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+                window.scrollTo(previousScrollX, previousScrollY);
+            });
+        }
+
         function downloadCanvas(canvas, filename) {
             var link = document.createElement('a');
             link.download = filename;
@@ -6687,7 +6744,7 @@
         function saveCompleteImage() {
             var target = document.getElementById('complete-capture-area');
             if (!target) return;
-            captureVisibleElementCanvas(target, '#ffffff').then(function (canvas) {
+            captureCleanElementCanvas(target, '#ffffff').then(function (canvas) {
                 return shareCanvasOrDownload(canvas, 'dream_plan_summary_' + state.date + '.png', 'Dream Schedule Plan', true);
             }).catch(function (e) {
                 alert('画像保存に失敗しました: ' + (e && e.message ? e.message : e));

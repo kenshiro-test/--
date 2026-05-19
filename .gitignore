@@ -1,0 +1,14 @@
+.DS_Store
+*.sqlite3
+*.sqlite3-*
+__pycache__/
+
+# Local scratch files
+disney-shiori/tmp_script.js
+
+# Source images kept locally after optimized assets are copied into assets/show-images.
+*.png
+!disney-shiori/dream-usage-guide.png
+!disney-shiori/assets/show-images/*.png
+!disney-shiori/アイコン/*.png
+disney-shiori/アイコン/*.PNG

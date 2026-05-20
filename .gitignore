@@ -13,3 +13,5 @@ disney-shiori/tmp_script.js
 !disney-shiori/assets/show-images/*.png
 !disney-shiori/アイコン/*.png
 disney-shiori/アイコン/*.PNG
+disney-shiori/docs/video/**/frames/
+disney-shiori/docs/video/**/output/preview_*.jpg

@@ -1,0 +1,19 @@
+{
+  "name": "dream-planner-short-remotion",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render src/Root.tsx DreamPlannerShort ../output/dream-schedule-planner-short-remotion.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "latest",
+    "remotion": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}
+

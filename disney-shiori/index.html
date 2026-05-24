@@ -1491,6 +1491,8 @@
             justify-content: flex-start;
         }
 
+        #step-plan-type,
+        #step-attraction-pick,
         #step-method {
             justify-content: flex-start;
             align-items: center;
@@ -1501,6 +1503,8 @@
             margin: 20px 0;
         }
 
+        #step-plan-type .step-card,
+        #step-attraction-pick .step-card,
         #step-method .step-card {
             margin: 20px 0;
         }
@@ -1716,6 +1720,251 @@
 
         .show-picker-item.disabled input {
             cursor: not-allowed;
+        }
+
+        .plan-type-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .attraction-toolbar {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin: 10px 0 14px;
+        }
+
+        .attraction-tab {
+            border: 1px solid rgba(108, 92, 231, 0.24);
+            background: #ffffff;
+            color: #4b3fc1;
+            border-radius: 999px;
+            padding: 8px 13px;
+            font-size: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .attraction-tab.active {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .attraction-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 14px;
+            text-align: left;
+        }
+
+        .attraction-section-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: #243042;
+            margin: 8px 0;
+        }
+
+        .attraction-list,
+        .attraction-priority-list {
+            background: #f8f9fa;
+            border-radius: 16px;
+            border: 1px solid #eef0f2;
+            overflow: hidden;
+        }
+
+        .attraction-item {
+            display: grid;
+            grid-template-columns: 24px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 13px 14px;
+            border-bottom: 1px solid #eef0f2;
+            cursor: pointer;
+        }
+
+        .attraction-item:last-child,
+        .attraction-priority-row:last-child {
+            border-bottom: none;
+        }
+
+        .attraction-item:hover {
+            background: rgba(108, 92, 231, 0.05);
+        }
+
+        .attraction-item input {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--accent);
+        }
+
+        .attraction-name {
+            font-size: 14px;
+            font-weight: 900;
+            color: #243042;
+            line-height: 1.35;
+        }
+
+        .attraction-meta {
+            font-size: 11px;
+            color: #667085;
+            line-height: 1.55;
+            margin-top: 3px;
+        }
+
+        .attraction-pill {
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: 900;
+            color: #1f6c8f;
+            background: rgba(0, 151, 230, 0.1);
+            white-space: nowrap;
+        }
+
+        .attraction-priority-row {
+            display: grid;
+            grid-template-columns: 34px 1fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 11px 12px;
+            border-bottom: 1px solid #eef0f2;
+        }
+
+        .priority-no {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .priority-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .priority-actions button {
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            background: #ffffff;
+            color: var(--accent);
+            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .attraction-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            background: rgba(108, 92, 231, 0.08);
+            border-radius: 14px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #4b3fc1;
+        }
+
+        .attraction-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .auto-plan-note {
+            margin-top: 10px;
+            border-radius: 12px;
+            padding: 10px 12px;
+            background: rgba(0, 151, 230, 0.08);
+            color: #1f6c8f;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.55;
+            text-align: left;
+        }
+
+        .route-map-content {
+            max-width: 760px;
+            width: calc(100% - 24px);
+            max-height: 92vh;
+            overflow: auto;
+        }
+
+        .route-map-wrap {
+            border-radius: 18px;
+            border: 1px solid rgba(108, 92, 231, 0.16);
+            background: linear-gradient(160deg, #f8fbff 0%, #f7f1ff 100%);
+            overflow: hidden;
+        }
+
+        .route-map-svg {
+            width: 100%;
+            aspect-ratio: 1.28;
+            display: block;
+            background:
+                linear-gradient(135deg, rgba(108, 92, 231, 0.08), rgba(0, 151, 230, 0.08)),
+                #ffffff;
+        }
+
+        .route-map-list {
+            margin-top: 12px;
+            display: grid;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .route-map-row {
+            display: grid;
+            grid-template-columns: 34px 74px 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid #eef0f7;
+            color: #243042;
+        }
+
+        .route-map-no {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .route-map-time {
+            font-size: 11px;
+            font-weight: 900;
+            color: #4b3fc1;
+        }
+
+        .route-map-name {
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .route-map-area {
+            font-size: 10px;
+            color: #667085;
+            margin-top: 2px;
         }
 
         .btn-next {
@@ -2831,12 +3080,42 @@
         <div class="flow-nav-row flow-page-nav"><button class="flow-nav-btn flow-next" onclick="goNextFromPark()">次へ</button></div>
     </div>
 
+    <div id="step-plan-type" class="step-container" style="display:none;">
+        <div class="flow-shell">
+            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div></div>
+            <div class="flow-progress"><div class="flow-progress-bar" style="--progress:24%;"></div></div>
+        </div>
+        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="prevStep('park')">戻る</button></div>
+        <div class="step-card">
+            <h2 class="step-title">プランの種類を<br>選択してください</h2>
+            <p class="step-desc">ショー中心、アトラクション中心、両方から選べます</p>
+            <div class="plan-type-grid">
+                <button type="button" id="plan-type-show" class="method-choice-card" onclick="selectPlanType('show')">
+                    <div class="method-choice-icon"><img class="app-icon" src="./アイコン/show.png" alt="ショー"></div>
+                    <div class="method-choice-title">ショーのみ</div>
+                    <div class="method-choice-desc">これまで通り、ショー・パレードの時間を選んで予定を作成します。</div>
+                </button>
+                <button type="button" id="plan-type-attraction" class="method-choice-card" onclick="selectPlanType('attraction')">
+                    <div class="method-choice-icon"><img class="app-icon" src="./アイコン/attraction.png" alt="アトラクション"></div>
+                    <div class="method-choice-title">アトラクションのみ</div>
+                    <div class="method-choice-desc">乗りたいアトラクションの優先度と平均待ち時間から、自動で1日の流れを作ります。</div>
+                </button>
+                <button type="button" id="plan-type-mixed" class="method-choice-card" onclick="selectPlanType('mixed')">
+                    <div class="method-choice-icon"><img class="app-icon" src="./アイコン/auto.png" alt="両方"></div>
+                    <div class="method-choice-title">ショー + アトラクション</div>
+                    <div class="method-choice-desc">ショーの時間を固定し、その前後にアトラクションをはめ込みます。</div>
+                </button>
+            </div>
+        </div>
+        <div class="flow-nav-row flow-page-nav"><button class="flow-nav-btn flow-next" onclick="goNextFromPlanType()">次へ</button></div>
+    </div>
+
     <div id="step-show-pick" class="step-container" style="display:none;">
         <div class="flow-shell">
             <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div></div>
             <div class="flow-progress"><div class="flow-progress-bar" style="--progress:33%;"></div></div>
         </div>
-        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="prevStep('park')">戻る</button></div>
+        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="prevStep('plan-type')">戻る</button></div>
         <div class="step-card">
             <h2 class="step-title">見たいショーを<br>選択してください</h2>
             <p class="step-desc">あとから変更できます</p>
@@ -2851,12 +3130,42 @@
         <div class="flow-nav-row flow-page-nav"><button class="flow-nav-btn flow-next" onclick="goNextFromShowPick()">次へ</button></div>
     </div>
 
+    <div id="step-attraction-pick" class="step-container" style="display:none;">
+        <div class="flow-shell">
+            <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div></div>
+            <div class="flow-progress"><div class="flow-progress-bar" style="--progress:42%;"></div></div>
+        </div>
+        <div class="flow-subnav-row"><button id="attraction-pick-back" class="flow-nav-btn flow-back" onclick="backFromAttractionPick()">戻る</button></div>
+        <div class="step-card">
+            <h2 class="step-title">乗りたい<br>アトラクションを選択</h2>
+            <p class="step-desc">選んだ順番が優先度になります。あとから上下で並び替えできます。</p>
+            <div id="attraction-recommendation" class="method-summary"></div>
+            <div id="attraction-area-tabs" class="attraction-toolbar"></div>
+            <div class="attraction-layout">
+                <div>
+                    <div class="attraction-section-title">アトラクション</div>
+                    <div id="attraction-picker-list" class="attraction-list"></div>
+                </div>
+                <div>
+                    <div class="attraction-section-title">優先度</div>
+                    <div id="picked-attraction-list" class="attraction-priority-list"></div>
+                    <div class="attraction-options">
+                        <label><input type="checkbox" id="attraction-lunch" checked> 昼食を入れる（60分）</label>
+                        <label><input type="checkbox" id="attraction-dinner"> 夕食を入れる（60分）</label>
+                        <label><input type="checkbox" id="attraction-rest"> 休憩を多めにする（30分）</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flow-nav-row flow-page-nav"><button class="flow-nav-btn flow-next" onclick="goNextFromAttractionPick()">次へ</button></div>
+    </div>
+
     <div id="step-method" class="step-container" style="display:none;">
         <div class="flow-shell">
             <div class="flow-header"><div class="flow-brand" onclick="renderHome()">Dream Schedule Planner</div></div>
             <div class="flow-progress"><div class="flow-progress-bar" style="--progress:50%;"></div></div>
         </div>
-        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="prevStep('show-pick')">戻る</button></div>
+        <div class="flow-subnav-row"><button class="flow-nav-btn flow-back" onclick="backFromMethod()">戻る</button></div>
         <div class="step-card">
             <h2 class="step-title">作成方法を<br>選択してください</h2>
             <div id="method-summary" class="method-summary"></div>
@@ -2886,6 +3195,7 @@
             <div class="complete-title">予定の作成が<br>完了しました</div>
             <div class="complete-save-row">
                 <button class="home-btn primary" onclick="saveCompleteImage()">画像を保存する</button>
+                <button class="home-btn secondary" onclick="openCompleteRouteMap()">マップを開く</button>
             </div>
             <div id="complete-plan-tabs" class="confirm-plan-tabs"></div>
             <div id="complete-capture-area">
@@ -3137,6 +3447,16 @@
             </div>
         </div>
 
+        <div id="modal-route-map" class="modal hidden">
+            <div class="modal-content route-map-content">
+                <h3>1日の移動マップ</h3>
+                <div id="route-map-content" style="margin:15px 0;"></div>
+                <div class="modal-footer">
+                    <button onclick="closeModal('modal-route-map')" class="btn-fill btn-s">閉じる</button>
+                </div>
+            </div>
+        </div>
+
         <div id="modal-admin" class="modal hidden">
             <div class="modal-content" style="max-width:500px;">
                 <h3>日別スケジュール管理</h3>
@@ -3195,6 +3515,90 @@
             ]
         };
 
+        var DEFAULT_ATTRACTIONS = {
+            land: [
+                { id: "tdl_beauty_beast", name: "美女と野獣“魔法のものがたり”", area: "ファンタジーランド", duration: 8, popularity: 5, isFeatured: true, hasDpa: true, isClosed: false, officialUrl: "" },
+                { id: "tdl_baymax", name: "ベイマックスのハッピーライド", area: "トゥモローランド", duration: 2, popularity: 5, isFeatured: true, hasDpa: true, isClosed: false, officialUrl: "" },
+                { id: "tdl_splash", name: "スプラッシュ・マウンテン", area: "クリッターカントリー", duration: 10, popularity: 4, isFeatured: true, hasDpa: false, isClosed: false, officialUrl: "" },
+                { id: "tdl_pooh", name: "プーさんのハニーハント", area: "ファンタジーランド", duration: 5, popularity: 4, isFeatured: true, hasDpa: false, isClosed: false, officialUrl: "" },
+                { id: "tdl_monsters", name: "モンスターズ・インク“ライド&ゴーシーク!”", area: "トゥモローランド", duration: 4, popularity: 4, isFeatured: false, hasDpa: false, isClosed: false, officialUrl: "" },
+                { id: "tdl_big_thunder", name: "ビッグサンダー・マウンテン", area: "ウエスタンランド", duration: 4, popularity: 4, isFeatured: false, hasDpa: false, isClosed: false, officialUrl: "" },
+                { id: "tdl_pirates", name: "カリブの海賊", area: "アドベンチャーランド", duration: 15, popularity: 3, isFeatured: false, hasDpa: false, isClosed: false, officialUrl: "" }
+            ],
+            sea: [
+                { id: "tds_soaring", name: "ソアリン：ファンタスティック・フライト", area: "メディテレーニアンハーバー", duration: 5, popularity: 5, isFeatured: true, hasDpa: true, isClosed: false, officialUrl: "" },
+                { id: "tds_toy_story", name: "トイ・ストーリー・マニア！", area: "アメリカンウォーターフロント", duration: 7, popularity: 5, isFeatured: true, hasDpa: true, isClosed: false, officialUrl: "" },
+                { id: "tds_center", name: "センター・オブ・ジ・アース", area: "ミステリアスアイランド", duration: 3, popularity: 4, isFeatured: true, hasDpa: false, isClosed: false, officialUrl: "" },
+                { id: "tds_tower", name: "タワー・オブ・テラー", area: "アメリカンウォーターフロント", duration: 2, popularity: 4, isFeatured: true, hasDpa: true, isClosed: false, officialUrl: "" },
+                { id: "tds_indiana", name: "インディ・ジョーンズ・アドベンチャー", area: "ロストリバーデルタ", duration: 3, popularity: 4, isFeatured: false, hasDpa: false, isClosed: false, officialUrl: "" },
+                { id: "tds_raging", name: "レイジングスピリッツ", area: "ロストリバーデルタ", duration: 2, popularity: 3, isFeatured: false, hasDpa: false, isClosed: false, officialUrl: "" },
+                { id: "tds_sindbad", name: "シンドバッド・ストーリーブック・ヴォヤッジ", area: "アラビアンコースト", duration: 10, popularity: 2, isFeatured: false, hasDpa: false, isClosed: false, officialUrl: "" }
+            ]
+        };
+
+        var DEFAULT_ATTRACTION_WAIT_TIMES = {
+            land: {
+                tdl_beauty_beast: { default: 80, byTimeBand: { "09:00": 100, "11:00": 90, "14:00": 75, "18:00": 60 } },
+                tdl_baymax: { default: 65, byTimeBand: { "09:00": 85, "12:00": 70, "16:00": 55, "19:00": 45 } },
+                tdl_splash: { default: 55, byTimeBand: { "09:00": 45, "12:00": 65, "15:00": 70, "18:00": 45 } },
+                tdl_pooh: { default: 50, byTimeBand: { "09:00": 60, "12:00": 55, "15:00": 45, "18:00": 35 } },
+                tdl_monsters: { default: 45, byTimeBand: { "09:00": 55, "12:00": 45, "15:00": 40, "18:00": 30 } },
+                tdl_big_thunder: { default: 45, byTimeBand: { "09:00": 35, "12:00": 50, "15:00": 55, "18:00": 35 } },
+                tdl_pirates: { default: 20, byTimeBand: { "09:00": 15, "12:00": 25, "15:00": 25, "18:00": 15 } }
+            },
+            sea: {
+                tds_soaring: { default: 90, byTimeBand: { "09:00": 110, "11:00": 95, "14:00": 85, "18:00": 65 } },
+                tds_toy_story: { default: 75, byTimeBand: { "09:00": 95, "12:00": 80, "15:00": 70, "18:00": 55 } },
+                tds_center: { default: 55, byTimeBand: { "09:00": 45, "12:00": 60, "15:00": 65, "18:00": 45 } },
+                tds_tower: { default: 55, byTimeBand: { "09:00": 50, "12:00": 60, "15:00": 65, "18:00": 45 } },
+                tds_indiana: { default: 45, byTimeBand: { "09:00": 35, "12:00": 50, "15:00": 55, "18:00": 35 } },
+                tds_raging: { default: 35, byTimeBand: { "09:00": 25, "12:00": 40, "15:00": 45, "18:00": 25 } },
+                tds_sindbad: { default: 15, byTimeBand: { "09:00": 10, "12:00": 20, "15:00": 15, "18:00": 10 } }
+            }
+        };
+
+        var DEFAULT_AREA_TRAVEL_TIMES = {
+            land: {
+                "ワールドバザール": { "アドベンチャーランド": 5, "ウエスタンランド": 7, "クリッターカントリー": 10, "ファンタジーランド": 9, "トゥモローランド": 7 },
+                "アドベンチャーランド": { "ウエスタンランド": 5, "クリッターカントリー": 8, "ファンタジーランド": 10, "トゥモローランド": 12 },
+                "ウエスタンランド": { "クリッターカントリー": 5, "ファンタジーランド": 7, "トゥモローランド": 12 },
+                "クリッターカントリー": { "ファンタジーランド": 8, "トゥモローランド": 14 },
+                "ファンタジーランド": { "トゥモローランド": 8 }
+            },
+            sea: {
+                "メディテレーニアンハーバー": { "アメリカンウォーターフロント": 8, "ポートディスカバリー": 12, "ロストリバーデルタ": 16, "アラビアンコースト": 15, "ミステリアスアイランド": 7 },
+                "アメリカンウォーターフロント": { "ポートディスカバリー": 8, "ロストリバーデルタ": 13, "アラビアンコースト": 16, "ミステリアスアイランド": 12 },
+                "ポートディスカバリー": { "ロストリバーデルタ": 7, "アラビアンコースト": 12, "ミステリアスアイランド": 10 },
+                "ロストリバーデルタ": { "アラビアンコースト": 8, "ミステリアスアイランド": 12 },
+                "アラビアンコースト": { "ミステリアスアイランド": 8 }
+            }
+        };
+
+        var PARK_AREA_MAP_POINTS = {
+            land: {
+                "入園口": { x: 50, y: 88 },
+                "ワールドバザール": { x: 50, y: 76 },
+                "アドベンチャーランド": { x: 25, y: 62 },
+                "ウエスタンランド": { x: 28, y: 43 },
+                "クリッターカントリー": { x: 19, y: 26 },
+                "ファンタジーランド": { x: 51, y: 34 },
+                "トゥーンタウン": { x: 72, y: 24 },
+                "トゥモローランド": { x: 76, y: 58 },
+                "退園口": { x: 50, y: 94 }
+            },
+            sea: {
+                "入園口": { x: 50, y: 90 },
+                "メディテレーニアンハーバー": { x: 50, y: 73 },
+                "アメリカンウォーターフロント": { x: 28, y: 55 },
+                "ポートディスカバリー": { x: 25, y: 33 },
+                "ロストリバーデルタ": { x: 52, y: 22 },
+                "アラビアンコースト": { x: 72, y: 39 },
+                "マーメイドラグーン": { x: 66, y: 57 },
+                "ミステリアスアイランド": { x: 50, y: 48 },
+                "退園口": { x: 50, y: 96 }
+            }
+        };
+
         function normalizeMasterEvent(m) {
             if (!m) return m;
             if (!Array.isArray(m.times)) m.times = [];
@@ -3209,6 +3613,37 @@
         function normalizeMasterEvents(list) {
             if (!Array.isArray(list)) return [];
             return list.map(function (m) { return normalizeMasterEvent(m); });
+        }
+
+        function normalizeAttraction(a) {
+            if (!a) return a;
+            if (typeof a.id === 'undefined') a.id = 'attr_' + Date.now();
+            if (typeof a.name !== 'string') a.name = '';
+            if (typeof a.area !== 'string') a.area = '';
+            a.duration = parseInt(a.duration, 10) || 5;
+            a.popularity = parseInt(a.popularity, 10) || 1;
+            a.isFeatured = !!a.isFeatured;
+            a.hasDpa = !!a.hasDpa;
+            a.isClosed = !!a.isClosed;
+            if (typeof a.officialUrl !== 'string') a.officialUrl = '';
+            return a;
+        }
+
+        function normalizeAttractions(list) {
+            if (!Array.isArray(list)) return [];
+            return list.map(function (a) { return normalizeAttraction(a); });
+        }
+
+        function cloneDefaultAttractions(parkKey) {
+            return cloneData(DEFAULT_ATTRACTIONS[parkKey] || []);
+        }
+
+        function cloneDefaultWaitTimes(parkKey) {
+            return cloneData(DEFAULT_ATTRACTION_WAIT_TIMES[parkKey] || {});
+        }
+
+        function cloneDefaultTravelTimes(parkKey) {
+            return cloneData(DEFAULT_AREA_TRAVEL_TIMES[parkKey] || {});
         }
 
         var SHOW_IMAGE_CACHE_VERSION = '20260514-3';
@@ -3328,6 +3763,12 @@
                     merged.parks[parkKey].masterEvents = DEFAULT_EVENTS[parkKey];
                 }
                 if (!merged.parks[parkKey].dailySchedules) merged.parks[parkKey].dailySchedules = {};
+                if (!Array.isArray(merged.parks[parkKey].masterAttractions) || merged.parks[parkKey].masterAttractions.length === 0) {
+                    merged.parks[parkKey].masterAttractions = cloneDefaultAttractions(parkKey);
+                }
+                merged.parks[parkKey].masterAttractions = normalizeAttractions(merged.parks[parkKey].masterAttractions);
+                if (!merged.parks[parkKey].attractionWaitTimes) merged.parks[parkKey].attractionWaitTimes = cloneDefaultWaitTimes(parkKey);
+                if (!merged.parks[parkKey].areaTravelTimes) merged.parks[parkKey].areaTravelTimes = cloneDefaultTravelTimes(parkKey);
                 if (userData.parks && userData.parks[parkKey] && userData.parks[parkKey].plans) {
                     merged.parks[parkKey].plans = userData.parks[parkKey].plans;
                 } else if (!merged.parks[parkKey].plans) {
@@ -3374,6 +3815,15 @@
                 if (shouldUpgradeMasterData({ parks: { land: merged.parks.land || {}, sea: merged.parks.sea || {} } }, { parks: { land: seedData.parks.land || {}, sea: seedData.parks.sea || {} } })) {
                     merged.parks[parkKey].masterEvents = cloneData(seedData.parks[parkKey].masterEvents || []);
                     merged.parks[parkKey].dailySchedules = cloneData(seedData.parks[parkKey].dailySchedules || {});
+                }
+                if (Array.isArray(seedData.parks[parkKey].masterAttractions) && (!Array.isArray(merged.parks[parkKey].masterAttractions) || !merged.parks[parkKey].masterAttractions.length)) {
+                    merged.parks[parkKey].masterAttractions = cloneData(seedData.parks[parkKey].masterAttractions);
+                }
+                if (seedData.parks[parkKey].attractionWaitTimes && !merged.parks[parkKey].attractionWaitTimes) {
+                    merged.parks[parkKey].attractionWaitTimes = cloneData(seedData.parks[parkKey].attractionWaitTimes);
+                }
+                if (seedData.parks[parkKey].areaTravelTimes && !merged.parks[parkKey].areaTravelTimes) {
+                    merged.parks[parkKey].areaTravelTimes = cloneData(seedData.parks[parkKey].areaTravelTimes);
                 }
             });
             if (!Array.isArray(merged.importHistory) || !merged.importHistory.length) {
@@ -3616,6 +4066,14 @@
                     if (!Array.isArray(p.parks.sea.masterEvents)) p.parks.sea.masterEvents = DEFAULT_EVENTS.sea;
                     p.parks.land.masterEvents = normalizeMasterEvents(p.parks.land.masterEvents);
                     p.parks.sea.masterEvents = normalizeMasterEvents(p.parks.sea.masterEvents);
+                    if (!Array.isArray(p.parks.land.masterAttractions) || !p.parks.land.masterAttractions.length) p.parks.land.masterAttractions = cloneDefaultAttractions('land');
+                    if (!Array.isArray(p.parks.sea.masterAttractions) || !p.parks.sea.masterAttractions.length) p.parks.sea.masterAttractions = cloneDefaultAttractions('sea');
+                    p.parks.land.masterAttractions = normalizeAttractions(p.parks.land.masterAttractions);
+                    p.parks.sea.masterAttractions = normalizeAttractions(p.parks.sea.masterAttractions);
+                    if (!p.parks.land.attractionWaitTimes) p.parks.land.attractionWaitTimes = cloneDefaultWaitTimes('land');
+                    if (!p.parks.sea.attractionWaitTimes) p.parks.sea.attractionWaitTimes = cloneDefaultWaitTimes('sea');
+                    if (!p.parks.land.areaTravelTimes) p.parks.land.areaTravelTimes = cloneDefaultTravelTimes('land');
+                    if (!p.parks.sea.areaTravelTimes) p.parks.sea.areaTravelTimes = cloneDefaultTravelTimes('sea');
                     if (!p.parks.land.plans) p.parks.land.plans = {};
                     if (!p.parks.sea.plans) p.parks.sea.plans = {};
                     if (!p.parks.land.dailySchedules) p.parks.land.dailySchedules = {};
@@ -3634,8 +4092,8 @@
                 userNotes: {},
                 importHistory: [],
                 parks: {
-                    land: { masterEvents: DEFAULT_EVENTS.land, plans: {}, dailySchedules: {} },
-                    sea: { masterEvents: DEFAULT_EVENTS.sea, plans: {}, dailySchedules: {} }
+                    land: { masterEvents: DEFAULT_EVENTS.land, masterAttractions: cloneDefaultAttractions('land'), attractionWaitTimes: cloneDefaultWaitTimes('land'), areaTravelTimes: cloneDefaultTravelTimes('land'), plans: {}, dailySchedules: {} },
+                    sea: { masterEvents: DEFAULT_EVENTS.sea, masterAttractions: cloneDefaultAttractions('sea'), attractionWaitTimes: cloneDefaultWaitTimes('sea'), areaTravelTimes: cloneDefaultTravelTimes('sea'), plans: {}, dailySchedules: {} }
                 }
             };
             hydrateShowAssets(d);
@@ -3657,10 +4115,16 @@
                     d.parkHours = { open: "09:00", close: "21:00" };
                 }
                 if (!Array.isArray(d.importHistory)) d.importHistory = [];
-                if (!d.parks.land) d.parks.land = { masterEvents: DEFAULT_EVENTS.land, plans: {}, dailySchedules: {} };
-                if (!d.parks.sea) d.parks.sea = { masterEvents: DEFAULT_EVENTS.sea, plans: {}, dailySchedules: {} };
+                if (!d.parks.land) d.parks.land = { masterEvents: DEFAULT_EVENTS.land, masterAttractions: cloneDefaultAttractions('land'), attractionWaitTimes: cloneDefaultWaitTimes('land'), areaTravelTimes: cloneDefaultTravelTimes('land'), plans: {}, dailySchedules: {} };
+                if (!d.parks.sea) d.parks.sea = { masterEvents: DEFAULT_EVENTS.sea, masterAttractions: cloneDefaultAttractions('sea'), attractionWaitTimes: cloneDefaultWaitTimes('sea'), areaTravelTimes: cloneDefaultTravelTimes('sea'), plans: {}, dailySchedules: {} };
                 if (!Array.isArray(d.parks.land.masterEvents)) d.parks.land.masterEvents = DEFAULT_EVENTS.land;
                 if (!Array.isArray(d.parks.sea.masterEvents)) d.parks.sea.masterEvents = DEFAULT_EVENTS.sea;
+                if (!Array.isArray(d.parks.land.masterAttractions) || !d.parks.land.masterAttractions.length) d.parks.land.masterAttractions = cloneDefaultAttractions('land');
+                if (!Array.isArray(d.parks.sea.masterAttractions) || !d.parks.sea.masterAttractions.length) d.parks.sea.masterAttractions = cloneDefaultAttractions('sea');
+                if (!d.parks.land.attractionWaitTimes) d.parks.land.attractionWaitTimes = cloneDefaultWaitTimes('land');
+                if (!d.parks.sea.attractionWaitTimes) d.parks.sea.attractionWaitTimes = cloneDefaultWaitTimes('sea');
+                if (!d.parks.land.areaTravelTimes) d.parks.land.areaTravelTimes = cloneDefaultTravelTimes('land');
+                if (!d.parks.sea.areaTravelTimes) d.parks.sea.areaTravelTimes = cloneDefaultTravelTimes('sea');
                 if (!d.parks.land.plans) d.parks.land.plans = {};
                 if (!d.parks.sea.plans) d.parks.sea.plans = {};
                 if (!d.parks.land.dailySchedules) d.parks.land.dailySchedules = {};
@@ -3668,6 +4132,8 @@
                 if (!d.userNotes || typeof d.userNotes !== 'object' || Array.isArray(d.userNotes)) d.userNotes = {};
                 d.parks.land.masterEvents = normalizeMasterEvents(d.parks.land.masterEvents);
                 d.parks.sea.masterEvents = normalizeMasterEvents(d.parks.sea.masterEvents);
+                d.parks.land.masterAttractions = normalizeAttractions(d.parks.land.masterAttractions);
+                d.parks.sea.masterAttractions = normalizeAttractions(d.parks.sea.masterAttractions);
                 hydrateShowAssets(d);
                 localStorage.setItem(this.key, JSON.stringify(d));
                 return d;
@@ -3729,6 +4195,10 @@
             var pd = d.parks[state.park];
             if (!Array.isArray(pd.masterEvents)) pd.masterEvents = DEFAULT_EVENTS[state.park];
             pd.masterEvents = normalizeMasterEvents(pd.masterEvents);
+            if (!Array.isArray(pd.masterAttractions) || !pd.masterAttractions.length) pd.masterAttractions = cloneDefaultAttractions(state.park);
+            pd.masterAttractions = normalizeAttractions(pd.masterAttractions);
+            if (!pd.attractionWaitTimes) pd.attractionWaitTimes = cloneDefaultWaitTimes(state.park);
+            if (!pd.areaTravelTimes) pd.areaTravelTimes = cloneDefaultTravelTimes(state.park);
             if (!pd.plans) pd.plans = {};
             if (!pd.dailySchedules) pd.dailySchedules = {};
             return pd;
@@ -3748,6 +4218,11 @@
             adminDraftSchedules: {},// { showId: { date: [times] } }
             step: 'home',
             pickedShowIds: [], // ユーザーが選択したショーのID
+            planType: 'show',
+            pickedAttractionIds: [],
+            attractionAreaFilter: 'featured',
+            attractionStartId: '',
+            attractionOptions: { lunch: true, dinner: false, rest: false },
             homePlanTab: 'all',
             homePreviewKey: null,
             homePreviewPlanIndex: {},
@@ -4665,6 +5140,11 @@
             state.pId = 0;
             state.mode = 'select';
             state.pickedShowIds = [];
+            state.planType = 'show';
+            state.pickedAttractionIds = [];
+            state.attractionAreaFilter = 'featured';
+            state.attractionStartId = '';
+            state.attractionOptions = { lunch: true, dinner: false, rest: false };
             try {
                 var dateInput = document.getElementById('plan-date');
                 if (dateInput) dateInput.value = ds;
@@ -4703,7 +5183,9 @@
             } else {
                 document.getElementById('app-main').style.display = 'none';
                 document.getElementById('step-' + s).style.display = 'flex';
+                if (s === 'plan-type') renderPlanType();
                 if (s === 'show-pick') renderShowPicker();
+                if (s === 'attraction-pick') renderAttractionPicker();
                 if (s === 'method') renderScheduleMethod();
             }
         }
@@ -4721,12 +5203,44 @@
 
         function goNextFromPark() {
             if (!state.park) state.park = 'land';
+            nextStep('plan-type');
+        }
+
+        function selectPlanType(type) {
+            state.planType = type;
+            renderPlanType();
+        }
+
+        function renderPlanType() {
+            ['show', 'attraction', 'mixed'].forEach(function (type) {
+                var el = document.getElementById('plan-type-' + type);
+                if (el) el.classList.toggle('active', state.planType === type);
+            });
+        }
+
+        function goNextFromPlanType() {
+            if (!state.planType) {
+                alert('プランの種類を選択してください。');
+                return;
+            }
+            if (state.planType === 'attraction') {
+                nextStep('attraction-pick');
+                return;
+            }
             nextStep('show-pick');
+        }
+
+        function backFromAttractionPick() {
+            nextStep(state.planType === 'mixed' ? 'show-pick' : 'plan-type');
         }
 
         function goNextFromShowPick() {
             if (!state.pickedShowIds || state.pickedShowIds.length === 0) {
                 alert('見たいショーを1つ以上選択してください。');
+                return;
+            }
+            if (state.planType === 'mixed') {
+                nextStep('attraction-pick');
                 return;
             }
             nextStep('method');
@@ -4747,6 +5261,14 @@
             }
             if (state.scheduleMethod === 'auto') autoCreateSchedule();
             else manualCreateSchedule();
+        }
+
+        function backFromMethod() {
+            if (state.planType === 'attraction' || state.planType === 'mixed') {
+                nextStep('attraction-pick');
+                return;
+            }
+            nextStep('show-pick');
         }
 
         function renderShowPicker() {
@@ -4858,6 +5380,172 @@
             renderShowPicker();
         }
 
+        function getActiveAttractions(pd) {
+            return (pd.masterAttractions || []).filter(function (a) { return !a.isClosed; });
+        }
+
+        function getAttractionWaitMinutes(pd, attraction, minute) {
+            var config = pd.attractionWaitTimes && pd.attractionWaitTimes[attraction.id] ? pd.attractionWaitTimes[attraction.id] : {};
+            var byTime = config.byTimeBand || {};
+            var bestKey = '';
+            var bestMin = -1;
+            Object.keys(byTime).forEach(function (key) {
+                var n = timeToMin(key);
+                if (!isNaN(n) && n <= minute && n > bestMin) {
+                    bestMin = n;
+                    bestKey = key;
+                }
+            });
+            return parseInt(bestKey ? byTime[bestKey] : config.default, 10) || 30;
+        }
+
+        function getTravelMinutes(pd, fromArea, toArea) {
+            if (!fromArea || !toArea || fromArea === toArea) return fromArea === toArea ? 3 : 8;
+            var map = pd.areaTravelTimes || {};
+            if (map[fromArea] && typeof map[fromArea][toArea] !== 'undefined') return parseInt(map[fromArea][toArea], 10) || 8;
+            if (map[toArea] && typeof map[toArea][fromArea] !== 'undefined') return parseInt(map[toArea][fromArea], 10) || 8;
+            return 10;
+        }
+
+        function getAttractionById(pd, id) {
+            return (pd.masterAttractions || []).find(function (a) { return a.id === id; });
+        }
+
+        function renderAttractionPicker() {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var active = getActiveAttractions(pd);
+            var validIds = active.map(function (a) { return a.id; });
+            state.pickedAttractionIds = state.pickedAttractionIds.filter(function (id) { return validIds.includes(id); });
+            if (state.attractionStartId && !state.pickedAttractionIds.includes(state.attractionStartId)) state.attractionStartId = '';
+
+            var recommended = active.slice().sort(function (a, b) {
+                return getAttractionWaitMinutes(pd, b, timeToMin('09:00')) - getAttractionWaitMinutes(pd, a, timeToMin('09:00'));
+            }).slice(0, 3);
+            var reco = document.getElementById('attraction-recommendation');
+            if (reco) {
+                reco.innerHTML = '<div class="method-summary-title">朝おすすめ</div>' +
+                    recommended.map(function (a) {
+                        return '<div>' + escapeHtml(a.name) + '（目安 ' + getAttractionWaitMinutes(pd, a, timeToMin('09:00')) + '分）</div>';
+                    }).join('');
+            }
+
+            var areas = Array.from(new Set(active.map(function (a) { return a.area || 'その他'; })));
+            var tabs = document.getElementById('attraction-area-tabs');
+            var filters = [{ key: 'featured', label: '人気' }, { key: 'all', label: 'すべて' }].concat(areas.map(function (area) { return { key: area, label: area }; }));
+            if (!filters.some(function (f) { return f.key === state.attractionAreaFilter; })) state.attractionAreaFilter = 'featured';
+            tabs.innerHTML = filters.map(function (f) {
+                return '<button type="button" class="attraction-tab' + (state.attractionAreaFilter === f.key ? ' active' : '') + '" onclick="setAttractionAreaFilter(\'' + escapeHtml(f.key) + '\')">' + escapeHtml(f.label) + '</button>';
+            }).join('');
+
+            var filtered = active.filter(function (a) {
+                if (state.attractionAreaFilter === 'featured') return a.isFeatured;
+                if (state.attractionAreaFilter === 'all') return true;
+                return a.area === state.attractionAreaFilter;
+            }).sort(function (a, b) {
+                if (b.popularity !== a.popularity) return b.popularity - a.popularity;
+                return a.name.localeCompare(b.name, 'ja');
+            });
+            var list = document.getElementById('attraction-picker-list');
+            if (!filtered.length) {
+                list.innerHTML = '<div class="attraction-item" style="display:block; color:#667085;">表示できるアトラクションがありません。</div>';
+            } else {
+                list.innerHTML = filtered.map(function (a) {
+                    var picked = state.pickedAttractionIds.includes(a.id);
+                    var wait = getAttractionWaitMinutes(pd, a, timeToMin('12:00'));
+                    return '<label class="attraction-item">' +
+                        '<input type="checkbox" data-attraction-id="' + escapeHtml(a.id) + '"' + (picked ? ' checked' : '') + '>' +
+                        '<div><div class="attraction-name">' + escapeHtml(a.name) + '</div>' +
+                        '<div class="attraction-meta">' + escapeHtml(a.area || 'エリア未登録') + ' / 所要 約' + escapeHtml(a.duration) + '分 / 待ち時間目安 ' + wait + '分' + (a.hasDpa ? ' / DPA対象' : '') + '</div></div>' +
+                        '<div class="attraction-pill">人気度 ' + escapeHtml(a.popularity) + '</div>' +
+                        '</label>';
+                }).join('');
+                Array.prototype.slice.call(list.querySelectorAll('input[data-attraction-id]')).forEach(function (input) {
+                    input.onchange = function () { toggleAttractionPick(input.getAttribute('data-attraction-id'), input.checked); };
+                });
+            }
+            renderPickedAttractions();
+            var lunch = document.getElementById('attraction-lunch');
+            var dinner = document.getElementById('attraction-dinner');
+            var rest = document.getElementById('attraction-rest');
+            if (lunch) lunch.checked = state.attractionOptions.lunch !== false;
+            if (dinner) dinner.checked = !!state.attractionOptions.dinner;
+            if (rest) rest.checked = !!state.attractionOptions.rest;
+        }
+
+        function setAttractionAreaFilter(area) {
+            state.attractionAreaFilter = area;
+            renderAttractionPicker();
+        }
+
+        function toggleAttractionPick(id, checked) {
+            if (checked) {
+                if (!state.pickedAttractionIds.includes(id)) state.pickedAttractionIds.push(id);
+                if (!state.attractionStartId) state.attractionStartId = id;
+            } else {
+                state.pickedAttractionIds = state.pickedAttractionIds.filter(function (pickedId) { return pickedId !== id; });
+                if (state.attractionStartId === id) state.attractionStartId = state.pickedAttractionIds[0] || '';
+            }
+            renderAttractionPicker();
+        }
+
+        function movePickedAttraction(id, delta) {
+            var idx = state.pickedAttractionIds.indexOf(id);
+            if (idx === -1) return;
+            var next = idx + delta;
+            if (next < 0 || next >= state.pickedAttractionIds.length) return;
+            var tmp = state.pickedAttractionIds[idx];
+            state.pickedAttractionIds[idx] = state.pickedAttractionIds[next];
+            state.pickedAttractionIds[next] = tmp;
+            renderAttractionPicker();
+        }
+
+        function setAttractionStart(id) {
+            state.attractionStartId = id;
+            renderPickedAttractions();
+        }
+
+        function renderPickedAttractions() {
+            var pd = getParkData(dm.get());
+            var box = document.getElementById('picked-attraction-list');
+            if (!box) return;
+            if (!state.pickedAttractionIds.length) {
+                box.innerHTML = '<div class="attraction-priority-row" style="display:block; color:#667085;">まだ選択されていません。</div>';
+                return;
+            }
+            box.innerHTML = state.pickedAttractionIds.map(function (id, idx) {
+                var a = getAttractionById(pd, id);
+                if (!a) return '';
+                return '<div class="attraction-priority-row">' +
+                    '<div class="priority-no">' + (idx + 1) + '</div>' +
+                    '<label style="display:block; min-width:0;">' +
+                    '<div class="attraction-name">' + escapeHtml(a.name) + '</div>' +
+                    '<div class="attraction-meta"><input type="radio" name="attraction-start" value="' + escapeHtml(a.id) + '"' + (state.attractionStartId === a.id ? ' checked' : '') + '> 最初に乗る</div>' +
+                    '</label>' +
+                    '<div class="priority-actions">' +
+                    '<button type="button" onclick="movePickedAttraction(\'' + escapeHtml(a.id) + '\', -1)">↑</button>' +
+                    '<button type="button" onclick="movePickedAttraction(\'' + escapeHtml(a.id) + '\', 1)">↓</button>' +
+                    '</div>' +
+                    '</div>';
+            }).join('');
+            Array.prototype.slice.call(box.querySelectorAll('input[name="attraction-start"]')).forEach(function (input) {
+                input.onchange = function () { setAttractionStart(input.value); };
+            });
+        }
+
+        function goNextFromAttractionPick() {
+            if (!state.pickedAttractionIds.length) {
+                alert('乗りたいアトラクションを1つ以上選択してください。');
+                return;
+            }
+            state.attractionOptions = {
+                lunch: !!(document.getElementById('attraction-lunch') && document.getElementById('attraction-lunch').checked),
+                dinner: !!(document.getElementById('attraction-dinner') && document.getElementById('attraction-dinner').checked),
+                rest: !!(document.getElementById('attraction-rest') && document.getElementById('attraction-rest').checked)
+            };
+            nextStep('method');
+        }
+
         function renderScheduleMethod() {
             var summary = document.getElementById('method-summary');
             if (!summary) return;
@@ -4865,19 +5553,38 @@
             var d = dm.get();
             var pd = getParkData(d);
             var picked = pd.masterEvents.filter(function (m) { return state.pickedShowIds.includes(m.id); });
+            var pickedAttractions = (pd.masterAttractions || []).filter(function (a) { return state.pickedAttractionIds.includes(a.id); });
+            if (state.planType === 'attraction') {
+                summary.innerHTML = '<div class="method-summary-title">' + pickedAttractions.length + '件のアトラクションを選択中:</div>' +
+                    '<ul class="method-summary-list">' + pickedAttractions.map(function (a) {
+                        return '<li>' + escapeHtml(a.name) + '</li>';
+                    }).join('') + '</ul>';
+                return;
+            }
             if (!picked.length) {
                 summary.innerHTML = 'ショーが選択されていません。戻って見たいショーを選択してください。';
                 return;
             }
-            summary.innerHTML = '<div class="method-summary-title">' + picked.length + '件のショーを選択中:</div>' +
+            summary.innerHTML = '<div class="method-summary-title">' + picked.length + '件のショー' + (state.planType === 'mixed' ? ' / ' + pickedAttractions.length + '件のアトラクション' : '') + 'を選択中:</div>' +
                 '<ul class="method-summary-list">' + picked.map(function (m) {
                     return '<li>' + escapeHtml(m.name) + '</li>';
-                }).join('') + '</ul>';
+                }).concat(state.planType === 'mixed' ? pickedAttractions.map(function (a) {
+                    return '<li>' + escapeHtml(a.name) + '</li>';
+                }) : []).join('') + '</ul>';
         }
 
         function manualCreateSchedule() {
+            if (state.planType === 'attraction') {
+                state.mode = 'refine';
+                nextStep('planner');
+                return;
+            }
             state.mode = 'select';
             nextStep('planner');
+        }
+
+        function getEntranceArea() {
+            return state.park === 'sea' ? 'メディテレーニアンハーバー' : 'ワールドバザール';
         }
 
         function getShowTimesForDate(pd, show) {
@@ -4972,6 +5679,14 @@
         }
 
         function autoCreateSchedule() {
+            if (state.planType === 'attraction') {
+                autoCreateAttractionSchedule([]);
+                return;
+            }
+            if (state.planType === 'mixed') {
+                autoCreateMixedSchedule();
+                return;
+            }
             var d = dm.get();
             var pd = getParkData(d);
             var picked = pd.masterEvents.filter(function (m) { return state.pickedShowIds.includes(m.id); });
@@ -5001,6 +5716,148 @@
             pd.plans[state.date] = plans;
             dm.save(d);
             state.mode = 'select';
+            nextStep('planner');
+        }
+
+        function autoCreateMixedSchedule() {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var picked = pd.masterEvents.filter(function (m) { return state.pickedShowIds.includes(m.id); });
+            if (!picked.length) {
+                alert('ショーが選択されていません。戻って見たいショーを選択してください。');
+                return;
+            }
+            var result = findAutoShowCombination(picked, pd);
+            if (!result.ok) {
+                alert(result.reason);
+                return;
+            }
+            var fixedItems = result.items.map(function (candidate) {
+                return {
+                    masterId: candidate.show.id,
+                    name: candidate.show.name,
+                    time: candidate.time,
+                    duration: candidate.show.duration || 30,
+                    cat: 'show',
+                    area: candidate.show.area || getEntranceArea()
+                };
+            });
+            autoCreateAttractionSchedule(fixedItems);
+        }
+
+        function buildAttractionOrder(pd) {
+            var selected = state.pickedAttractionIds.map(function (id) { return getAttractionById(pd, id); }).filter(Boolean);
+            if (!selected.length) return [];
+            var first = state.attractionStartId ? selected.find(function (a) { return a.id === state.attractionStartId; }) : null;
+            var rest = selected.filter(function (a) { return !first || a.id !== first.id; });
+            return (first ? [first] : []).concat(rest);
+        }
+
+        function insertMealAndRestItems(items, options) {
+            options = options || {};
+            function hasItemInRange(startMin, endMin) {
+                return items.some(function (item) {
+                    var s = timeToMin(item.time);
+                    return s >= startMin && s < endMin;
+                });
+            }
+            function addFixed(name, time, duration, cat) {
+                var s = timeToMin(time);
+                var e = s + duration;
+                var overlap = items.some(function (item) {
+                    var itemStart = timeToMin(item.time);
+                    var itemEnd = itemStart + (item.duration || 30);
+                    return s < itemEnd && e > itemStart;
+                });
+                if (!overlap) items.push({ masterId: cat === 'food' ? 997 : 996, name: name, time: time, duration: duration, cat: cat });
+            }
+            if (options.lunch && !hasItemInRange(timeToMin('11:00'), timeToMin('14:30'))) addFixed('昼食', '12:00', 60, 'food');
+            if (options.dinner && !hasItemInRange(timeToMin('17:00'), timeToMin('20:00'))) addFixed('夕食', '18:00', 60, 'food');
+            if (options.rest && !hasItemInRange(timeToMin('14:00'), timeToMin('17:00'))) addFixed('休憩', '15:00', 30, 'rest');
+        }
+
+        function autoCreateAttractionSchedule(fixedItems) {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var ordered = buildAttractionOrder(pd);
+            if (!ordered.length) {
+                alert('アトラクションが選択されていません。戻って乗りたいアトラクションを選択してください。');
+                return;
+            }
+
+            var open = d.parkHours && d.parkHours.open ? d.parkHours.open : '09:00';
+            var close = d.parkHours && d.parkHours.close ? d.parkHours.close : '21:00';
+            var parkStart = timeToMin(open);
+            var parkEnd = timeToMin(close);
+            var items = (fixedItems || []).slice().sort(function (a, b) { return timeToMin(a.time) - timeToMin(b.time); });
+            var remaining = ordered.slice();
+            var unplaced = [];
+            var cursor = parkStart;
+            var currentArea = getEntranceArea();
+
+            function placeUntil(limitMin) {
+                var madeProgress = true;
+                while (remaining.length && madeProgress) {
+                    madeProgress = false;
+                    var bestIdx = -1;
+                    var bestScore = null;
+                    for (var i = 0; i < remaining.length; i++) {
+                        var a = remaining[i];
+                        var travel = getTravelMinutes(pd, currentArea, a.area);
+                        var start = cursor + travel;
+                        var wait = getAttractionWaitMinutes(pd, a, start);
+                        var total = travel + wait + (a.duration || 5);
+                        if (start + wait + (a.duration || 5) > limitMin) continue;
+                        var score = (i * 1000) + travel + Math.max(0, wait - getAttractionWaitMinutes(pd, a, timeToMin('18:00')));
+                        if (bestScore === null || score < bestScore) {
+                            bestScore = score;
+                            bestIdx = i;
+                        }
+                    }
+                    if (bestIdx === -1) return;
+                    var chosen = remaining.splice(bestIdx, 1)[0];
+                    var travelMin = getTravelMinutes(pd, currentArea, chosen.area);
+                    var itemStart = cursor + travelMin;
+                    var waitMin = getAttractionWaitMinutes(pd, chosen, itemStart);
+                    var rideMin = chosen.duration || 5;
+                    items.push({
+                        masterId: chosen.id,
+                        name: chosen.name,
+                        time: minToTime(itemStart),
+                        duration: waitMin + rideMin,
+                        cat: 'attraction',
+                        area: chosen.area,
+                        waitMinutes: waitMin,
+                        rideDuration: rideMin,
+                        travelMinutes: travelMin
+                    });
+                    cursor = itemStart + waitMin + rideMin;
+                    currentArea = chosen.area;
+                    madeProgress = true;
+                }
+            }
+
+            items.filter(function (item) { return item.cat === 'show'; }).forEach(function (fixed) {
+                var fixedStart = timeToMin(fixed.time);
+                placeUntil(fixedStart);
+                cursor = Math.max(cursor, fixedStart + (fixed.duration || 30));
+                currentArea = fixed.area || currentArea;
+            });
+            placeUntil(parkEnd);
+            unplaced = remaining.map(function (a) { return a.name; });
+            insertMealAndRestItems(items, state.attractionOptions);
+            items.sort(function (a, b) { return timeToMin(a.time) - timeToMin(b.time); });
+
+            var plans = pd.plans[state.date] || [{ id: 0, name: '予定①', items: [] }];
+            if (!Array.isArray(plans) || !plans.length) plans = [{ id: 0, name: '予定①', items: [] }];
+            var activePlan = plans.find(function (p) { return p.id === state.pId; }) || plans[0];
+            state.pId = activePlan.id;
+            activePlan.items = items;
+            activePlan.unplacedAttractions = unplaced;
+            activePlan.autoPlanNote = 'アトラクションの待ち時間は登録データをもとにした目安です。当日の混雑状況により変わる場合があります。';
+            pd.plans[state.date] = plans;
+            dm.save(d);
+            state.mode = 'refine';
             nextStep('planner');
         }
 
@@ -5086,11 +5943,11 @@
                     if (plannerProgressBar) plannerProgressBar.style.setProperty('--progress', state.mode === 'select' ? '66%' : '83%');
                     if (plannerTitle) {
                         plannerTitle.style.display = plannerRow.style.display === 'flex' ? 'block' : 'none';
-                        plannerTitle.innerHTML = state.mode === 'select' ? 'ショーの時間を<br>選択してください' : '予定を追加してください';
+                        plannerTitle.innerHTML = state.mode === 'select' ? 'ショーの時間を<br>選択してください' : '予定を追加・調整してください';
                     }
                     if (plannerSelectTools) plannerSelectTools.style.display = state.mode === 'select' ? 'flex' : 'none';
                     plannerBack.style.display = plannerRow.style.display === 'flex' ? '' : 'none';
-                    plannerBack.onclick = state.mode === 'select' ? function () { nextStep('show-pick'); } : function () { changeMode('select'); };
+                    plannerBack.onclick = state.mode === 'select' ? function () { nextStep(state.planType === 'show' ? 'show-pick' : 'attraction-pick'); } : function () { state.planType === 'attraction' ? nextStep('attraction-pick') : changeMode('select'); };
                     plannerNext.onclick = state.mode === 'select' ? function () { changeMode('refine'); } : function () { showCompleteScreen(); };
                     if (plannerReset) {
                         plannerReset.style.display = state.mode === 'select' ? '' : 'none';
@@ -5441,6 +6298,10 @@
             var icon = catIconHtml(it.cat);
             div.style.cssText = 'height:100%; min-height:0; padding:9px; border-radius:10px; background:#fff; border:2px solid ' + color + '; color:#243042; cursor:pointer; position:relative; box-shadow:0 4px 10px rgba(108,92,231,0.12); z-index:10; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; overflow:hidden;';
 
+            var metaBits = [];
+            if (typeof it.waitMinutes !== 'undefined') metaBits.push('待ち ' + it.waitMinutes + '分');
+            if (typeof it.rideDuration !== 'undefined') metaBits.push('体験 ' + it.rideDuration + '分');
+            if (typeof it.travelMinutes !== 'undefined') metaBits.push('移動 ' + it.travelMinutes + '分');
             div.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">' +
                 '<div style="font-size:12px; font-weight:800; background:rgba(108,92,231,0.09); color:#243042; padding:3px 7px; border-radius:6px; white-space:nowrap;">' + t + ' - ' + minToTime(timeToMin(t) + dur) + '</div>' +
                 '<div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">' +
@@ -5448,7 +6309,8 @@
                 '<button class="item-del-btn" style="background:' + color + '; border:none; color:white; width:26px; height:26px; border-radius:13px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:0.2s; flex-shrink:0;">✕</button>' +
                 '</div>' +
                 '</div>' +
-                '<div class="icon-text" style="font-size:14px; font-weight:700; line-height:1.25; letter-spacing:0; overflow:hidden;">' + icon + '<span>' + escapeHtml(it.name || '') + '</span></div>';
+                '<div class="icon-text" style="font-size:14px; font-weight:700; line-height:1.25; letter-spacing:0; overflow:hidden;">' + icon + '<span>' + escapeHtml(it.name || '') + '</span></div>' +
+                (metaBits.length ? '<div style="font-size:10px; color:#667085; font-weight:800; margin-top:5px; line-height:1.35;">' + escapeHtml(metaBits.join(' / ')) + '</div>' : '');
 
             div.querySelector('.item-del-btn').onclick = function (e) {
                 e.stopPropagation();
@@ -6637,11 +7499,20 @@
                 var end = row.time ? minToTime(timeToMin(row.time) + dur) : '';
                 var color = row.gap ? '#c8bfff' : getCatColor(row.cat);
                 var badge = row.gap ? '' : '<div class="confirm-badge" style="background:' + color + ';">' + escapeHtml(getCatLabel(row.cat)) + '</div>';
+                var meta = '';
+                if (!row.gap) {
+                    var metaBits = [];
+                    if (typeof row.waitMinutes !== 'undefined') metaBits.push('待ち時間目安 ' + row.waitMinutes + '分');
+                    if (typeof row.travelMinutes !== 'undefined') metaBits.push('移動目安 ' + row.travelMinutes + '分');
+                    if (typeof row.rideDuration !== 'undefined') metaBits.push('体験 ' + row.rideDuration + '分');
+                    if (metaBits.length) meta = '<div class="attraction-meta">' + escapeHtml(metaBits.join(' / ')) + '</div>';
+                }
                 return '<div class="confirm-row' + (row.gap ? ' gap' : '') + '">' +
                     '<div class="confirm-dot" style="background:' + color + '; box-shadow:0 0 0 4px ' + (row.gap ? 'rgba(168,155,254,0.16)' : 'rgba(108,92,231,0.12)') + ';"></div>' +
                     '<div>' +
                     '<div class="confirm-time">' + escapeHtml(row.time || '') + ' 〜 ' + escapeHtml(end) + '（' + dur + '分）</div>' +
                     '<div class="confirm-name">' + escapeHtml(row.name || '予定なし') + '</div>' +
+                    meta +
                     '</div>' +
                     badge +
                     '</div>';
@@ -6665,7 +7536,106 @@
             var title = document.getElementById('complete-active-title');
             if (title) title.innerText = active.name || '予定①';
             var list = document.getElementById('complete-plan-list');
-            list.innerHTML = buildConfirmRowsHtml(active);
+            var extra = '';
+            if (active.autoPlanNote) {
+                extra += '<div class="auto-plan-note">' + escapeHtml(active.autoPlanNote) + '</div>';
+            }
+            if (Array.isArray(active.unplacedAttractions) && active.unplacedAttractions.length) {
+                extra += '<div class="auto-plan-note"><strong>今回のプランに入らなかったアトラクション</strong><br>' + active.unplacedAttractions.map(function (name) { return '・' + escapeHtml(name); }).join('<br>') + '</div>';
+            }
+            list.innerHTML = buildConfirmRowsHtml(active) + extra;
+        }
+
+        function getAreaPoint(parkKey, area) {
+            var points = PARK_AREA_MAP_POINTS[parkKey] || PARK_AREA_MAP_POINTS.land;
+            return points[area] || points[getEntranceArea()] || points['入園口'];
+        }
+
+        function getItemRouteArea(item, pd, fallbackArea) {
+            if (item.area) return item.area;
+            if (item.cat === 'attraction') {
+                var attraction = getAttractionById(pd, item.masterId);
+                if (attraction && attraction.area) return attraction.area;
+            }
+            if (item.cat === 'show') {
+                var show = (pd.masterEvents || []).find(function (m) { return m.id == item.masterId; });
+                if (show && show.area) return show.area;
+            }
+            return fallbackArea || getEntranceArea();
+        }
+
+        function buildRouteMapStops(plan) {
+            var d = dm.get();
+            var pd = getParkData(d);
+            var items = (plan && Array.isArray(plan.items) ? plan.items : []).slice().filter(function (item) {
+                return item.time;
+            }).sort(function (a, b) {
+                return timeToMin(a.time) - timeToMin(b.time);
+            });
+            var stops = [{ type: 'gate', name: '入園', time: d.parkHours.open || '09:00', area: '入園口' }];
+            var lastArea = getEntranceArea();
+            items.forEach(function (item) {
+                var area = getItemRouteArea(item, pd, lastArea);
+                stops.push({
+                    type: item.cat || 'other',
+                    name: item.name || getCatLabel(item.cat),
+                    time: item.time,
+                    area: area
+                });
+                lastArea = area;
+            });
+            stops.push({ type: 'gate', name: '退園', time: d.parkHours.close || '21:00', area: '退園口' });
+            return stops;
+        }
+
+        function buildRouteMapSvg(stops) {
+            var parkKey = state.park || 'land';
+            var points = PARK_AREA_MAP_POINTS[parkKey] || PARK_AREA_MAP_POINTS.land;
+            var routePoints = stops.map(function (stop) { return getAreaPoint(parkKey, stop.area); });
+            var polyline = routePoints.map(function (point) { return point.x + ',' + point.y; }).join(' ');
+            var areaNodes = Object.keys(points).map(function (area) {
+                var p = points[area];
+                var isGate = area === '入園口' || area === '退園口';
+                return '<g>' +
+                    '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (isGate ? 3.2 : 4.2) + '" fill="' + (isGate ? '#22a66f' : '#ffffff') + '" stroke="#c8bfff" stroke-width="1.4"></circle>' +
+                    '<text x="' + p.x + '" y="' + (p.y - 6) + '" text-anchor="middle" font-size="3.2" font-weight="700" fill="#4b3fc1">' + escapeHtml(area) + '</text>' +
+                    '</g>';
+            }).join('');
+            var stopNodes = stops.map(function (stop, idx) {
+                var p = getAreaPoint(parkKey, stop.area);
+                var color = stop.type === 'gate' ? '#22a66f' : getCatColor(stop.type);
+                return '<g>' +
+                    '<circle cx="' + p.x + '" cy="' + p.y + '" r="5.4" fill="' + color + '" stroke="#ffffff" stroke-width="1.8"></circle>' +
+                    '<text x="' + p.x + '" y="' + (p.y + 1.5) + '" text-anchor="middle" font-size="4.2" font-weight="900" fill="#ffffff">' + (idx + 1) + '</text>' +
+                    '</g>';
+            }).join('');
+            return '<div class="route-map-wrap">' +
+                '<svg class="route-map-svg" viewBox="0 0 100 100" role="img" aria-label="入園から退園までの移動ルート">' +
+                '<rect x="4" y="4" width="92" height="92" rx="8" fill="rgba(255,255,255,0.72)" stroke="rgba(108,92,231,0.14)"></rect>' +
+                areaNodes +
+                '<polyline points="' + polyline + '" fill="none" stroke="#6c5ce7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.72"></polyline>' +
+                stopNodes +
+                '</svg>' +
+                '</div>';
+        }
+
+        function openCompleteRouteMap() {
+            var plans = getCurrentPlans();
+            var active = plans.find(function (p) { return p.id === state.completePlanId; }) || plans[0];
+            var stops = buildRouteMapStops(active);
+            var rows = stops.map(function (stop, idx) {
+                return '<div class="route-map-row">' +
+                    '<div class="route-map-no">' + (idx + 1) + '</div>' +
+                    '<div class="route-map-time">' + escapeHtml(stop.time || '') + '</div>' +
+                    '<div><div class="route-map-name">' + escapeHtml(stop.name || '') + '</div>' +
+                    '<div class="route-map-area">' + escapeHtml(stop.area || '') + '</div></div>' +
+                    '</div>';
+            }).join('');
+            document.getElementById('route-map-content').innerHTML =
+                buildRouteMapSvg(stops) +
+                '<div class="auto-plan-note">実際の園内マップではなく、エリア間の移動順を確認するための簡易マップです。</div>' +
+                '<div class="route-map-list">' + rows + '</div>';
+            document.getElementById('modal-route-map').classList.remove('hidden');
         }
 
         async function shareCanvasOrDownload(canvas, filename, title, preferShare) {
